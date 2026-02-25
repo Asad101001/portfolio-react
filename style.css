@@ -1,0 +1,234 @@
+/* ============================================================
+   PORTFOLIO — style.css
+   Muhammad Asad Khan
+   ============================================================
+
+   TABLE OF CONTENTS
+   1. Fonts & Base
+   2. Typewriter animation
+   3. Tech marquee (scrolling badge lanes)
+   4. Certifications drawer overlay
+   5. Counter animation
+   6. Misc utilities
+   ============================================================ */
+
+
+/* ── 1. Fonts & Base ─────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  --cyan:   #00d4ff;
+  --purple: #a855f7;
+  --radius: 12px;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #0a0a0a;
+  color: #f4f4f5;
+  overflow-x: hidden;
+}
+
+/* smooth scroll */
+html { scroll-behavior: smooth; }
+
+/* ── 2. Typewriter animation ──────────────────────────────── */
+@keyframes typewriter-56 {
+  from { max-width: 0; }
+  to   { max-width: 56ch; }
+}
+@keyframes caret-blink {
+  50% { border-color: transparent; }
+}
+
+.animate-typewriter-48 {
+  animation: typewriter-56 3.2s steps(42, end) forwards;
+}
+.animate-caret {
+  animation: caret-blink 0.75s step-end infinite;
+}
+
+/* ── 3. Tech marquee ─────────────────────────────────────── */
+@keyframes marquee-fwd {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes marquee-rev {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+.export-tech-marquee-lane {
+  display: flex;
+  gap: 0.5rem;
+  width: max-content;
+  animation: marquee-fwd 28s linear infinite;
+}
+.export-tech-marquee-lane--reverse {
+  animation: marquee-rev 28s linear infinite;
+}
+.export-tech-marquee-lane:hover,
+.export-tech-marquee-lane--reverse:hover {
+  animation-play-state: paused;
+}
+
+/* ── 4. Certifications slide-in drawer ───────────────────── */
+
+/* The drawer sits off-screen right by default */
+#certs-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+  pointer-events: none;        /* invisible until open */
+}
+
+/* Backdrop */
+#certs-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+/* Panel */
+#certs-panel {
+  position: relative;
+  width: min(100%, 820px);
+  height: 100%;
+  background: #0f0f10;
+  border-left: 1px solid rgba(255,255,255,0.07);
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 2rem;
+}
+
+/* Open state — toggled by JS adding .open to #certs-drawer */
+#certs-drawer.open {
+  pointer-events: all;
+}
+#certs-drawer.open #certs-backdrop {
+  opacity: 1;
+}
+#certs-drawer.open #certs-panel {
+  transform: translateX(0);
+}
+
+/* Close button inside panel */
+#certs-close {
+  position: sticky;
+  top: 0;
+  float: right;
+  margin-bottom: 1rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
+  color: #a1a1aa;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background 0.2s, color 0.2s;
+  z-index: 10;
+}
+#certs-close:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+/* Cert card grid inside drawer */
+.certs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+  clear: both;
+}
+
+.cert-card {
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.07);
+  background: rgba(255,255,255,0.03);
+  padding: 1.1rem;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.cert-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0,212,255,0.25);
+  box-shadow: 0 12px 32px -16px rgba(0,212,255,0.18);
+}
+
+.cert-thumb {
+  height: 7rem;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.07);
+  background: #18181b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+.cert-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 0.4rem;
+}
+.cert-thumb .cert-emoji {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+.cert-title  { font-size: 0.85rem; font-weight: 600; color: #f4f4f5; margin-bottom: 0.2rem; }
+.cert-issuer { font-size: 0.72rem; color: #71717a; margin-bottom: 0.15rem; }
+.cert-meta   { font-size: 0.68rem; color: #52525b; margin-bottom: 0.5rem; }
+
+.cert-skills { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-bottom: 0.6rem; }
+.cert-skill  {
+  font-size: 0.64rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 99px;
+  background: rgba(255,255,255,0.05);
+  color: #a1a1aa;
+}
+
+.cert-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 99px;
+}
+.cert-badge.completed  { background: rgba(168,85,247,0.12); color: #a855f7; }
+.cert-badge.inprogress { background: rgba(0,212,255,0.12);  color: #00d4ff; }
+.cert-badge::before { content:''; display:inline-block; width:6px; height:6px; border-radius:50%; background:currentColor; }
+
+
+/* ── 5. Animated counters ────────────────────────────────── */
+[data-export-counter] { transition: none; }
+
+
+/* ── 6. Misc utilities ───────────────────────────────────── */
+
+/* hide the Cloudflare email-decode script element visually (safety) */
+script[data-cfasync] { display: none !important; }
+
+/* project card image zoom on hover */
+.project-img-zoom {
+  transition: transform 0.5s ease;
+}
+.group:hover .project-img-zoom {
+  transform: scale(1.05);
+}
+
+/* scrollbar styling */
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
