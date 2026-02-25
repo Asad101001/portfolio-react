@@ -1,0 +1,153 @@
+{
+  "templateId": "opensource",
+  "primaryColor": "#00d4ff",
+  "accentColor": "#a855f7",
+  "portfolioData": {
+    "personal": {
+      "name": "Muhammad Asad Khan",
+      "title": "Student",
+      "email": "muhammadasadk42@gmail.com",
+      "location": "Karachi,Pakistan",
+      "shortBio": "UBIT ’28 | Networking & Cloud Enthusiast | Python | AWS ",
+      "bio": "I am a CS student with the fever to explore all possible sub-domains of Computer Science. My aim isn't (for now) to deprive myself by limiting to one or two specific fields but keep on venturing until i am confident/mature enough to settle down. So far I have successfully ticked off Cloud Computing, Networking, Web Development, Version Control, Project Management, Prompt Engineering, AI with lots more to come.",
+      "resume": {
+        "url": "https://res.cloudinary.com/dsegmsiu8/raw/upload/v1771990991/portfolio/resumes/resume_1771990985118.pdf",
+        "fileName": "resume.pdf",
+        "fileSize": 132782,
+        "uploadedAt": "2026-02-25T03:43:08.963Z",
+        "publicPath": "https://res.cloudinary.com/dsegmsiu8/raw/upload/v1771990991/portfolio/resumes/resume_1771990985118.pdf"
+      }
+    },
+    "seo": {},
+    "social": {
+      "github": "github.com/Asad101001",
+      "linkedin": "https://www.linkedin.com/in/muhammadasadk/",
+      "website": "https://asad101001.github.io/portfolio/"
+    },
+    "skills": [
+      "Version Control",
+      "Cloud",
+      "Python",
+      "Generative AI",
+      "Data Science",
+      "ML",
+      "Prompt Engineering",
+      "Scrum",
+      "C++",
+      "Java",
+      "Web Development",
+      "RAG",
+      "AWS",
+      "Virtualization"
+    ],
+    "projects": [
+      {
+        "id": "4d76494b-534e-4db3-8d7f-b660b831a522",
+        "title": "LegalEaseAI",
+        "description": "LegalEase AI - upload any contract (PDF, DOCX, or TXT) and get:\n\n⚠️ Every clause risk-rated Red / Yellow / Green automatically\n🌐 Plain Urdu explanation for each clause\n💬 A RAG chatbot that answers your questions in Urdu or English, grounded in your document only\n📊 A downloadable PDF risk report\n\nFull analysis in under a minute.\n",
+        "image": "https://res.cloudinary.com/dsegmsiu8/image/upload/v1771991401/portfolio/projects/ch9hhzcwj8zsaykonrxu.png",
+        "tags": [
+          "ES6+ Vanilla JS",
+          "LangChain",
+          "FAISS",
+          "RAG",
+          "FastAPI",
+          "pdfplumber"
+        ],
+        "github": "https://github.com/Asad101001/LegalEaseAI",
+        "demo": "https://legal-ease-ai-iota.vercel.app/",
+        "featured": true,
+        "visible": true
+      },
+      {
+        "id": "adbe518d-ec1e-4eda-a172-9e1be60b9a03",
+        "title": "PollPulse",
+        "description": "PollPulse — a real-time voting platform on AWS.\n\nI built this as my Cloud Computing capstone project to explore how to architect a secure, scalable voting system.Configured a custom VPC where the EC2 web server sits in a public subnet, while the RDS MySQL database is tucked away in a private subnet for maximum security.\n",
+        "image": "https://res.cloudinary.com/dsegmsiu8/image/upload/v1771991672/portfolio/projects/uif8wcmblgjswd39cshr.png",
+        "tags": [
+          "ES6+ Vanilla JS",
+          "AWS RDS",
+          "MySQL",
+          "Amazon EC2",
+          "Chart.js"
+        ],
+        "github": "https://github.com/Asad101001/pollpulse",
+        "featured": true,
+        "visible": true
+      }
+    ],
+    "experience": [],
+    "education": [
+      {
+        "institution": "Department of Computer Science UBIT, University of Karachi",
+        "degree": "B.S Computer Science",
+        "period": "2025 - Present",
+        "description": "",
+        "id": "59ae64ba-5762-4728-a6ae-f1e57f12f823"
+      },
+      {
+        "institution": "Govt. Degree Science/Commerce College, Gulshan Block 7",
+        "degree": "Intermediate",
+        "period": "2023 - 2024",
+        "description": "",
+        "id": "283b8de0-64ef-4e1c-8283-1d33d2d63706"
+      },
+      {
+        "institution": "Karachi Public Shool",
+        "degree": "Matric",
+        "period": "2009 - 2022",
+        "description": "",
+        "id": "d80ea97e-c71b-4467-b621-5e03a1c275e9"
+      }
+    ],
+    "sectionConfig": [
+      {
+        "id": "hero",
+        "type": "hero",
+        "title": "Hero Section",
+        "visible": true,
+        "content": {
+          "heroStyle": "hero-bento",
+          "navBrandText": "Portfolio",
+          "navCtaText": "Github",
+          "bentoBadge": "In progress...",
+          "bentoTypewriterRoles": "Cloud & Networking\nGenerative AI/ LLMs\nData Science",
+          "bentoBuildFocusItems": "Solution-oriented Projects\nAI Integration\nAlways keep exploring"
+        }
+      },
+      {
+        "id": "about",
+        "type": "about",
+        "title": "About Section",
+        "visible": true,
+        "content": {
+          "text": "I am a Certified Data Scientist trained in fundamentals which include data visualization, statistical analysis, data scrubbing and model training. These valuable skills vastly improved my technical ability. I plan to expand my hold on Cloud Computing as well as potentially Web Development.",
+          "aboutStyle": "about-stats-counter"
+        }
+      },
+      {
+        "id": "skills",
+        "type": "skills",
+        "title": "Skills Section",
+        "visible": true,
+        "content": {
+          "headline": "Tech Stack",
+          "techStackStyle": "tech-marquee"
+        }
+      }
+    ]
+  },
+  "sectionStyles": {
+    "projects": "cards-glass",
+    "experience": "timeline-split",
+    "education": "timeline-classic"
+  },
+  "sectionOrder": [
+    "projects",
+    "experience",
+    "education"
+  ],
+  "navbarStyle": "nav-pill",
+  "footerStyle": "footer-minimal",
+  "heroStyle": "hero-bento"
+}
