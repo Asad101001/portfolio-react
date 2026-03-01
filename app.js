@@ -89,7 +89,7 @@
 (function () {
   var counters = [
     { id: 'cnt-projects', target: 4 },
-    { id: 'cnt-certs',    target: 4 },
+    { id: 'cnt-certs',    target: 6 },
     { id: 'cnt-tech',     target: 20 }
   ];
 
@@ -215,3 +215,144 @@
 document.querySelectorAll('.export-tech-marquee-lane').forEach(function (lane) {
   lane.innerHTML += lane.innerHTML;
 });
+
+
+/* ── H. Back to Top ─────────────────────────────────────── */
+(function () {
+  var btn = document.getElementById('back-to-top');
+  if (!btn) return;
+
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > 400) {
+      btn.classList.add('visible');
+    } else {
+      btn.classList.remove('visible');
+    }
+  }, { passive: true });
+
+  btn.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
+
+
+/* ── I. Last.fm Recently Played ─────────────────────────── */
+(function () {
+  var container = document.getElementById('lastfm-tracks');
+  if (!container) return;
+
+  var USER    = 'Asad991';
+  var API_KEY = 'eccfb681fcf620a63fcb300d526544ba'; /* public read-only Last.fm demo key */
+  var LIMIT   = 8;
+  var URL     = 'https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks'
+              + '&user=' + USER
+              + '&api_key=' + API_KEY
+              + '&format=json'
+              + '&limit=' + LIMIT;
+
+  function timeAgo(unixTs) {
+    if (!unixTs) return 'now';
+    var diff = Math.floor(Date.now() / 1000) - parseInt(unixTs, 10);
+    if (diff < 60)  return 'just now';
+    if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+    return Math.floor(diff / 86400) + 'd ago';
+  }
+
+  function getArt(images) {
+    /* Last.fm returns images array; prefer medium (index 1) */
+    if (!images || !images.length) return '';
+    var med = images[1] && images[1]['#text'] ? images[1]['#text'] : '';
+    var lg  = images[2] && images[2]['#text'] ? images[2]['#text'] : '';
+    return lg || med || (images[0] && images[0]['#text']) || '';
+  }
+
+  function render(tracks) {
+    container.innerHTML = '';
+    tracks.forEach(function (t) {
+      var nowPlaying = t['@attr'] && t['@attr'].nowplaying === 'true';
+      var art        = getArt(t.image);
+      var name       = t.name || 'Unknown';
+      var artist     = (t.artist && (t.artist['#text'] || t.artist.name)) || '';
+      var url        = t.url || '#';
+      var ts         = t.date && t.date.uts ? t.date.uts : null;
+
+      var a = document.createElement('a');
+      a.href        = url;
+      a.target      = '_blank';
+      a.rel         = 'noopener';
+      a.className   = 'lastfm-track';
+
+      /* Album art */
+      var img = document.createElement('img');
+      img.className = 'lastfm-track-art';
+      img.alt       = name;
+      if (art) {
+        img.src = art;
+        img.onerror = function () {
+          this.style.background = 'rgba(213,16,7,0.1)';
+          this.src = '';
+        };
+      } else {
+        img.style.background = 'rgba(213,16,7,0.08)';
+      }
+      a.appendChild(img);
+
+      /* Track info */
+      var info = document.createElement('div');
+      info.className = 'lastfm-track-info';
+
+      var nameEl = document.createElement('div');
+      nameEl.className   = 'lastfm-track-name';
+      nameEl.textContent = name;
+
+      var artistEl = document.createElement('div');
+      artistEl.className   = 'lastfm-track-artist';
+      artistEl.textContent = artist;
+
+      info.appendChild(nameEl);
+      info.appendChild(artistEl);
+      a.appendChild(info);
+
+      /* Timestamp or now-playing indicator */
+      var timeEl = document.createElement('div');
+      timeEl.className = 'lastfm-track-time';
+      if (nowPlaying) {
+        timeEl.innerHTML = '<span class="lastfm-now-playing">'
+          + '<span class="lastfm-eq"><span></span><span></span><span></span><span></span></span>'
+          + ' live</span>';
+      } else {
+        timeEl.textContent = timeAgo(ts);
+      }
+      a.appendChild(timeEl);
+
+      container.appendChild(a);
+    });
+  }
+
+  function showError(msg) {
+    container.innerHTML = '<div class="lastfm-error">&#9888; ' + msg + '</div>';
+  }
+
+  fetch(URL)
+    .then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function (data) {
+      var tracks = data
+        && data.recenttracks
+        && data.recenttracks.track;
+      if (!tracks || !tracks.length) {
+        showError('No recent tracks found.');
+        return;
+      }
+      /* API returns array or single object */
+      if (!Array.isArray(tracks)) tracks = [tracks];
+      render(tracks);
+    })
+    .catch(function (err) {
+      showError('Could not load scrobbles — check back later.');
+      console.warn('Last.fm fetch failed:', err);
+    });
+})();

@@ -863,3 +863,531 @@ footer {
   animation: fade-up 0.5s ease both;
   animation-delay: var(--delay, 0ms);
 }
+
+/* ══════════════════════════════════════════════════════════
+   ADDITIONS v3
+   ══════════════════════════════════════════════════════════ */
+
+/* ── About grid alignment fix ─────────────────────────────── */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 20px;
+  align-items: stretch;
+}
+.about-text {
+  padding: 32px 36px;
+  font-size: 0.93rem;
+  line-height: 1.78;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.about-stats-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.about-stat-card {
+  padding: 20px 16px;
+  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+@media (max-width: 800px) {
+  .about-grid { grid-template-columns: 1fr; }
+  .about-stats-col { flex-direction: row; }
+  .about-stat-card { flex: 1; }
+}
+
+/* ── Chip icon (Simple Icons) ──────────────────────────────── */
+.chip-icon {
+  font-size: 0.9rem;
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+/* Simple icons use fill by default; we already set color via inline style */
+.si { vertical-align: middle; }
+
+/* ── Cert ongoing card ─────────────────────────────────────── */
+.cert-card--ongoing {
+  border-color: rgba(0,212,255,0.18);
+  background: rgba(0,212,255,0.03);
+}
+.cert-thumb--placeholder {
+  background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(168,85,247,0.06)) !important;
+  position: relative;
+}
+.cert-placeholder-icon {
+  font-size: 2.4rem;
+  opacity: 0.7;
+}
+
+/* ── Social cards grid (new contact section) ───────────────── */
+.social-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.social-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: all 0.22s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.social-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  border-radius: inherit;
+}
+.social-card:hover { transform: translateY(-3px); }
+.social-card:hover::before { opacity: 1; }
+.social-card:hover .social-card-name { color: #fff; }
+.social-card:hover .social-card-arrow { opacity: 1; }
+
+/* Per-platform accent colours */
+.social-card.github:hover   { border-color: rgba(255,255,255,0.25); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+.social-card.github:hover .social-card-icon { color: #fff; }
+
+.social-card.linkedin:hover { border-color: rgba(10,102,194,0.5); box-shadow: 0 8px 24px rgba(10,102,194,0.15); }
+.social-card.linkedin:hover .social-card-icon { color: #0A66C2; }
+
+.social-card.gmail:hover    { border-color: rgba(234,67,53,0.5); box-shadow: 0 8px 24px rgba(234,67,53,0.15); }
+.social-card.gmail:hover .social-card-icon { color: #EA4335; }
+
+.social-card.discord:hover  { border-color: rgba(88,101,242,0.5); box-shadow: 0 8px 24px rgba(88,101,242,0.15); }
+.social-card.discord:hover .social-card-icon { color: #5865F2; }
+
+.social-card.medium:hover   { border-color: rgba(255,255,255,0.2); box-shadow: 0 8px 24px rgba(255,255,255,0.05); }
+.social-card.medium:hover .social-card-icon { color: #fff; }
+
+.social-card.instagram:hover { border-color: rgba(228,64,95,0.5); box-shadow: 0 8px 24px rgba(228,64,95,0.15); }
+.social-card.instagram:hover .social-card-icon { color: #E4405F; }
+
+.social-card.spotify:hover  { border-color: rgba(29,185,84,0.5); box-shadow: 0 8px 24px rgba(29,185,84,0.15); }
+.social-card.spotify:hover .social-card-icon { color: #1DB954; }
+
+.social-card-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: color 0.22s;
+  color: var(--text-muted);
+}
+.social-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+.social-card-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+  transition: color 0.22s;
+}
+.social-card-handle {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.social-card-arrow {
+  flex-shrink: 0;
+  color: var(--text-dim);
+  opacity: 0;
+  transition: opacity 0.22s;
+}
+
+/* Spotify embed wide card inside the grid */
+.social-card-spotify-embed {
+  grid-column: 1 / -1;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(29,185,84,0.15);
+  background: rgba(29,185,84,0.03);
+}
+
+/* contact-sub tweak */
+.contact-sub {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  margin-top: 10px;
+  margin-bottom: 24px;
+  max-width: 520px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   ADDITIONS v4 — Back to Top, Last.fm, Tech Icons, Social grid
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Back to Top button ───────────────────────────────────── */
+#back-to-top {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 150;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(13,17,23,0.9);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  transition: opacity 0.3s ease, transform 0.3s ease, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+}
+#back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+#back-to-top:hover {
+  color: var(--cyan);
+  border-color: rgba(0,212,255,0.4);
+  box-shadow: 0 4px 20px rgba(0,212,255,0.2);
+}
+
+/* ── Tech chip SVG icons ──────────────────────────────────── */
+.chip-svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+.skill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  border-radius: 99px;
+  border: 1px solid var(--border);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.03);
+  white-space: nowrap;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.skill-chip:hover {
+  border-color: var(--border-h);
+  color: var(--text);
+  background: rgba(0,212,255,0.06);
+}
+
+/* ── Project description risk colours ────────────────────── */
+.risk-red    { color: #f87171; font-weight: 700; }
+.risk-yellow { color: #fbbf24; font-weight: 700; }
+.risk-green  { color: #4ade80; font-weight: 700; }
+
+/* ── Social cards grid — properly centred ─────────────────── */
+.contact-bottom {
+  border-top: 1px solid var(--border);
+  padding-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.social-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+@media (max-width: 900px) {
+  .social-cards-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .social-cards-grid { grid-template-columns: 1fr; }
+}
+.social-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: all 0.22s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.social-card:hover { transform: translateY(-3px); }
+.social-card:hover .social-card-name { color: #fff; }
+.social-card:hover .social-card-arrow { opacity: 1; }
+
+.social-card.github:hover   { border-color: rgba(255,255,255,0.25); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+.social-card.github:hover .social-card-icon { color: #fff; }
+.social-card.linkedin:hover { border-color: rgba(10,102,194,0.5); box-shadow: 0 8px 24px rgba(10,102,194,0.15); }
+.social-card.linkedin:hover .social-card-icon { color: #0A66C2; }
+.social-card.gmail:hover    { border-color: rgba(234,67,53,0.5); box-shadow: 0 8px 24px rgba(234,67,53,0.15); }
+.social-card.gmail:hover .social-card-icon { color: #EA4335; }
+.social-card.discord:hover  { border-color: rgba(88,101,242,0.5); box-shadow: 0 8px 24px rgba(88,101,242,0.15); }
+.social-card.discord:hover .social-card-icon { color: #5865F2; }
+.social-card.medium:hover   { border-color: rgba(255,255,255,0.2); box-shadow: 0 8px 24px rgba(255,255,255,0.05); }
+.social-card.medium:hover .social-card-icon { color: #fff; }
+.social-card.instagram:hover { border-color: rgba(228,64,95,0.5); box-shadow: 0 8px 24px rgba(228,64,95,0.15); }
+.social-card.instagram:hover .social-card-icon { color: #E4405F; }
+.social-card.lastfm:hover   { border-color: rgba(213,16,7,0.5); box-shadow: 0 8px 24px rgba(213,16,7,0.15); }
+.social-card.lastfm:hover .social-card-icon { color: #D51007; }
+.social-card.spotify:hover  { border-color: rgba(29,185,84,0.5); box-shadow: 0 8px 24px rgba(29,185,84,0.15); }
+.social-card.spotify:hover .social-card-icon { color: #1DB954; }
+
+.social-card-icon {
+  width: 42px; height: 42px;
+  border-radius: 11px;
+  background: rgba(255,255,255,0.05);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: color 0.22s;
+  color: var(--text-muted);
+}
+.social-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+.social-card-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text);
+  transition: color 0.22s;
+}
+.social-card-handle {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.social-card-arrow {
+  flex-shrink: 0;
+  color: var(--text-dim);
+  opacity: 0;
+  transition: opacity 0.22s;
+}
+
+/* ── Last.fm recently played widget ──────────────────────── */
+.lastfm-widget {
+  border-radius: 16px;
+  border: 1px solid rgba(213,16,7,0.2);
+  background: rgba(213,16,7,0.03);
+  overflow: hidden;
+}
+.lastfm-widget-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(213,16,7,0.12);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.lastfm-user {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  color: #D51007;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.lastfm-tracks {
+  padding: 8px 0;
+  max-height: 320px;
+  overflow-y: auto;
+}
+.lastfm-track {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px;
+  transition: background 0.15s;
+  text-decoration: none;
+  color: inherit;
+}
+.lastfm-track:hover {
+  background: rgba(213,16,7,0.06);
+}
+.lastfm-track-art {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: rgba(255,255,255,0.05);
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+.lastfm-track-info {
+  flex: 1;
+  min-width: 0;
+}
+.lastfm-track-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lastfm-track-artist {
+  font-size: 0.71rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+.lastfm-track-time {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  flex-shrink: 0;
+  text-align: right;
+}
+.lastfm-now-playing {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #D51007;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+/* Animated equaliser bars for now-playing */
+.lastfm-eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+.lastfm-eq span {
+  display: inline-block;
+  width: 2px;
+  background: #D51007;
+  border-radius: 1px;
+  animation: eq-bounce 0.8s ease-in-out infinite;
+}
+.lastfm-eq span:nth-child(1) { animation-delay: 0s;    height: 40%; }
+.lastfm-eq span:nth-child(2) { animation-delay: 0.15s; height: 80%; }
+.lastfm-eq span:nth-child(3) { animation-delay: 0.3s;  height: 60%; }
+.lastfm-eq span:nth-child(4) { animation-delay: 0.1s;  height: 90%; }
+@keyframes eq-bounce {
+  0%, 100% { transform: scaleY(0.4); }
+  50%       { transform: scaleY(1); }
+}
+.lastfm-loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 18px;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+}
+/* Loading bars */
+.lastfm-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 16px;
+}
+.lastfm-bars span {
+  display: inline-block;
+  width: 3px;
+  background: #D51007;
+  border-radius: 2px;
+  opacity: 0.6;
+  animation: eq-bounce 0.7s ease-in-out infinite;
+}
+.lastfm-bars span:nth-child(1) { animation-delay: 0s; }
+.lastfm-bars span:nth-child(2) { animation-delay: 0.18s; }
+.lastfm-bars span:nth-child(3) { animation-delay: 0.36s; }
+.lastfm-bars span:nth-child(4) { animation-delay: 0.12s; }
+.lastfm-error {
+  padding: 16px 18px;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── About grid responsive fix ────────────────────────────── */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 20px;
+  align-items: stretch;
+}
+.about-stats-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.about-stat-card {
+  padding: 20px 16px;
+  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.about-text {
+  padding: 32px 36px;
+  font-size: 0.93rem;
+  line-height: 1.78;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+@media (max-width: 800px) {
+  .about-grid { grid-template-columns: 1fr; }
+  .about-stats-col { flex-direction: row; }
+  .about-stat-card { flex: 1; }
+}
