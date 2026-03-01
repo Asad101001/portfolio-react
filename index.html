@@ -1,734 +1,816 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Muhammad Asad - Portfolio</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
-  <meta name="description" content="Muhammad Asad Khan — CS student at UBIT '28. Python, AWS, Data Science, AI/ML." />
+  <title>Asad's Portfolio</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x26A1;</text></svg>" />
+  <meta name="description"
+    content="Muhammad Asad Khan &#8212; CS student at UBIT '28. Python, AWS, Data Science, AI/ML." />
   <meta name="robots" content="index,follow" />
   <meta property="og:title" content="Asad Khan | CS @ UBIT '28" />
-  <meta property="og:description" content="Muhammad Asad Khan — CS student at UBIT '28. Python, AWS, Data Science, AI/ML." />
   <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Asad Khan | CS @ UBIT '28" />
-  <meta name="twitter:description" content="Muhammad Asad Khan — CS student at UBIT '28. Python, AWS, Data Science, AI/ML." />
-
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-
-  <!-- Our styles -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 
-<!-- ═══════════════════════════════════════════════
-     ANIMATED BACKGROUND CANVAS
-     ═══════════════════════════════════════════════ -->
-<canvas id="bg-canvas"></canvas>
+  <canvas id="bg-canvas"></canvas>
 
-<!-- ═══════════════════════════════════════════════
-     CERTIFICATIONS DRAWER
-     ═══════════════════════════════════════════════ -->
-<div id="certs-drawer" aria-modal="true" role="dialog" aria-label="Certifications">
-  <div id="certs-backdrop"></div>
-  <div id="certs-panel">
-    <button id="certs-close" aria-label="Close certifications">✕ Close</button>
-    <p class="label-xs">Credentials</p>
-    <h2 class="drawer-title">Certifications</h2>
-    <div class="certs-grid">
+  <!-- CERTIFICATIONS DRAWER -->
+  <div id="certs-drawer" aria-modal="true" role="dialog" aria-label="Certifications">
+    <div id="certs-backdrop"></div>
+    <div id="certs-panel">
+      <button id="certs-close" aria-label="Close certifications">&#x2715; Close</button>
+      <p class="label-xs">Credentials</p>
+      <h2 class="drawer-title">Certifications</h2>
+      <div class="certs-grid">
 
-      <div class="cert-card">
-        <div class="cert-thumb">
-          <img src="public/certs/google-agile.png" alt="Google Agile Essentials"
-               onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'cert-emoji',textContent:'🔄'}))"/>
+        <div class="cert-card">
+          <div class="cert-thumb">
+            <img src="public/certs/google-agile.png" alt="Google Agile Essentials"
+              onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'cert-emoji',textContent:'&#x1F504;'}))" />
+          </div>
+          <p class="cert-title">Google Agile Essentials</p>
+          <p class="cert-issuer">Google</p>
+          <p class="cert-meta">Issued Jan 2026 &middot; ID 5RY1Q2E8VFGC</p>
+          <div class="cert-skills">
+            <span class="cert-skill">Agile Methodology</span>
+            <span class="cert-skill">Lean Methodologies</span>
+            <span class="cert-skill">Agile Project Management</span>
+            <span class="cert-skill">Agile Product Development</span>
+          </div>
+          <span class="cert-badge completed">Completed</span>
         </div>
-        <p class="cert-title">Google Agile Essentials</p>
-        <p class="cert-issuer">Google</p>
-        <p class="cert-meta">Issued Jan 2026 · ID 5RY1Q2E8VFGC</p>
-        <span class="cert-badge completed">Completed</span>
+
+        <div class="cert-card">
+          <div class="cert-thumb">
+            <img src="public/certs/google-ai.png" alt="Google AI Essentials"
+              onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'cert-emoji',textContent:'&#x1F916;'}))" />
+          </div>
+          <p class="cert-title">Google AI Essentials</p>
+          <p class="cert-issuer">Google</p>
+          <p class="cert-meta">Issued Dec 2025 &middot; ID HY8VX0Q5HT0U</p>
+          <div class="cert-skills">
+            <span class="cert-skill">AI / ML</span>
+            <span class="cert-skill">NLP</span>
+            <span class="cert-skill">Google Workspace</span>
+            <span class="cert-skill">Operational Efficiency</span>
+            <span class="cert-skill">Generative AI </span> 
+            <span class="cert-skill">Use AI Responsibly </span>
+            <span class="cert-skill">Critical Thinking</span>
+            <span class="cert-skill">Maximize Productivity With AI Tools</span>
+          </div>
+          <span class="cert-badge completed">Completed</span>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-thumb">
+            <img src="public/certs/google-prompt.png" alt="Google Prompting Essentials"
+              onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'cert-emoji',textContent:'&#x1F4AC;'}))" />
+          </div>
+          <p class="cert-title">Google Prompting Essentials</p>
+          <p class="cert-issuer">Google</p>
+          <p class="cert-meta">Issued Dec 2025 &middot; ID ONHQG9H3H8EE</p>
+          <span class="cert-badge completed">Completed</span>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-thumb">
+            <img src="public/certs/ned-ds.png" alt="Certified Data Scientist"
+              onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'cert-emoji',textContent:'&#x1F4CA;'}))" />
+          </div>
+          <p class="cert-title">Certified Data Scientist</p>
+          <p class="cert-issuer">NED University of Engineering &amp; Technology</p>
+          <p class="cert-meta">Issued Nov 2024 &middot; ID 25317</p>
+          <div class="cert-skills">
+            <span class="cert-skill">Statistical Analysis</span>
+            <span class="cert-skill">NumPy</span>
+            <span class="cert-skill">Scikit-Learn</span>
+            <span class="cert-skill">pandas</span>
+            <span class="cert-skill">Matplotlib</span>
+            <span class="cert-skill">R</span>
+            <span class="cert-skill">Random Forest</span>
+          </div>
+          <span class="cert-badge completed">Completed</span>
+        </div>
+
       </div>
-
-      <div class="cert-card">
-        <div class="cert-thumb">
-          <img src="public/certs/google-ai.png" alt="Google AI Essentials"
-               onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'cert-emoji',textContent:'🤖'}))"/>
-        </div>
-        <p class="cert-title">Google AI Essentials</p>
-        <p class="cert-issuer">Google</p>
-        <p class="cert-meta">Issued Dec 2025 · ID HY8VX0Q5HT0U</p>
-        <div class="cert-skills">
-          <span class="cert-skill">AI / ML</span>
-          <span class="cert-skill">NLP</span>
-          <span class="cert-skill">Google Workspace</span>
-          <span class="cert-skill">Operational Efficiency</span>
-        </div>
-        <span class="cert-badge completed">Completed</span>
-      </div>
-
-      <div class="cert-card">
-        <div class="cert-thumb">
-          <img src="public/certs/google-prompt.png" alt="Google Prompting Essentials"
-               onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'cert-emoji',textContent:'💬'}))"/>
-        </div>
-        <p class="cert-title">Google Prompting Essentials</p>
-        <p class="cert-issuer">Google</p>
-        <p class="cert-meta">Issued Dec 2025 · ID ONHQG9H3H8EE</p>
-        <span class="cert-badge completed">Completed</span>
-      </div>
-
-      <div class="cert-card">
-        <div class="cert-thumb">
-          <img src="public/certs/ned-ds.png" alt="Certified Data Scientist"
-               onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'cert-emoji',textContent:'📊'}))"/>
-        </div>
-        <p class="cert-title">Certified Data Scientist</p>
-        <p class="cert-issuer">NED University of Engineering &amp; Technology</p>
-        <p class="cert-meta">Issued Nov 2024 · ID 25317</p>
-        <div class="cert-skills">
-          <span class="cert-skill">Statistical Analysis</span>
-          <span class="cert-skill">NumPy</span>
-          <span class="cert-skill">Scikit-Learn</span>
-          <span class="cert-skill">pandas</span>
-          <span class="cert-skill">Matplotlib</span>
-          <span class="cert-skill">R</span>
-          <span class="cert-skill">Random Forest</span>
-        </div>
-        <span class="cert-badge completed">Completed</span>
-      </div>
-
     </div>
   </div>
-</div>
 
 
-<!-- ═══════════════════════════════════════════════
-     NAVIGATION
-     ═══════════════════════════════════════════════ -->
-<nav>
-  <div class="nav-inner">
-    <span class="nav-brand">Asad's Portfolio</span>
-
-    <div class="nav-links">
-      <a href="#hero">Home</a>
-      <a href="#about">About</a>
-      <a href="#projects">Projects</a>
-      <a href="#certifications">Certifications</a>
-      <a href="#contact">Contact</a>
-    </div>
-
-    <!-- Resume CTA — glowing button -->
-    <a href="public/resume/resume.pdf" target="_blank" rel="noopener" class="nav-cta">
-      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-           fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-        <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
-        <line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
-      </svg>
-      Resume
-    </a>
-
-    <!-- Mobile hamburger -->
-    <details class="mobile-nav">
-      <summary>
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-             fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="4" x2="20" y1="12" y2="12"/>
-          <line x1="4" x2="20" y1="6" y2="6"/>
-          <line x1="4" x2="20" y1="18" y2="18"/>
-        </svg>
-      </summary>
-      <div class="mobile-dropdown">
+  <!-- NAVIGATION -->
+  <nav>
+    <div class="nav-inner">
+      <span class="nav-brand">Asad's Portfolio</span>
+      <div class="nav-links">
         <a href="#hero">Home</a>
         <a href="#about">About</a>
         <a href="#projects">Projects</a>
         <a href="#certifications">Certifications</a>
-        <a href="public/resume/resume.pdf" target="_blank" rel="noopener">Resume</a>
         <a href="#contact">Contact</a>
       </div>
-    </details>
-  </div>
-</nav>
-
-
-<!-- ═══════════════════════════════════════════════
-     HERO
-     ═══════════════════════════════════════════════ -->
-<section id="hero">
-  <div class="hero-grid">
-
-    <!-- Main name + tagline card -->
-    <div class="card hero-main glass-card" style="--delay:0ms">
-      <div class="status-pill">
-        <span class="status-dot"></span>
-        Building & exploring
-      </div>
-
-      <h1 class="hero-name">Muhammad<br/>Asad Khan</h1>
-
-      <div class="typewriter-wrap">
-        <span id="typewriter" class="typewriter-text"></span><span class="caret">|</span>
-      </div>
-
-      <p class="hero-sub">CS Student @ UBIT '28</p>
-      <p class="hero-desc">Python · AWS · Data Science · AI/ML · Networking</p>
-
-      <div class="hero-actions">
-        <a href="#projects" class="btn-primary">
-          View Projects
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-               fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>
+      <a href="public/resume/resume.pdf" target="_blank" rel="noopener" class="nav-cta">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+          <polyline points="10 9 9 9 8 9" />
+        </svg>
+        Resume
+      </a>
+      <details class="mobile-nav">
+        <summary>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <line x1="4" x2="20" y1="12" y2="12" />
+            <line x1="4" x2="20" y1="6" y2="6" />
+            <line x1="4" x2="20" y1="18" y2="18" />
           </svg>
-        </a>
-        <a href="#contact" class="btn-secondary">Contact</a>
-      </div>
-    </div>
-
-    <!-- Terminal / live info card -->
-    <div class="card hero-side glass-card" style="--delay:100ms">
-      <div class="terminal-bar">
-        <span class="t-dot t-red"></span>
-        <span class="t-dot t-yellow"></span>
-        <span class="t-dot t-green"></span>
-        <span class="t-title">asad@ubit ~ </span>
-      </div>
-      <div class="terminal-body">
-        <p><span class="t-prompt">$</span> <span class="t-cmd">whoami</span></p>
-        <p class="t-out">Muhammad Asad Khan</p>
-        <p><span class="t-prompt">$</span> <span class="t-cmd">cat focus.txt</span></p>
-        <p class="t-out">Python · OOP · Data Science</p>
-        <p class="t-out">Cloud (AWS) · AI/ML · RAG</p>
-        <p class="t-out">Networking · Linux · Web Dev</p>
-        <p><span class="t-prompt">$</span> <span class="t-cmd">echo $LOCATION</span></p>
-        <p class="t-out">Karachi, Pakistan 🇵🇰</p>
-        <p><span class="t-prompt">$</span> <span class="t-cmd">cat status.txt</span></p>
-        <p class="t-out" style="color:var(--cyan)">🟢 Open to collabs &amp; internships</p>
-        <p><span class="t-prompt">$</span> <span class="t-cursor">▌</span></p>
-      </div>
-    </div>
-
-    <!-- Highlights -->
-    <div class="card glass-card" style="--delay:200ms">
-      <p class="card-label">Highlights</p>
-      <div class="stats-grid">
-        <div class="stat-box" data-export-counter="4"><span class="stat-num">4+</span><span class="stat-label">Projects</span></div>
-        <div class="stat-box" data-export-counter="20"><span class="stat-num">20+</span><span class="stat-label">Skills</span></div>
-        <div class="stat-box" data-export-counter="4"><span class="stat-num">4+</span><span class="stat-label">Certs</span></div>
-        <div class="stat-box" data-export-counter="3"><span class="stat-num">3+</span><span class="stat-label">Education</span></div>
-      </div>
-    </div>
-
-    <!-- Build focus -->
-    <div class="card glass-card" style="--delay:300ms">
-      <p class="card-label">Build Focus</p>
-      <div class="focus-list">
-        <div class="focus-item">
-          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
-          Solution-oriented Projects
+        </summary>
+        <div class="mobile-dropdown">
+          <a href="#hero">Home</a>
+          <a href="#about">About</a>
+          <a href="#projects">Projects</a>
+          <a href="#certifications">Certifications</a>
+          <a href="public/resume/resume.pdf" target="_blank" rel="noopener">Resume</a>
+          <a href="#contact">Contact</a>
         </div>
-        <div class="focus-item">
-          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
-          AI Integration &amp; RAG Systems
+      </details>
+    </div>
+  </nav>
+
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-grid">
+
+      <div class="card hero-main glass-card" style="--delay:0ms">
+        <div class="status-pill">
+          <span class="status-dot"></span>
+          Building &amp; exploring
         </div>
-        <div class="focus-item">
-          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg>
-          Cloud Architecture (AWS)
+        <h1 class="hero-name">Muhammad<br />Asad Khan</h1>
+        <div class="typewriter-wrap">
+          <span id="typewriter" class="typewriter-text"></span><span class="caret">|</span>
         </div>
-      </div>
-    </div>
-
-    <!-- Availability -->
-    <div class="card glass-card" style="--delay:400ms">
-      <p class="card-label">Availability</p>
-      <p class="avail-text">Open for internships, part-time roles, and remote collaborations.</p>
-      <p class="avail-loc">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
-        Karachi, Pakistan
-      </p>
-      <p class="avail-loc">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-        <a href="mailto:muhammadasadk42@gmail.com">muhammadasadk42@gmail.com</a>
-      </p>
-    </div>
-
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════════
-     ABOUT
-     ═══════════════════════════════════════════════ -->
-<section id="about">
-  <div class="section-inner">
-    <div class="section-header">
-      <div>
-        <p class="label-xs">Who I Am</p>
-        <h2 class="section-title">About Me</h2>
-      </div>
-    </div>
-
-    <div class="about-grid">
-      <div class="about-text glass-card">
-        <p>
-          I'm a Computer Science student at UBIT, University of Karachi (Class of 2028/2029),
-          with the drive to explore every corner of CS before committing to a specialty.
-          So far I've ticked off Cloud Computing, Networking, Web Development, Data Science,
-          Version Control, Project Management, Prompt Engineering, and AI — with lots more ahead.
-        </p>
-        <p style="margin-top:1rem">
-          I believe in learning by building. Every project I take on is an attempt to apply real
-          concepts in real environments — from AWS VPC architecture to RAG-powered LLM pipelines.
-          My philosophy: break things intentionally, understand why they broke, then build them better.
-        </p>
-        <div class="about-actions" style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap">
-          <a href="https://github.com/Asad101001" target="_blank" rel="noopener" class="btn-github">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                 fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
-              <path d="M9 18c-4.51 2-5-2-7-2"/>
+        <p class="hero-sub">CS Student @ UBIT '28</p>
+        <p class="hero-desc">Python &middot; AWS &middot; Data Science &middot; AI/ML &middot; Networking</p>
+        <div class="hero-actions">
+          <a href="https://github.com/Asad101001" target="_blank" rel="noopener" class="btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path
+                d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+              <path d="M9 18c-4.51 2-5-2-7-2" />
             </svg>
             GitHub
           </a>
-          <a href="#projects" class="btn-secondary">View Projects</a>
+          <a href="#contact" class="btn-secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <rect width="20" height="16" x="2" y="4" rx="2" />
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+            </svg>
+            Contact
+          </a>
         </div>
       </div>
 
-      <div class="about-stats-col">
-        <div class="about-stat-card glass-card" data-stat>
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-          <p class="stat-big" data-export-counter="4">0+</p>
-          <p class="stat-lbl">Projects</p>
+      <div class="card hero-side glass-card" style="--delay:100ms">
+        <div class="terminal-bar">
+          <span class="t-dot t-red"></span>
+          <span class="t-dot t-yellow"></span>
+          <span class="t-dot t-green"></span>
+          <span class="t-title">asad@2006 ~ </span>
         </div>
-        <div class="about-stat-card glass-card" data-stat>
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>
-          <p class="stat-big" data-export-counter="4">0+</p>
-          <p class="stat-lbl">Certifications</p>
-        </div>
-        <div class="about-stat-card glass-card" data-stat>
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
-          <p class="stat-big" data-export-counter="20">0+</p>
-          <p class="stat-lbl">Technologies</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════════
-     GITHUB CONTRIBUTION GRAPH
-     ═══════════════════════════════════════════════ -->
-<section id="gh-section">
-  <div class="section-inner">
-    <div class="gh-graph-wrap glass-card">
-      <div class="gh-header">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
-             fill="none" stroke="var(--cyan)" stroke-width="2">
-          <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
-          <path d="M9 18c-4.51 2-5-2-7-2"/>
-        </svg>
-        <span>GitHub Contributions</span>
-        <span id="gh-contrib-count" class="gh-count"></span>
-      </div>
-      <div class="gh-graph-scroll">
-        <div id="gh-contrib-grid" class="gh-grid">
-          <p class="gh-loading">Loading contributions…</p>
+        <div class="terminal-body">
+          <p><span class="t-prompt">$</span> <span class="t-cmd">whoami</span></p>
+          <p class="t-out">Muhammad Asad Khan</p>
+          <p><span class="t-prompt">$</span> <span class="t-cmd">cat focus.txt</span></p>
+          <p class="t-out">Python &middot; OOP &middot; Data Science</p>
+          <p class="t-out">Cloud (AWS) &middot; AI/ML &middot; RAG</p>
+          <p class="t-out">Networking &middot; Linux &middot; Web Dev</p>
+          <p><span class="t-prompt">$</span> <span class="t-cmd">echo $LOCATION</span></p>
+          <p class="t-out">Karachi, Pakistan &#x1F1F5;&#x1F1F0;</p>
+          <p><span class="t-prompt">$</span> <span class="t-cmd">cat status.txt</span></p>
+          <p class="t-out" style="color:var(--cyan)">&#x1F7E2; Open to collabs &amp; internships</p>
+          <p><span class="t-prompt">$</span> <span class="t-cursor">&#x25AE;</span></p>
         </div>
       </div>
-      <div class="gh-legend">
-        <span>Less</span>
-        <span class="gh-leg-cell" style="opacity:0.08"></span>
-        <span class="gh-leg-cell" style="opacity:0.25"></span>
-        <span class="gh-leg-cell" style="opacity:0.5"></span>
-        <span class="gh-leg-cell" style="opacity:0.75"></span>
-        <span class="gh-leg-cell" style="opacity:1"></span>
-        <span>More</span>
-      </div>
-    </div>
-  </div>
-</section>
 
-
-<!-- ═══════════════════════════════════════════════
-     PROJECTS
-     ═══════════════════════════════════════════════ -->
-<section id="projects">
-  <div class="section-inner">
-    <div class="section-header">
-      <div>
-        <p class="label-xs">Work</p>
-        <h2 class="section-title">Projects</h2>
-      </div>
-      <a href="https://github.com/Asad101001?tab=repositories" target="_blank" rel="noopener" class="view-all-link">
-        All Repositories
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-             fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M15 3h6v6"/><path d="M10 14 21 3"/>
-          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-        </svg>
-      </a>
-    </div>
-
-    <div class="projects-grid">
-
-      <!-- LegalEaseAI -->
-      <div class="project-card glass-card">
-        <div class="proj-img-wrap">
-          <img src="public/images/legalease.png" alt="LegalEaseAI screenshot" class="proj-img"
-               onerror="this.parentElement.style.background='linear-gradient(135deg,#00d4ff18,#18181b)';this.style.display='none'"/>
-          <div class="proj-img-overlay"></div>
-          <span class="proj-badge">Featured</span>
+      <div class="card glass-card" style="--delay:200ms">
+        <p class="card-label">Fun Facts</p>
+        <div class="fun-facts">
+          <div class="fun-fact-item">&#x1F41B; Bugs feared? 0. Bugs fixed? debatable.</div>
+          <div class="fun-fact-item">&#x1F319; Peak productivity: 11pm&#x2013;3am</div>
+          <div class="fun-fact-item">&#x1F4D6; Docs reader... eventually</div>
         </div>
-        <div class="proj-body">
-          <div class="proj-head">
-            <div class="proj-icon" style="background:linear-gradient(135deg,#00d4ff30,#00d4ff10);color:var(--cyan)">L</div>
-            <div>
-              <h3 class="proj-title">LegalEaseAI</h3>
-              <p class="proj-live"><a href="https://legal-ease-ai-iota.vercel.app/" target="_blank" rel="noopener">Live Demo ↗</a></p>
-            </div>
+      </div>
+
+      <div class="card glass-card" style="--delay:300ms">
+        <p class="card-label">Build Focus</p>
+        <div class="focus-list">
+          <div class="focus-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+              stroke="var(--cyan)" stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3" />
+              <path d="M3 5V19A9 3 0 0 0 21 19V5" />
+              <path d="M3 12A9 3 0 0 0 21 12" />
+            </svg>
+            Solution-oriented Projects
           </div>
-          <p class="proj-desc">
-            Upload any contract (PDF, DOCX, or TXT) and get every clause risk-rated Red/Yellow/Green,
-            a plain Urdu explanation, a RAG chatbot grounded in your document, and a downloadable PDF
-            risk report — all in under a minute.
-          </p>
-          <div class="proj-tags">
-            <span class="tag">ES6+ Vanilla JS</span>
-            <span class="tag">LangChain</span>
-            <span class="tag">FAISS</span>
-            <span class="tag">RAG</span>
-            <span class="tag">FastAPI</span>
+          <div class="focus-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+              stroke="var(--cyan)" stroke-width="2">
+              <path d="m18 16 4-4-4-4" />
+              <path d="m6 8-4 4 4 4" />
+              <path d="m14.5 4-5 16" />
+            </svg>
+            AI Integration &amp; RAG Systems
           </div>
-          <div class="proj-links">
-            <a href="https://github.com/Asad101001/LegalEaseAI" target="_blank" rel="noopener" class="proj-link-code">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
-              Code
-            </a>
-            <a href="https://legal-ease-ai-iota.vercel.app/" target="_blank" rel="noopener" class="proj-link-demo">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
-              Live Demo
-            </a>
+          <div class="focus-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+              stroke="var(--cyan)" stroke-width="2">
+              <path
+                d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />
+            </svg>
+            Cloud Architecture (AWS)
           </div>
         </div>
       </div>
 
-      <!-- PollPulse -->
-      <div class="project-card glass-card">
-        <div class="proj-img-wrap">
-          <img src="public/images/pollpulse.png" alt="PollPulse screenshot" class="proj-img"
-               onerror="this.parentElement.style.background='linear-gradient(135deg,#a855f720,#18181b)';this.style.display='none'"/>
-          <div class="proj-img-overlay"></div>
-          <span class="proj-badge">Featured</span>
-        </div>
-        <div class="proj-body">
-          <div class="proj-head">
-            <div class="proj-icon" style="background:linear-gradient(135deg,#a855f730,#a855f710);color:#a855f7">P</div>
-            <div>
-              <h3 class="proj-title">PollPulse</h3>
-              <p class="proj-live" style="color:#71717a">Cloud Capstone</p>
-            </div>
-          </div>
-          <p class="proj-desc">
-            Node.js real-time polling platform deployed on AWS. Custom VPC with EC2 in a public subnet
-            and RDS MySQL in a private subnet for maximum security, S3 for static assets, and Chart.js
-            for live analytics dashboards.
-          </p>
-          <div class="proj-tags">
-            <span class="tag">Node.js</span>
-            <span class="tag">AWS EC2</span>
-            <span class="tag">AWS RDS</span>
-            <span class="tag">MySQL</span>
-            <span class="tag">Chart.js</span>
-            <span class="tag">AWS S3</span>
-          </div>
-          <div class="proj-links">
-            <a href="https://github.com/Asad101001/pollpulse" target="_blank" rel="noopener" class="proj-link-code">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
-              Code
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Data Science Fundamentals -->
-      <div class="project-card glass-card">
-        <div class="proj-img-wrap" style="background:linear-gradient(135deg,#f7931a18,#18181b)">
-          <div class="proj-img-placeholder">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#f7931a" stroke-width="1.5" opacity="0.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-          </div>
-          <div class="proj-img-overlay"></div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-head">
-            <div class="proj-icon" style="background:linear-gradient(135deg,#f7931a30,#f7931a10);color:#f7931a">D</div>
-            <div>
-              <h3 class="proj-title">Data Science Fundamentals</h3>
-              <p class="proj-live" style="color:#71717a">Learning Collection</p>
-            </div>
-          </div>
-          <p class="proj-desc">
-            Collection of Jupyter notebooks covering core Data Science concepts: data wrangling, EDA,
-            statistical analysis, visualization with Seaborn/Matplotlib, and ML models including
-            Random Forest and regression. Based on real datasets.
-          </p>
-          <div class="proj-tags">
-            <span class="tag">Python</span>
-            <span class="tag">Jupyter</span>
-            <span class="tag">pandas</span>
-            <span class="tag">NumPy</span>
-            <span class="tag">Matplotlib</span>
-            <span class="tag">Seaborn</span>
-            <span class="tag">Scikit-Learn</span>
-          </div>
-          <div class="proj-links">
-            <a href="https://github.com/Asad101001/Data-Science_Fundamentals" target="_blank" rel="noopener" class="proj-link-code">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
-              Code
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Mini-LMS -->
-      <div class="project-card glass-card">
-        <div class="proj-img-wrap" style="background:linear-gradient(135deg,#22c55e18,#18181b)">
-          <div class="proj-img-placeholder">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.5" opacity="0.5"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>
-          </div>
-          <div class="proj-img-overlay"></div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-head">
-            <div class="proj-icon" style="background:linear-gradient(135deg,#22c55e30,#22c55e10);color:#22c55e">M</div>
-            <div>
-              <h3 class="proj-title">Mini-LMS</h3>
-              <p class="proj-live" style="color:#71717a">OOP Practice</p>
-            </div>
-          </div>
-          <p class="proj-desc">
-            Lightweight Learning Management System prototype built for OOP practice. Features
-            student enrollment, course management, and assignment tracking — all implemented
-            using Python classes and clean modular architecture.
-          </p>
-          <div class="proj-tags">
-            <span class="tag">Python</span>
-            <span class="tag">OOP</span>
-            <span class="tag">Data Structures</span>
-          </div>
-          <div class="proj-links">
-            <a href="https://github.com/Asad101001/Mini-LMS" target="_blank" rel="noopener" class="proj-link-code">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
-              Code
-            </a>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════════
-     TECH STACK MARQUEE
-     ═══════════════════════════════════════════════ -->
-<section id="tech">
-  <div class="section-inner">
-    <div class="section-header centered">
-      <p class="label-xs" style="text-align:center">Arsenal</p>
-      <h2 class="section-title" style="text-align:center">Tech Stack</h2>
-      <p class="section-sub">Technologies and tools I use to build things</p>
-    </div>
-    <div class="marquee-wrap glass-card">
-      <div class="marquee-fade-l"></div>
-      <div class="marquee-fade-r"></div>
-      <div class="marquee-rows">
-
-        <div class="export-tech-marquee-lane">
-          <span class="skill-chip"><span class="chip-dot" style="background:#3776AB"></span>Python</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#00d4ff"></span>AWS</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#F7931A"></span>Data Science</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#a855f7"></span>Generative AI</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#EE4C2C"></span>Machine Learning</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#00d4ff"></span>RAG</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#3776AB"></span>LangChain</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#22c55e"></span>Cloud Computing</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#f97316"></span>Networking</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#00d4ff"></span>Linux</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#F05032"></span>C++</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#007396"></span>Java</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#E34F26"></span>HTML/CSS</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#F7DF1E"></span>JavaScript</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#a855f7"></span>Prompt Engineering</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#276DC3"></span>R</span>
-        </div>
-
-        <div class="export-tech-marquee-lane export-tech-marquee-lane--reverse">
-          <span class="skill-chip"><span class="chip-dot" style="background:#FF6B6B"></span>FastAPI</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#013243"></span>NumPy</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#150458"></span>pandas</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#F7931A"></span>Scikit-Learn</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#11557C"></span>Matplotlib</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#4EABE6"></span>Seaborn</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#4DB33D"></span>MySQL</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#FF9900"></span>Amazon EC2</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#FF9900"></span>AWS RDS</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#FF9900"></span>AWS S3</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#FF6384"></span>Chart.js</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#F05032"></span>Git</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#68A063"></span>Node.js</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#007ACC"></span>VS Code</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#000000"></span>PyCharm</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#F37626"></span>Jupyter</span>
-          <span class="skill-chip"><span class="chip-dot" style="background:#a855f7"></span>Scrum / Agile</span>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════════
-     EDUCATION
-     ═══════════════════════════════════════════════ -->
-<section id="education">
-  <div class="section-inner">
-    <div class="section-header">
-      <div>
-        <p class="label-xs">Background</p>
-        <h2 class="section-title">Education</h2>
-      </div>
-    </div>
-    <div class="timeline">
-
-      <div class="timeline-item">
-        <div class="tl-dot"></div>
-        <div class="tl-card glass-card">
-          <span class="tl-year">2025 – Present</span>
-          <h3 class="tl-degree">B.S Computer Science</h3>
-          <p class="tl-inst">Department of Computer Science UBIT, University of Karachi</p>
-        </div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="tl-dot"></div>
-        <div class="tl-card glass-card">
-          <span class="tl-year">2023 – 2024</span>
-          <h3 class="tl-degree">Intermediate (Pre-Engineering)</h3>
-          <p class="tl-inst">Govt. Degree Science/Commerce College, Gulshan Block 7</p>
-        </div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="tl-dot"></div>
-        <div class="tl-card glass-card">
-          <span class="tl-year">2009 – 2022</span>
-          <h3 class="tl-degree">Matric (SSC)</h3>
-          <p class="tl-inst">Karachi Public School</p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════════
-     CONTACT
-     ═══════════════════════════════════════════════ -->
-<section id="contact">
-  <div class="section-inner">
-    <div class="contact-wrap glass-card">
-      <div class="contact-top">
-        <p class="label-xs">Say Hello</p>
-        <h2 class="section-title">Let's Collaborate</h2>
-        <p class="contact-sub">Always open to interesting projects, open source contributions, and learning opportunities.</p>
-
-        <a href="mailto:muhammadasadk42@gmail.com" class="btn-primary contact-email-btn">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
-               fill="none" stroke="currentColor" stroke-width="2">
-            <rect width="20" height="16" x="2" y="4" rx="2"/>
-            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+      <div class="card glass-card" style="--delay:400ms">
+        <p class="card-label">Availability</p>
+        <p class="avail-text">Open for internships, part-time roles, and remote collaborations.</p>
+        <p class="avail-loc">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path
+              d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+            <circle cx="12" cy="10" r="3" />
           </svg>
-          Get in Touch
+          Karachi, Pakistan
+        </p>
+        <p class="avail-loc">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <rect width="20" height="16" x="2" y="4" rx="2" />
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+          </svg>
+          <a href="mailto:muhammadasadk42@gmail.com">muhammadasadk42@gmail.com</a>
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="section-header">
+        <div>
+          <p class="label-xs">Who I Am</p>
+          <h2 class="section-title">About Me</h2>
+        </div>
+      </div>
+      <div class="about-grid">
+
+        <div class="about-text glass-card">
+          <p>
+            I'm a Computer Science student at UBIT, University of Karachi '28,
+            with the drive to explore every corner of CS before committing to a specialty.
+            So far I've explored Cloud Computing, Networking, Web Development, Data Science,
+            Version Control, Project Management, Prompt Engineering, and AI &#x2014; with lots more ahead.
+          </p>
+          <p style="margin-top:1rem">
+            I believe in learning by building. Every project I attempt is to apply real
+            concepts in real environments &#x2014; from AWS VPC architecture to RAG-powered LLM pipelines.
+            My philosophy: build broken things, understand why they are broken, then dedicate ages to "unbreak" them.
+          </p>
+        </div>
+
+        <div class="about-stats-col">
+          <div class="about-stat-card glass-card">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="var(--cyan)" stroke-width="2">
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+              <polyline points="16 7 22 7 22 13" />
+            </svg>
+            <p class="stat-big" id="cnt-projects">4+</p>
+            <p class="stat-lbl">Projects</p>
+          </div>
+          <div class="about-stat-card glass-card">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="var(--cyan)" stroke-width="2">
+              <path
+                d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+              <path d="m9 12 2 2 4-4" />
+            </svg>
+            <p class="stat-big" id="cnt-certs">4+</p>
+            <p class="stat-lbl">Certifications</p>
+          </div>
+          <div class="about-stat-card glass-card">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="var(--cyan)" stroke-width="2">
+              <path d="m18 16 4-4-4-4" />
+              <path d="m6 8-4 4 4 4" />
+              <path d="m14.5 4-5 16" />
+            </svg>
+            <p class="stat-big" id="cnt-tech">20+</p>
+            <p class="stat-lbl">Technologies</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- GITHUB CONTRIBUTION GRAPH -->
+  <!-- <section id="gh-section">
+    <div class="section-inner">
+      <div class="gh-graph-wrap glass-card">
+        <div class="gh-header">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="var(--cyan)" stroke-width="2">
+            <path
+              d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+            <path d="M9 18c-4.51 2-5-2-7-2" />
+          </svg>
+          <span>GitHub Contributions</span>
+          <span id="gh-contrib-count" class="gh-count"></span>
+        </div>
+        <div class="gh-graph-scroll">
+          <div id="gh-contrib-grid" class="gh-grid">
+            <p class="gh-loading">Loading contributions&#x2026;</p>
+          </div>
+        </div>
+        <div class="gh-legend">
+          <span>Less</span>
+          <span class="gh-leg-cell" style="opacity:0.08"></span>
+          <span class="gh-leg-cell" style="opacity:0.25"></span>
+          <span class="gh-leg-cell" style="opacity:0.5"></span>
+          <span class="gh-leg-cell" style="opacity:0.75"></span>
+          <span class="gh-leg-cell" style="opacity:1"></span>
+          <span>More</span>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-inner">
+      <div class="section-header">
+        <div>
+          <p class="label-xs">Work</p>
+          <h2 class="section-title">Projects</h2>
+        </div>
+        <a href="https://github.com/Asad101001?tab=repositories" target="_blank" rel="noopener" class="view-all-link">
+          All Repositories
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M15 3h6v6" />
+            <path d="M10 14 21 3" />
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+          </svg>
         </a>
       </div>
 
-      <div class="contact-bottom">
-        <!-- Social icons row -->
-        <div class="socials-row">
+      <div class="projects-grid">
 
-          <!-- GitHub -->
-          <a href="https://github.com/Asad101001" target="_blank" rel="noopener" class="social-icon github" title="GitHub">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
-          </a>
-
-          <!-- LinkedIn -->
-          <a href="https://www.linkedin.com/in/muhammadasadk/" target="_blank" rel="noopener" class="social-icon linkedin" title="LinkedIn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
-          </a>
-
-          <!-- Gmail -->
-          <a href="mailto:muhammadasadk42@gmail.com" class="social-icon gmail" title="Email">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-          </a>
-
-          <!-- Discord -->
-          <a href="https://discord.com/users/1390327957062418654" target="_blank" rel="noopener" class="social-icon discord" title="Discord">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-          </a>
-
-          <!-- Medium -->
-          <a href="https://medium.com/@muhammadasadk42" target="_blank" rel="noopener" class="social-icon medium" title="Medium">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M13.54 12a6.8 6.8 0 0 1-6.77 6.82A6.8 6.8 0 0 1 0 12a6.8 6.8 0 0 1 6.77-6.82A6.8 6.8 0 0 1 13.54 12zm7.42 0c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
-          </a>
-
-          <!-- Instagram -->
-          <a href="https://www.instagram.com/muhammadasad.k_/" target="_blank" rel="noopener" class="social-icon instagram" title="Instagram">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-          </a>
-
-          <!-- Spotify -->
-          <a href="https://open.spotify.com/user/31nzox4rnz5dywmealmdmufewe3u" target="_blank" rel="noopener" class="social-icon spotify" title="Spotify">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-          </a>
-
+        <!-- LegalEaseAI -->
+        <div class="project-card glass-card">
+          <div class="proj-img-wrap" style="background:linear-gradient(135deg,#00d4ff18,#18181b)">
+            <img src="public/images/legalease.png" alt="LegalEaseAI" class="proj-img"
+              onerror="this.style.display='none'" />
+            <div class="proj-img-placeholder" style="display:flex">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                stroke="#00d4ff" stroke-width="1.2" opacity="0.45">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+              </svg>
+            </div>
+            <div class="proj-img-overlay"></div>
+            <span class="proj-badge">Featured</span>
+          </div>
+          <div class="proj-body">
+            <div class="proj-head">
+              <div class="proj-icon" style="background:linear-gradient(135deg,#00d4ff30,#00d4ff10);color:var(--cyan)">L
+              </div>
+              <div>
+                <h3 class="proj-title">LegalEaseAI</h3>
+                <p class="proj-live"><a href="https://legal-ease-ai-iota.vercel.app/" target="_blank"
+                    rel="noopener">Live Demo &#x2197;</a></p>
+              </div>
+            </div>
+            <p class="proj-desc">Upload any contract (PDF, DOCX, or TXT) and get every clause risk-rated
+              Red/Yellow/Green, a plain Urdu explanation, a RAG chatbot grounded in your document, and a downloadable
+              PDF risk report &#x2014; all in under a minute.</p>
+            <div class="proj-tags">
+              <span class="tag">ES6+ Vanilla JS</span>
+              <span class="tag">LangChain</span>
+              <span class="tag">FAISS</span>
+              <span class="tag">RAG</span>
+              <span class="tag">FastAPI</span>
+            </div>
+            <div class="proj-links">
+              <a href="https://github.com/Asad101001/LegalEaseAI" target="_blank" rel="noopener" class="proj-link-code">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                  <path d="M9 18c-4.51 2-5-2-7-2" />
+                </svg>
+                Code
+              </a>
+              <a href="https://legal-ease-ai-iota.vercel.app/" target="_blank" rel="noopener" class="proj-link-demo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <path d="M15 3h6v6" />
+                  <path d="M10 14 21 3" />
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                </svg>
+                Live Demo
+              </a>
+            </div>
+          </div>
         </div>
 
-        <!-- Spotify Now Playing Widget -->
-        <div class="spotify-widget">
-          <div class="spotify-label">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-            My Spotify
+        <!-- PollPulse -->
+        <div class="project-card glass-card">
+          <div class="proj-img-wrap" style="background:linear-gradient(135deg,#a855f720,#18181b)">
+            <img src="public/images/pollpulse.png" alt="PollPulse" class="proj-img"
+              onerror="this.style.display='none'" />
+            <div class="proj-img-placeholder" style="display:flex">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                stroke="#a855f7" stroke-width="1.2" opacity="0.45">
+                <path d="M3 3v18h18" />
+                <path d="m19 9-5 5-4-4-3 3" />
+              </svg>
+            </div>
+            <div class="proj-img-overlay"></div>
+            <span class="proj-badge">Featured</span>
           </div>
-          <iframe
-            src="https://open.spotify.com/embed/user/31nzox4rnz5dywmealmdmufewe3u/playlists?utm_source=generator&theme=0"
-            width="100%" height="152" frameborder="0"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy"
-            style="border-radius:12px;border:1px solid rgba(255,255,255,0.08)">
-          </iframe>
+          <div class="proj-body">
+            <div class="proj-head">
+              <div class="proj-icon" style="background:linear-gradient(135deg,#a855f730,#a855f710);color:#a855f7">P
+              </div>
+              <div>
+                <h3 class="proj-title">PollPulse</h3>
+                <p class="proj-live" style="color:#71717a">Cloud Capstone</p>
+              </div>
+            </div>
+            <p class="proj-desc">Node.js real-time polling platform deployed on AWS. Custom VPC with EC2 in a public
+              subnet and RDS MySQL in a private subnet for maximum security, S3 for static assets, and Chart.js for live
+              analytics dashboards.</p>
+            <div class="proj-tags">
+              <span class="tag">Node.js</span>
+              <span class="tag">AWS EC2</span>
+              <span class="tag">AWS RDS</span>
+              <span class="tag">MySQL</span>
+              <span class="tag">Chart.js</span>
+              <span class="tag">AWS S3</span>
+            </div>
+            <div class="proj-links">
+              <a href="https://github.com/Asad101001/pollpulse" target="_blank" rel="noopener" class="proj-link-code">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                  <path d="M9 18c-4.51 2-5-2-7-2" />
+                </svg>
+                Code
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Science Fundamentals -->
+        <div class="project-card glass-card">
+          <div class="proj-img-wrap" style="background:linear-gradient(135deg,#f7931a18,#18181b)">
+            <img src="public/images/data-science.jpg" alt="PollPulse" class="proj-img">
+            <div class="proj-img-placeholder" style="display:flex">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                stroke="#f7931a" stroke-width="1.2" opacity="0.45">
+                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+                <polyline points="16 7 22 7 22 13" />
+              </svg>
+            </div>
+            <div class="proj-img-overlay"></div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-head">
+              <div class="proj-icon" style="background:linear-gradient(135deg,#f7931a30,#f7931a10);color:#f7931a">D
+              </div>
+              <div>
+                <h3 class="proj-title">Data Science Fundamentals</h3>
+                <p class="proj-live" style="color:#71717a">Learning Collection</p>
+              </div>
+            </div>
+            <p class="proj-desc">Collection of Jupyter notebooks covering core Data Science concepts: data wrangling,
+              EDA, statistical analysis, visualization with Seaborn/Matplotlib, and ML models including Random Forest
+              and regression.</p>
+            <div class="proj-tags">
+              <span class="tag">Python</span>
+              <span class="tag">Jupyter</span>
+              <span class="tag">pandas</span>
+              <span class="tag">NumPy</span>
+              <span class="tag">Matplotlib</span>
+              <span class="tag">Seaborn</span>
+              <span class="tag">Scikit-Learn</span>
+            </div>
+            <div class="proj-links">
+              <a href="https://github.com/Asad101001/Data-Science_Fundamentals" target="_blank" rel="noopener"
+                class="proj-link-code">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                  <path d="M9 18c-4.51 2-5-2-7-2" />
+                </svg>
+                Code
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- AWS Static Website -->
+        <div class="project-card glass-card">
+          <div class="proj-img-wrap" style="background:linear-gradient(135deg,#FF990018,#18181b)">
+            <img src="public/images/aws.png" alt="PollPulse" class="proj-img">
+            <div class="proj-img-placeholder" style="display:flex">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                stroke="#FF9900" stroke-width="1.2" opacity="0.45">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+            </div>
+            <div class="proj-img-overlay"></div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-head">
+              <div class="proj-icon" style="background:linear-gradient(135deg,#FF990030,#FF990010);color:#FF9900">A
+              </div>
+              <div>
+                <h3 class="proj-title">AWS Static Website</h3>
+                <p class="proj-live" style="color:#71717a">Cloud Hosting</p>
+              </div>
+            </div>
+            <p class="proj-desc">Static website hosted on an AWS EC2 instance using Nginx as the web server, running on
+              Ubuntu Linux. Covers provisioning, security groups, SSH access, and serving production-ready HTML/CSS/JS
+              over the public internet.</p>
+            <div class="proj-tags">
+              <span class="tag">AWS EC2</span>
+              <span class="tag">Nginx</span>
+              <span class="tag">Linux</span>
+              <span class="tag">HTML/CSS/JS</span>
+              <span class="tag">SSH</span>
+            </div>
+            <div class="proj-links">
+              <a href="https://github.com/Asad101001/aws-static-website" target="_blank" rel="noopener"
+                class="proj-link-code">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                  <path d="M9 18c-4.51 2-5-2-7-2" />
+                </svg>
+                Code
+              </a>
+            </div>
+          </div>
         </div>
 
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
 
-<!-- ═══════════════════════════════════════════════
-     FOOTER
-     ═══════════════════════════════════════════════ -->
-<footer>
-  <p>© 2026 Muhammad Asad Khan · Built with ☕ and late nights</p>
-</footer>
+  <!-- TECH STACK MARQUEE -->
+  <section id="tech">
+    <div class="section-inner">
+      <div class="section-header centered">
+        <p class="label-xs" style="text-align:center">Arsenal</p>
+        <h2 class="section-title" style="text-align:center">Tech Stack</h2>
+        <p class="section-sub">Technologies and tools I use to build things</p>
+      </div>
+      <div class="marquee-wrap glass-card">
+        <div class="marquee-fade-l"></div>
+        <div class="marquee-fade-r"></div>
+        <div class="marquee-rows">
+          <div class="export-tech-marquee-lane">
+            <span class="skill-chip"><span class="chip-dot" style="background:#3776AB"></span>Python</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#00d4ff"></span>AWS</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#F7931A"></span>Data Science</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#a855f7"></span>Generative AI</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#EE4C2C"></span>Machine Learning</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#00d4ff"></span>RAG</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#3776AB"></span>LangChain</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#22c55e"></span>Cloud Computing</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#f97316"></span>Networking</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#00d4ff"></span>Linux</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#F05032"></span>C++</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#007396"></span>Java</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#E34F26"></span>HTML/CSS</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#F7DF1E"></span>JavaScript</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#a855f7"></span>Prompt Engineering</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#276DC3"></span>R</span>
+          </div>
+          <div class="export-tech-marquee-lane export-tech-marquee-lane--reverse">
+            <span class="skill-chip"><span class="chip-dot" style="background:#FF6B6B"></span>FastAPI</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#013243"></span>NumPy</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#150458"></span>pandas</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#F7931A"></span>Scikit-Learn</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#11557C"></span>Matplotlib</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#4EABE6"></span>Seaborn</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#4DB33D"></span>MySQL</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#FF9900"></span>Amazon EC2</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#FF9900"></span>AWS RDS</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#FF9900"></span>AWS S3</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#FF6384"></span>Chart.js</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#F05032"></span>Git</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#68A063"></span>Node.js</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#007ACC"></span>VS Code</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#000000"></span>PyCharm</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#F37626"></span>Jupyter</span>
+            <span class="skill-chip"><span class="chip-dot" style="background:#a855f7"></span>Scrum / Agile</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
 
-<script src="app.js"></script>
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="section-inner">
+      <div class="section-header">
+        <div>
+          <p class="label-xs">Background</p>
+          <h2 class="section-title">Education</h2>
+        </div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div class="tl-card glass-card">
+            <span class="tl-year">2025 &#x2013; Present</span>
+            <h3 class="tl-degree">B.S Computer Science</h3>
+            <p class="tl-inst">Department of Computer Science UBIT, University of Karachi</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div class="tl-card glass-card">
+            <span class="tl-year">2023 &#x2013; 2024</span>
+            <h3 class="tl-degree">Intermediate (Pre-Engineering)</h3>
+            <p class="tl-inst">Govt. Degree Science/Commerce College, Gulshan Block 7</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div class="tl-card glass-card">
+            <span class="tl-year">2009 &#x2013; 2022</span>
+            <h3 class="tl-degree">Matric (SSC)</h3>
+            <p class="tl-inst">Karachi Public School</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <div class="contact-wrap glass-card">
+        <div class="contact-top">
+          <p class="label-xs">Say Hello</p>
+          <h2 class="section-title">Let's Collaborate</h2>
+          <p class="contact-sub">Always open to interesting projects, open source contributions, and learning
+            opportunities.</p>
+          <a href="mailto:muhammadasadk42@gmail.com" class="btn-primary contact-email-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <rect width="20" height="16" x="2" y="4" rx="2" />
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+            </svg>
+            Get in Touch
+          </a>
+        </div>
+
+        <div class="contact-bottom">
+          <div class="contact-social-spotify">
+
+            <div class="socials-col">
+              <p class="socials-label">Find me on</p>
+              <div class="socials-row">
+                <a href="https://github.com/Asad101001" target="_blank" rel="noopener" class="social-icon github"
+                  title="GitHub">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <path
+                      d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                    <path d="M9 18c-4.51 2-5-2-7-2" />
+                  </svg>
+                </a>
+                <a href="https://www.linkedin.com/in/muhammadasadk/" target="_blank" rel="noopener"
+                  class="social-icon linkedin" title="LinkedIn">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                    <rect width="4" height="12" x="2" y="9" />
+                    <circle cx="4" cy="4" r="2" />
+                  </svg>
+                </a>
+                <a href="mailto:muhammadasadk42@gmail.com" class="social-icon gmail" title="Email">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <rect width="20" height="16" x="2" y="4" rx="2" />
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                  </svg>
+                </a>
+                <a href="https://discord.com/users/1390327957062418654" target="_blank" rel="noopener"
+                  class="social-icon discord" title="Discord">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                    fill="currentColor">
+                    <path
+                      d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+                  </svg>
+                </a>
+                <a href="https://medium.com/@muhammadasadk42" target="_blank" rel="noopener" class="social-icon medium"
+                  title="Medium">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                    fill="currentColor">
+                    <path
+                      d="M13.54 12a6.8 6.8 0 0 1-6.77 6.82A6.8 6.8 0 0 1 0 12a6.8 6.8 0 0 1 6.77-6.82A6.8 6.8 0 0 1 13.54 12zm7.42 0c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z" />
+                  </svg>
+                </a>
+                <a href="https://www.instagram.com/muhammadasad.k_/" target="_blank" rel="noopener"
+                  class="social-icon instagram" title="Instagram">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                  </svg>
+                </a>
+                <a href="https://open.spotify.com/user/31nzox4rnz5dywmealmdmufewe3u" target="_blank" rel="noopener"
+                  class="social-icon spotify" title="Spotify">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                    fill="currentColor">
+                    <path
+                      d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            <div class="spotify-widget">
+              <div class="spotify-label">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#1DB954">
+                  <path
+                    d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" />
+                </svg>
+                My Playlist
+              </div>
+              <iframe
+                src="https://open.spotify.com/embed/playlist/7AiShuc4G6kqRLGLf8GQSD?utm_source=generator&amp;theme=0"
+                width="100%" height="152" frameborder="0"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"
+                style="border-radius:12px;border:1px solid rgba(255,255,255,0.08)">
+              </iframe>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&#169; 2026 Muhammad Asad Khan &middot; Built with &#x2615; and late nights</p>
+  </footer>
+
+  <script src="app.js"></script>
 </body>
+
 </html>

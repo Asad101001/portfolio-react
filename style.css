@@ -548,9 +548,11 @@ section {
 }
 .proj-img-placeholder {
   width: 100%; height: 100%;
-  display: flex;
+  display: none; /* shown by JS onerror or when wrapping div has no img */
   align-items: center;
   justify-content: center;
+  position: absolute;
+  inset: 0;
 }
 .proj-img-overlay {
   position: absolute;
@@ -824,6 +826,33 @@ footer {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+
+/* Fun facts */
+.fun-facts { display: flex; flex-direction: column; gap: 8px; }
+.fun-fact-item {
+  padding: 9px 13px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  line-height: 1.4;
+}
+.fun-fact-item:hover { color: var(--text); border-color: rgba(168,85,247,0.25); background: rgba(168,85,247,0.05); }
+
+/* Contact social-spotify side-by-side */
+.contact-social-spotify {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.socials-col { flex-shrink: 0; }
+.socials-label { font-size: 0.68rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+.socials-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.spotify-widget { flex: 1; min-width: 260px; max-width: 360px; }
 
 /* ── 16. Card entrance animation ──────────────────────────── */
 @keyframes fade-up {
