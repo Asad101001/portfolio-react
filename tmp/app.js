@@ -1,72 +1,107 @@
 'use strict';
 /* ============================================================
-   PORTFOLIO app.js v7  —  Muhammad Asad Khan
+   PORTFOLIO app.js v6  —  Muhammad Asad Khan
    ============================================================ */
 
-/* ── A. Background — CSS-only orbs, static dot grid on canvas ─ */
+/* ── A. Particle Canvas ─────────────────────────────────── */
 (function () {
   var c = document.getElementById('bg-canvas');
   if (!c) return;
-  var ctx = c.getContext('2d'), W, H;
+  var x = c.getContext('2d'), W, H, pts = [], mx = -9999, my = -9999;
 
-  function resize() {
-    W = c.width  = window.innerWidth;
-    H = c.height = window.innerHeight;
-    drawDots();
-  }
+  function resize() { W = c.width = window.innerWidth; H = c.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', function () { resize(); init(); });
+  window.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; });
 
-  function drawDots() {
-    ctx.clearRect(0, 0, W, H);
-    var spacing = 52;
-    ctx.fillStyle = 'rgba(255,255,255,0.038)';
-    for (var row = 0; row * spacing <= H + spacing; row++) {
-      for (var col = 0; col * spacing <= W + spacing; col++) {
-        ctx.beginPath();
-        ctx.arc(col * spacing, row * spacing, 0.8, 0, Math.PI * 2);
-        ctx.fill();
-      }
+  function r(a, b) { return Math.random() * (b - a) + a; }
+
+  // More particles, more variety
+  function init() {
+    pts = [];
+    var n = Math.floor(W * H / 12000);
+    for (var i = 0; i < n; i++) {
+      pts.push({
+        x: r(0,W), y: r(0,H),
+        vx: r(-0.22,0.22), vy: r(-0.22,0.22),
+        rad: r(0.6,2.8),
+        a: r(0.12,0.55),
+        hue: r(0,1) // 0=cyan, 0.5=purple, 1=cyan
+      });
     }
   }
+  init();
 
-  resize();
-  window.addEventListener('resize', resize, { passive: true });
-  // No rAF loop — canvas is static; CSS orbs handle animation
+  function lerp(a,b,t){ return a+(b-a)*t; }
+
+  function draw() {
+    x.clearRect(0, 0, W, H);
+
+    // Big ambient gradient
+    var g = x.createRadialGradient(W/2, 0, 0, W/2, 0, H*0.7);
+    g.addColorStop(0,'rgba(0,212,255,0.05)'); g.addColorStop(1,'transparent');
+    x.fillStyle = g; x.fillRect(0,0,W,H);
+
+    // Secondary bottom purple orb
+    var g2 = x.createRadialGradient(W*0.8, H, 0, W*0.8, H, H*0.5);
+    g2.addColorStop(0,'rgba(168,85,247,0.04)'); g2.addColorStop(1,'transparent');
+    x.fillStyle = g2; x.fillRect(0,0,W,H);
+
+    for (var i = 0; i < pts.length; i++) {
+      var p = pts[i];
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < -5) p.x = W+5; if (p.x > W+5) p.x = -5;
+      if (p.y < -5) p.y = H+5; if (p.y > H+5) p.y = -5;
+
+      // Mouse repulsion
+      var dx = p.x-mx, dy = p.y-my, dd = Math.sqrt(dx*dx+dy*dy);
+      if (dd < 100 && dd > 0) { var f=(100-dd)/100*0.4; p.x+=dx/dd*f; p.y+=dy/dd*f; }
+
+      // Color interpolation cyan↔purple
+      var r_c = p.hue < 0.5 ? lerp(0, 168, p.hue*2) : lerp(168, 0, (p.hue-0.5)*2);
+      var g_c = p.hue < 0.5 ? lerp(212, 85, p.hue*2)  : lerp(85, 212, (p.hue-0.5)*2);
+      var b_c = p.hue < 0.5 ? lerp(255, 247, p.hue*2)  : lerp(247, 255, (p.hue-0.5)*2);
+
+      x.beginPath(); x.arc(p.x,p.y,p.rad,0,Math.PI*2);
+      x.fillStyle='rgba('+Math.round(r_c)+','+Math.round(g_c)+','+Math.round(b_c)+','+p.a+')';
+      x.fill();
+
+      // Connect nearby particles
+      for (var j = i+1; j < pts.length; j++) {
+        var q=pts[j], ex=p.x-q.x, ey=p.y-q.y, ed=Math.sqrt(ex*ex+ey*ey);
+        if (ed < 100) {
+          x.beginPath(); x.moveTo(p.x,p.y); x.lineTo(q.x,q.y);
+          x.strokeStyle='rgba(0,212,255,'+(0.05*(1-ed/100))+')';
+          x.lineWidth=0.5; x.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
 })();
 
 
-/* ── B. Section Nav Dots ─────────────────────────────────── */
+/* ── B. Cursor Glow ─────────────────────────────────────── */
 (function () {
-  var sections = ['hero','about','projects','tech','education','contact'];
-  var nav = document.createElement('div');
-  nav.id = 'section-dots';
-  nav.setAttribute('aria-hidden', 'true');
-  sections.forEach(function (id) {
-    var dot = document.createElement('button');
-    dot.className = 'section-dot';
-    dot.setAttribute('data-section', id);
-    dot.setAttribute('title', id.charAt(0).toUpperCase() + id.slice(1));
-    dot.addEventListener('click', function () {
-      var el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    });
-    nav.appendChild(dot);
+  var glow = document.getElementById('cursor-glow');
+  if (!glow) return;
+  window.addEventListener('mousemove', function (e) {
+    glow.style.left = e.clientX + 'px';
+    glow.style.top  = e.clientY + 'px';
   });
-  document.body.appendChild(nav);
+})();
 
-  if (window.IntersectionObserver) {
-    var dots = nav.querySelectorAll('.section-dot');
-    sections.forEach(function (id, idx) {
-      var el = document.getElementById(id);
-      if (!el) return;
-      var obs = new IntersectionObserver(function (entries) {
-        if (entries[0].isIntersecting) {
-          dots.forEach(function (d) { d.classList.remove('active'); });
-          if (dots[idx]) dots[idx].classList.add('active');
-        }
-      }, { threshold: 0.35 });
-      obs.observe(el);
-    });
-  }
+
+/* ── C. Scroll Progress Bar ─────────────────────────────── */
+(function () {
+  var bar = document.getElementById('scroll-progress');
+  if (!bar) return;
+  window.addEventListener('scroll', function () {
+    var scrolled = document.documentElement.scrollTop;
+    var total = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    bar.style.width = (scrolled / total * 100) + '%';
+  }, { passive: true });
 })();
 
 
@@ -168,20 +203,13 @@ document.querySelectorAll('.export-tech-marquee-lane').forEach(function (lane) {
 });
 
 
-/* ── I. Back to Top + Scroll Progress Ring ──────────────── */
+/* ── I. Back to Top ─────────────────────────────────────── */
 (function () {
-  var btn  = document.getElementById('back-to-top');
-  var ring = document.getElementById('scroll-ring');
+  var btn = document.getElementById('back-to-top');
   if (!btn) return;
-  var CIRC = 119.4;
-  function onScroll() {
-    var scrolled = window.scrollY;
-    var total = document.documentElement.scrollHeight - window.innerHeight;
-    var pct = total > 0 ? scrolled / total : 0;
-    btn.classList.toggle('visible', scrolled > 400);
-    if (ring) ring.style.strokeDashoffset = CIRC * (1 - pct);
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('scroll', function () {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  }, { passive: true });
   btn.addEventListener('click', function () {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
@@ -271,9 +299,10 @@ document.querySelectorAll('.export-tech-marquee-lane').forEach(function (lane) {
 
   var XP_PER_VISIT = 35;
   var XP_PER_LEVEL = 100;
-  var KEY_VISITED  = 'asad_portfolio_visited_v2';
+  var KEY_VISITED  = 'asad_portfolio_visited_v2'; // new key = clean slate
   var KEY_VISITS   = 'asad_portfolio_visit_count';
 
+  // Unique visit — only increment on first visit per browser session
   var alreadyVisited = sessionStorage.getItem(KEY_VISITED);
   var visits = parseInt(localStorage.getItem(KEY_VISITS) || '0', 10);
 
@@ -330,6 +359,7 @@ document.querySelectorAll('.export-tech-marquee-lane').forEach(function (lane) {
       'left:' + (e.clientX - rect.left - size / 2) + 'px',
       'top:' + (e.clientY - rect.top - size / 2) + 'px'
     ].join(';');
+    // Ensure relative positioning
     var pos = getComputedStyle(target).position;
     if (pos === 'static') target.style.position = 'relative';
     target.style.overflow = 'hidden';
@@ -339,11 +369,9 @@ document.querySelectorAll('.export-tech-marquee-lane').forEach(function (lane) {
 })();
 
 
-/* ── N. Card Tilt — subtle, project cards only ──────────── */
+/* ── N. Card Tilt on mouse move ─────────────────────────── */
 (function () {
-  // Skip on touch / low-power devices
-  if (window.matchMedia('(hover: none)').matches) return;
-  var cards = document.querySelectorAll('.project-card');
+  var cards = document.querySelectorAll('.project-card, .about-stat-card');
   cards.forEach(function (card) {
     card.addEventListener('mousemove', function (e) {
       var rect = card.getBoundingClientRect();
@@ -351,9 +379,9 @@ document.querySelectorAll('.export-tech-marquee-lane').forEach(function (lane) {
       var y = e.clientY - rect.top;
       var cx = rect.width / 2;
       var cy = rect.height / 2;
-      var rx = (y - cy) / cy * -3;   // reduced from 6 → 3
-      var ry = (x - cx) / cx * 3;
-      card.style.transform = 'perspective(900px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) translateY(-3px)';
+      var rx = (y - cy) / cy * -6;
+      var ry = (x - cx) / cx * 6;
+      card.style.transform = 'perspective(800px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) translateY(-4px)';
     });
     card.addEventListener('mouseleave', function () {
       card.style.transform = '';
@@ -391,64 +419,43 @@ document.querySelectorAll('.export-tech-marquee-lane').forEach(function (lane) {
     });
   });
 
-  // ── Supabase config — fill in after following SETUP.md ──
-  var SUPABASE_URL = 'https://maqcxedrpmqtqibdjeae.supabase.co';   // e.g. 'https://abcxyz.supabase.co'
-  var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcWN4ZWRycG1xdHFpYmRqZWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0NzYyOTIsImV4cCI6MjA4ODA1MjI5Mn0.pAjBAmDhsbh8p7noOuyV6maPFDkRtptocE6VpuD6hSA'; // your anon/public key
-
-  function saveFeedback(rating, message) {
-    var entry = { rating: rating, message: message, time: new Date().toISOString() };
-
-    // 1. Always save locally as backup
-    var feedbacks = JSON.parse(localStorage.getItem('asad_feedbacks') || '[]');
-    feedbacks.push(entry);
-    localStorage.setItem('asad_feedbacks', JSON.stringify(feedbacks));
-
-    // 2. If Supabase is configured, also POST to the database
-    if (SUPABASE_URL && SUPABASE_ANON_KEY) {
-      fetch(SUPABASE_URL + '/rest/v1/feedback', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-          'Prefer': 'return=minimal'
-        },
-        body: JSON.stringify({ rating: rating, message: message })
-      }).catch(function(err) {
-        console.warn('Supabase save failed (local backup kept):', err);
-      });
-    }
-  }
-
-  function showSuccess() {
-    if (submitBtn.parentNode) {
-      submitBtn.style.display = 'none';
-      if (textarea) textarea.style.display = 'none';
-      document.querySelector('.feedback-rating').style.display = 'none';
-      document.querySelector('.feedback-header').style.display = 'none';
-    }
-    if (successEl) successEl.style.display = 'block';
-    setTimeout(function () {
-      closeModal();
-      setTimeout(function () {
-        if (submitBtn) submitBtn.style.display = '';
-        if (textarea)  { textarea.style.display = ''; textarea.value = ''; }
-        var ratingDiv = document.querySelector('.feedback-rating');
-        if (ratingDiv) ratingDiv.style.display = '';
-        var headerDiv = document.querySelector('.feedback-header');
-        if (headerDiv) headerDiv.style.display = '';
-        if (successEl) successEl.style.display = 'none';
-        selectedRating = 0;
-        ratingBtns.forEach(function (b) { b.classList.remove('selected'); });
-      }, 400);
-    }, 1800);
-  }
-
   if (submitBtn) {
     submitBtn.addEventListener('click', function () {
       var msg = textarea ? textarea.value.trim() : '';
-      saveFeedback(selectedRating, msg);
-      showSuccess();
+      // Store feedback locally (no backend needed this way)
+      var feedbacks = JSON.parse(localStorage.getItem('asad_feedbacks') || '[]');
+      feedbacks.push({
+        rating: selectedRating,
+        message: msg,
+        time: new Date().toISOString()
+      });
+      localStorage.setItem('asad_feedbacks', JSON.stringify(feedbacks));
+
+      // Show success state
+      if (submitBtn.parentNode) {
+        submitBtn.style.display = 'none';
+        if (textarea) textarea.style.display = 'none';
+        document.querySelector('.feedback-rating').style.display = 'none';
+        document.querySelector('.feedback-header').style.display = 'none';
+      }
+      if (successEl) successEl.style.display = 'block';
+
+      // Auto-close
+      setTimeout(function () {
+        closeModal();
+        // Reset after close
+        setTimeout(function () {
+          if (submitBtn) submitBtn.style.display = '';
+          if (textarea)  { textarea.style.display = ''; textarea.value = ''; }
+          var ratingDiv = document.querySelector('.feedback-rating');
+          if (ratingDiv) ratingDiv.style.display = '';
+          var headerDiv = document.querySelector('.feedback-header');
+          if (headerDiv) headerDiv.style.display = '';
+          if (successEl) successEl.style.display = 'none';
+          selectedRating = 0;
+          ratingBtns.forEach(function (b) { b.classList.remove('selected'); });
+        }, 400);
+      }, 1800);
     });
   }
 })();
