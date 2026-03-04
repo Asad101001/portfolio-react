@@ -1572,3 +1572,144 @@ section { position: relative; overflow: hidden; }
 #tech     .ambient-glow { width: 600px; height: 300px; top: 0; left: 50%; transform: translateX(-50%); background: radial-gradient(ellipse, rgba(0,212,255,0.05), transparent 70%); }
 #education .ambient-glow { width: 400px; height: 400px; bottom: 0; right: -100px; background: radial-gradient(circle, rgba(34,197,94,0.03), transparent 70%); }
 #contact  .ambient-glow { width: 500px; height: 500px; top: -100px; left: 50%; transform: translateX(-50%); background: radial-gradient(circle, rgba(168,85,247,0.04), transparent 70%); }
+
+/* ══════════════════════════════════════════════════════════
+   SPOTIFY NOW PLAYING WIDGET  (append to style.css)
+   ══════════════════════════════════════════════════════════ */
+
+/* Container */
+.spotify-widget-wrap {
+  border-radius: 16px;
+  border: 1px solid rgba(29,185,84,0.2);
+  background: rgba(29,185,84,0.025);
+  overflow: hidden;
+}
+.spotify-widget-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 14px 18px; border-bottom: 1px solid rgba(29,185,84,0.1);
+  font-size: 0.72rem; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.spotify-widget-header a {
+  margin-left: auto; color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+  font-weight: 600; text-transform: none; letter-spacing: 0;
+  transition: color 0.2s;
+}
+.spotify-widget-header a:hover { color: #1DB954; }
+
+#spotify-widget { padding: 0; min-height: 80px; }
+
+/* Inner link wrapper */
+.sp-inner {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px;
+  text-decoration: none; color: inherit;
+  transition: background 0.15s;
+}
+.sp-inner:hover { background: rgba(29,185,84,0.05); }
+
+/* Album art */
+.sp-art-wrap {
+  position: relative; flex-shrink: 0;
+  width: 52px; height: 52px;
+}
+.sp-art {
+  width: 52px; height: 52px;
+  border-radius: 8px; object-fit: cover;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.07);
+  display: block;
+}
+.sp-art--empty {
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-dim);
+}
+.sp-art--empty svg { width: 24px; height: 24px; }
+
+/* Spinning ring when playing */
+.sp-playing-ring {
+  position: absolute; inset: -3px; border-radius: 11px;
+  border: 1.5px solid rgba(29,185,84,0.5);
+  animation: sp-ring-spin 3s linear infinite;
+  pointer-events: none;
+}
+@keyframes sp-ring-spin {
+  0%   { border-color: rgba(29,185,84,0.5) transparent transparent transparent; }
+  25%  { border-color: transparent rgba(29,185,84,0.5) transparent transparent; }
+  50%  { border-color: transparent transparent rgba(29,185,84,0.5) transparent; }
+  75%  { border-color: transparent transparent transparent rgba(29,185,84,0.5); }
+  100% { border-color: rgba(29,185,84,0.5) transparent transparent transparent; }
+}
+
+/* Info */
+.sp-info { flex: 1; min-width: 0; }
+
+.sp-status {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.62rem; font-weight: 700;
+  color: #1DB954; text-transform: uppercase; letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+.sp-status-icon { width: 10px; height: 10px; color: var(--text-dim); }
+.sp-status-text { color: var(--text-dim); font-weight: 600; }
+
+/* Equalizer bars when playing */
+.sp-eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
+.sp-eq span {
+  display: inline-block; width: 2px; border-radius: 1px;
+  background: #1DB954; animation: eq-bounce 0.8s ease-in-out infinite;
+}
+.sp-eq span:nth-child(1) { animation-delay: 0s;    height: 40%; }
+.sp-eq span:nth-child(2) { animation-delay: 0.15s; height: 80%; }
+.sp-eq span:nth-child(3) { animation-delay: 0.3s;  height: 60%; }
+.sp-eq span:nth-child(4) { animation-delay: 0.1s;  height: 90%; }
+
+.sp-track-name {
+  font-size: 0.85rem; font-weight: 700; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.sp-artist {
+  font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.sp-album {
+  font-size: 0.65rem; color: var(--text-dim); margin-top: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* Progress bar */
+.sp-progress-wrap {
+  height: 2px; border-radius: 99px;
+  background: rgba(255,255,255,0.07);
+  margin-top: 8px; overflow: hidden;
+}
+.sp-progress-bar {
+  height: 100%; border-radius: 99px;
+  background: #1DB954;
+  box-shadow: 0 0 4px rgba(29,185,84,0.5);
+  transition: width 1s linear;
+}
+
+/* Spotify logo */
+.sp-logo {
+  width: 20px; height: 20px; flex-shrink: 0; opacity: 0.5;
+  transition: opacity 0.2s;
+}
+.sp-inner:hover .sp-logo { opacity: 0.9; }
+
+.sp-empty {
+  padding: 20px 18px;
+  font-size: 0.75rem; color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── GitHub widget centering fix ─── */
+.github-widget {
+  /* Already full-width in contact-bottom flex column — just ensure it doesn't overflow */
+  width: 100%;
+  box-sizing: border-box;
+}
+.commit-grid {
+  justify-content: center; /* center weeks when they don't fill full width */
+}
