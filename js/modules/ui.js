@@ -324,34 +324,7 @@ document.addEventListener('keydown', function (e) {
   });
 })();
 
-/* ── Falling Elements (Tech Section) ───────────────────── */
-(function () {
-  var techSection = document.getElementById('tech');
-  if (!techSection || !window.IntersectionObserver) return;
-  var fired = false;
-  var glyphs = ['{ }', '//', '< >', '( )', '[ ]', '★', '✦', '#', '=>', '∞', '01', '⚡'];
-  var colors = ['var(--cyan)', '#a855f7', '#f97316', '#22c55e', 'rgba(255,255,255,0.4)'];
-  function spawnFallers() {
-    var count = window._isMobile ? 8 : 18;
-    for (var i = 0; i < count; i++) {
-      (function (idx) {
-        setTimeout(function () {
-          var el = document.createElement('div');
-          el.className = 'faller';
-          el.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
-          el.style.cssText = 'left:' + (5 + Math.random() * 90) + 'vw;color:' + colors[Math.floor(Math.random() * colors.length)] + ';font-size:' + (0.65 + Math.random() * 0.65) + 'rem;animation-duration:' + (1.4 + Math.random() * 1.8) + 's;animation-delay:' + (Math.random() * 0.4) + 's;';
-          document.body.appendChild(el);
-          el.addEventListener('animationend', function () { el.remove(); });
-        }, idx * 60);
-      })(i);
-    }
-  }
-  new IntersectionObserver(function (entries) {
-    if (entries[0].isIntersecting && !fired) { fired = true; spawnFallers(); }
-  }, { threshold: 0.25 }).observe(techSection);
-})();
-
-/* ── Skill Chip Effects ─────────────────────────────────── */
+/* ── Skill Chip Effects — NO falling icons, reduced particles ── */
 (function () {
   if (window._isMobile) return;
   var chips = document.querySelectorAll('.skill-chip');
@@ -366,22 +339,25 @@ document.addEventListener('keydown', function (e) {
       lanes.forEach(function (lane) { lane.style.animationPlayState = visible ? 'running' : 'paused'; });
     }, { threshold: 0, rootMargin: '100px 0px 100px 0px' }).observe(techSection);
   }
+  // Reduced particles — subtle, no confetti
   var wrap = document.querySelector('.marquee-wrap');
   if (!wrap) return;
-  var pColors = ['var(--cyan)', '#a855f7', '#f97316', 'rgba(255,255,255,0.4)'];
+  var pColors = ['var(--cyan)', '#a855f7', 'rgba(255,255,255,0.3)'];
   function spawnParticle() {
     var p = document.createElement('div');
     p.className = 'marquee-particle';
-    p.style.cssText = 'left:' + (5 + Math.random() * 90) + '%;bottom:0;background:' + pColors[Math.floor(Math.random() * pColors.length)] + ';animation-duration:' + (2.5 + Math.random() * 3) + 's;animation-delay:' + (Math.random() * 2) + 's;width:' + (2 + Math.random() * 3) + 'px;height:' + (2 + Math.random() * 3) + 'px;';
+    p.style.cssText = 'left:' + (5 + Math.random() * 90) + '%;bottom:0;background:' + pColors[Math.floor(Math.random() * pColors.length)] + ';animation-duration:' + (2.5 + Math.random() * 3) + 's;animation-delay:' + (Math.random() * 2) + 's;width:' + (2 + Math.random() * 2) + 'px;height:' + (2 + Math.random() * 2) + 'px;';
     wrap.appendChild(p);
     p.addEventListener('animationend', function () { p.remove(); });
   }
-  setInterval(spawnParticle, 600);
-  for (var i = 0; i < 4; i++) setTimeout(spawnParticle, i * 200);
+  // Very reduced interval — 1 particle per 1200ms instead of 600ms
+  setInterval(spawnParticle, 1200);
+  for (var i = 0; i < 2; i++) setTimeout(spawnParticle, i * 400);
 })();
 
-/* ── Whimsy: Hero Sparks + 404 error popup ──────────────── */
+/* ── Whimsy: Hero Sparks only (no falling icons/confetti) ── */
 (function () {
+  // Hero name sparks — kept but further reduced interval
   if (!window._isMobile) {
     var heroName = document.querySelector('.hero-name');
     if (heroName) {
@@ -397,6 +373,8 @@ document.addEventListener('keydown', function (e) {
       }, 3500);
     }
   }
+
+  /* ── 404 Error Popup ── */
   var card404  = document.getElementById('demo-404-card');
   var popup    = document.getElementById('error-popup');
   var timerBar = document.getElementById('error-timer-fill');
@@ -434,6 +412,32 @@ document.addEventListener('keydown', function (e) {
   new IntersectionObserver(function (entries) { animateFills(entries[0].isIntersecting); }, { threshold: 0.05 }).observe(demo);
 })();
 
+/* ── Experience Accordion ───────────────────────────────── */
+(function () {
+  var toggleBtn = document.getElementById('experience-toggle');
+  var content   = document.getElementById('demo-content');
+  if (!toggleBtn || !content) return;
+  var arrow = toggleBtn.querySelector('.exp-toggle-arrow');
+  var isOpen = false;
+
+  toggleBtn.addEventListener('click', function () {
+    isOpen = !isOpen;
+    content.classList.toggle('demo-content-open', isOpen);
+    toggleBtn.classList.toggle('open', isOpen);
+    if (arrow) arrow.textContent = isOpen ? '▲' : '▼';
+
+    // Trigger progress bars when accordion opens
+    if (isOpen) {
+      setTimeout(function () {
+        var fills = content.querySelectorAll('.demo-progress-fill');
+        fills.forEach(function (f) {
+          f.style.width = f.getAttribute('data-w') || '0%';
+        });
+      }, 80);
+    }
+  });
+})();
+
 /* ── Feedback Modal ─────────────────────────────────────── */
 (function () {
   var btn       = document.getElementById('feedback-btn');
@@ -462,9 +466,6 @@ document.addEventListener('keydown', function (e) {
   var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcWN4ZWRycG1xdHFpYmRqZWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0NzYyOTIsImV4cCI6MjA4ODA1MjI5Mn0.pAjBAmDhsbh8p7noOuyV6maPFDkRtptocE6VpuD6hSA';
   if (submitBtn) submitBtn.addEventListener('click', function () {
     var msg = textarea ? textarea.value.trim() : '';
-    var arr = JSON.parse(localStorage.getItem('asad_feedbacks') || '[]');
-    arr.push({ rating:rating, message:msg, time:new Date().toISOString() });
-    localStorage.setItem('asad_feedbacks', JSON.stringify(arr));
     fetch(SB_URL + '/rest/v1/feedback', {
       method:'POST', headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'},
       body: JSON.stringify({ rating:rating, message:msg })

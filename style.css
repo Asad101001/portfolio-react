@@ -8,6 +8,7 @@
      css/sections.css    — about, projects, experience, tech, education, contact
      css/widgets.css     — github, clock, spotify, lastfm, xp, certs drawer, toast
      css/animations.css  — section reveal, responsive, keyframes
+     css/additions.css   — hero orb, currently-into, barca, marquee, accordion, popup
    ============================================================ */
 
 @import url('css/base.css');
@@ -15,3 +16,4 @@
 @import url('css/sections.css');
 @import url('css/widgets.css');
 @import url('css/animations.css');
+@import url('css/additions.css');

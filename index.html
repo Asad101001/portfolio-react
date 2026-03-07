@@ -22,7 +22,6 @@
   <!-- LOADING SCREEN — 3D Intro -->
   <div id="loading-screen">
     <div class="loading-inner">
-      <!-- 3D Cube -->
       <div class="intro-cube-wrap">
         <div class="intro-cube-face front">{ }</div>
         <div class="intro-cube-face back">&lt;/&gt;</div>
@@ -30,14 +29,11 @@
         <div class="intro-cube-face right">⚡</div>
         <div class="intro-cube-face top">#</div>
         <div class="intro-cube-face bottom">∞</div>
-        <!-- Orbiting rings -->
         <div class="intro-ring"></div>
         <div class="intro-ring-2"></div>
       </div>
-      <!-- Name & tag -->
       <div class="loading-name">Muhammad Asad Khan</div>
       <div class="loading-tagline">Cloud · AI · Dev</div>
-      <!-- Progress bar -->
       <div class="loading-bar-wrap">
         <div class="loading-bar-fill"></div>
       </div>
@@ -114,7 +110,6 @@
       <p class="label-xs">Credentials</p>
       <h2 class="drawer-title">Certifications</h2>
       <div class="certs-grid">
-
         <div class="cert-card">
           <div class="cert-thumb">
             <img src="public/certs/google-agile.png" alt="Google Agile Essentials"
@@ -130,7 +125,6 @@
           </div>
           <span class="cert-badge completed">Completed</span>
         </div>
-
         <div class="cert-card">
           <div class="cert-thumb">
             <img src="public/certs/google-ai.png" alt="Google AI Essentials"
@@ -148,7 +142,6 @@
           </div>
           <span class="cert-badge completed">Completed</span>
         </div>
-
         <div class="cert-card">
           <div class="cert-thumb">
             <img src="public/certs/google-prompt.png" alt="Google Prompting Essentials"
@@ -164,7 +157,6 @@
           </div>
           <span class="cert-badge completed">Completed</span>
         </div>
-
         <div class="cert-card">
           <div class="cert-thumb">
             <img src="public/certs/ned-ds.png" alt="Certified Data Scientist"
@@ -184,7 +176,6 @@
           </div>
           <span class="cert-badge completed">Completed</span>
         </div>
-
         <div class="cert-card cert-card--ongoing">
           <div class="cert-thumb cert-thumb--placeholder">
             <span class="cert-placeholder-icon">&#x2601;</span>
@@ -201,7 +192,6 @@
           </div>
           <span class="cert-badge inprogress">In Progress</span>
         </div>
-
         <div class="cert-card cert-card--ongoing">
           <div class="cert-thumb cert-thumb--placeholder">
             <span class="cert-placeholder-icon">&#x1F9E0;</span>
@@ -218,7 +208,6 @@
           </div>
           <span class="cert-badge inprogress">In Progress</span>
         </div>
-
       </div>
     </div>
   </div>
@@ -264,7 +253,6 @@
 
   <!-- HERO -->
   <section id="hero">
-    <!-- Hero background image — shrinks on scroll -->
     <div class="hero-backdrop" id="hero-backdrop">
       <img src="public/images/hero-bg.png" alt="" class="hero-backdrop-img" />
       <div class="hero-backdrop-overlay"></div>
@@ -281,6 +269,19 @@
           <span class="status-dot"></span>
           Building &amp; exploring
         </div>
+
+        <!-- 3D Micro-Orb — just above the name -->
+        <div class="hero-name-3d-wrap" aria-hidden="true">
+          <div class="hero-micro-orb">
+            <div class="hero-micro-orb-inner"></div>
+            <div class="hero-micro-face"></div>
+            <div class="hero-micro-face f2"></div>
+            <div class="hero-micro-face f3"></div>
+            <div class="hero-micro-ring"></div>
+            <div class="hero-micro-dot"></div>
+          </div>
+        </div>
+
         <h1 class="hero-name">Muhammad<br />Asad Khan</h1>
         <div class="typewriter-wrap">
           <span id="typewriter" class="typewriter-text"></span><span class="caret">|</span>
@@ -307,8 +308,8 @@
             </svg>
             LinkedIn
           </a>
-          <!-- ✅ FIXED: Contact Me now opens email directly -->
-          <a href="/cdn-cgi/l/email-protection#ff928a979e92929e9b9e8c9e9b94cbcdbf98929e9693d19c9092" class="btn-secondary magnetic">
+          <!-- ✅ Plain mailto — no Cloudflare obfuscation -->
+          <a href="mailto:muhammadasadk42@gmail.com" class="btn-secondary magnetic">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2">
               <rect width="20" height="16" x="2" y="4" rx="2" />
@@ -341,28 +342,53 @@
         </div>
       </div>
 
+      <!-- CURRENTLY INTO CARD — dynamic with media covers, separated from fun facts -->
       <div class="card glass-card reveal" style="--delay:200ms">
         <p class="card-label">Currently Into</p>
+
+        <!-- Rotating items with media thumbnails -->
         <div class="rotating-widget" id="rotating-widget">
-          <div class="rotating-item active" data-index="0">
-            <span class="rotating-label">Reading</span>
-            <span class="rotating-value">1984 — George Orwell</span>
+
+          <!-- Reading -->
+          <div class="rotating-item currently-into-item active" data-index="0">
+            <img id="reading-cover" class="currently-into-thumb" src="" alt="Book cover" style="display:none" />
+            <div id="reading-placeholder" class="currently-into-thumb-placeholder">📖</div>
+            <div class="currently-into-text">
+              <span class="rotating-label currently-into-label">Reading</span>
+              <span class="rotating-value currently-into-value">1984 — George Orwell</span>
+            </div>
           </div>
-          <div class="rotating-item" data-index="1">
-            <span class="rotating-label">Watching</span>
-            <span class="rotating-value">The Pitt — HBO</span>
+
+          <!-- Watching -->
+          <div class="rotating-item currently-into-item" data-index="1">
+            <img id="watching-poster" class="currently-into-thumb" src="" alt="Show poster" style="display:none" />
+            <div id="watching-placeholder" class="currently-into-thumb-placeholder">📺</div>
+            <div class="currently-into-text">
+              <span class="rotating-label currently-into-label">Watching</span>
+              <span class="rotating-value currently-into-value">The Pitt — HBO</span>
+            </div>
           </div>
-          <div class="rotating-item" data-index="2">
-            <span class="rotating-label">Football</span>
-            <span class="rotating-value">Enduring FC Barcelona's weekly humiliation rituals</span>
+
+          <!-- Football / Barca live score -->
+          <div class="rotating-item currently-into-item" data-index="2">
+            <div class="currently-into-thumb-placeholder">⚽</div>
+            <div class="currently-into-text">
+              <span class="rotating-label currently-into-label">Football</span>
+              <span class="rotating-value currently-into-value" id="barca-score">Enduring FC Barcelona's weekly
+                humiliation rituals</span>
+            </div>
           </div>
+
         </div>
+
         <div class="rotating-dots" id="rotating-dots">
           <button class="r-dot active" data-i="0"></button>
           <button class="r-dot" data-i="1"></button>
           <button class="r-dot" data-i="2"></button>
         </div>
-        <div class="fun-facts">
+
+        <!-- Fun facts — visually separated block -->
+        <div class="fun-facts fun-facts-block">
           <div class="fun-fact-item">Bugs feared? 0. Bugs fixed? debatable.</div>
           <div class="fun-fact-item">Peak productivity: 11pm–3am</div>
           <div class="fun-fact-item">Reads docs... eventually</div>
@@ -401,7 +427,7 @@
         </div>
       </div>
 
-      <!-- Availability card -->
+      <!-- Availability card — plain email, no obfuscation -->
       <div class="card glass-card avail-card reveal" style="--delay:400ms">
         <p class="card-label">Availability</p>
         <p class="avail-text">Open for internships, part-time roles, and remote collaborations.</p>
@@ -421,14 +447,13 @@
               <rect width="20" height="16" x="2" y="4" rx="2" />
               <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
             </svg>
-            <a href="/cdn-cgi/l/email-protection#4e233b262f23232f2a2f3d2f2a257a7c0e29232f2722602d2123" class="avail-email-link"><span class="__cf_email__" data-cfemail="d2bfa7bab3bfbfb3b6b3a1b3b6b9e6e092b5bfb3bbbefcb1bdbf">[email&#160;protected]</span></a>
+            <a href="mailto:muhammadasadk42@gmail.com" class="avail-email-link">muhammadasadk42@gmail.com</a>
           </div>
         </div>
       </div>
 
     </div>
 
-    <!-- Scroll indicator -->
     <div class="scroll-indicator" id="scroll-indicator">
       <span class="scroll-indicator-text">scroll</span>
       <div class="scroll-indicator-line"></div>
@@ -448,7 +473,6 @@
         </div>
       </div>
       <div class="about-grid">
-
         <div class="about-text glass-card reveal">
           <p>
             I'm a Computer Science student at UBIT, University of Karachi '28, driven to explore
@@ -462,7 +486,6 @@
             then spend ages unbreaking them.
           </p>
         </div>
-
         <div class="about-stats-col">
           <div class="about-stat-card glass-card reveal">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -494,7 +517,6 @@
             <p class="stat-lbl">Technologies</p>
           </div>
         </div>
-
       </div>
 
       <!-- Currently Exploring -->
@@ -542,7 +564,7 @@
         </div>
       </div>
 
-      <!-- GITHUB ACTIVITY HEATMAP — moved here from socials -->
+      <!-- GitHub Activity Heatmap -->
       <div class="github-widget reveal" style="margin-top:20px">
         <div class="github-widget-header">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
@@ -563,8 +585,8 @@
             <div class="commit-legend-sq" style="background:rgba(0,255,65,0.15)"></div>
             <div class="commit-legend-sq" style="background:rgba(0,255,65,0.35)"></div>
             <div class="commit-legend-sq" style="background:rgba(0,255,65,0.6)"></div>
-            <div class="commit-legend-sq"
-              style="background:rgba(0,255,65,0.82);box-shadow:0 0 6px rgba(0,255,65,0.4)"></div>
+            <div class="commit-legend-sq" style="background:rgba(0,255,65,0.82);box-shadow:0 0 6px rgba(0,255,65,0.4)">
+            </div>
             <span>More</span>
           </div>
         </div>
@@ -628,8 +650,7 @@
               Upload any contract and get every clause risk-rated <span class="risk-red">Red</span> / <span
                 class="risk-yellow">Yellow</span> / <span class="risk-green">Green</span>,
               a plain Urdu explanation, a RAG chatbot grounded in your document, and a downloadable PDF risk report — in
-              under a minute.
-              Powered by LangChain + FAISS for retrieval and FastAPI on the backend.
+              under a minute. Powered by LangChain + FAISS for retrieval and FastAPI on the backend.
             </p>
             <div class="proj-tags">
               <span class="tag">ES6+ Vanilla JS</span>
@@ -821,7 +842,7 @@
 
 
   <div class="section-divider"></div>
-  <!-- EXPERIENCE SECTION -->
+  <!-- EXPERIENCE SECTION — with accordion toggle -->
   <section id="demo" class="section-in">
     <div class="section-inner">
       <div class="section-header centered">
@@ -830,81 +851,92 @@
         <p class="section-sub">Where I've spent my time, energy, and sanity.</p>
       </div>
 
-      <div class="demo-grid">
-
-        <div class="glass-card demo-card reveal">
-          <span class="demo-emoji">📊</span>
-          <h3>Actual Skill Distribution</h3>
-          <p style="margin-bottom:14px">Based on hours spent vs. hours productive</p>
-          <div class="demo-progress-fake">
-            <div class="demo-progress-row">
-              <span class="demo-progress-label">Googling stuff</span>
-              <div class="demo-progress-bar-wrap">
-                <div class="demo-progress-fill" data-w="97%" style="--clr:#f97316"></div>
-              </div>
-            </div>
-            <div class="demo-progress-row">
-              <span class="demo-progress-label">Reading docs</span>
-              <div class="demo-progress-bar-wrap">
-                <div class="demo-progress-fill" data-w="15%" style="--clr:#a855f7"></div>
-              </div>
-            </div>
-            <div class="demo-progress-row">
-              <span class="demo-progress-label">Actual coding</span>
-              <div class="demo-progress-bar-wrap">
-                <div class="demo-progress-fill" data-w="61%" style="--clr:#00ff41"></div>
-              </div>
-            </div>
-            <div class="demo-progress-row">
-              <span class="demo-progress-label">Debugging</span>
-              <div class="demo-progress-bar-wrap">
-                <div class="demo-progress-fill" data-w="40%" style="--clr:#f87171"></div>
-              </div>
-            </div>
-            <div class="demo-progress-row">
-              <span class="demo-progress-label">It works locally</span>
-              <div class="demo-progress-bar-wrap">
-                <div class="demo-progress-fill" data-w="85%" style="--clr:#22c55e"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="glass-card demo-card reveal">
-          <span class="demo-emoji">⭐</span>
-          <h3>Testimonials</h3>
-          <div style="display:flex;flex-direction:column;gap:12px;margin-top:4px">
-            <div
-              style="padding:12px;border-radius:10px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07)">
-              <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:6px">"He once spent 3 hours debugging a
-                missing semicolon. Growth."</p>
-              <span style="font-size:0.68rem;color:var(--text-dim)">— Claude, probably </span>
-              <div class="demo-stars">★★★★☆</div>
-            </div>
-            <div
-              style="padding:12px;border-radius:10px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07)">
-              <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:6px">"Works perfectly. On my machine.
-                Every time."</p>
-              <span style="font-size:0.68rem;color:var(--text-dim)">— localhost:5000</span>
-              <div class="demo-stars">★★★★★</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="glass-card demo-404 reveal" id="demo-404-card">
-          <div class="demo-404-corner tl"></div>
-          <div class="demo-404-corner br"></div>
-          <div class="demo-big">404</div>
-          <h3>Experience Not Found</h3>
-          <p>You scrolled all the way down here looking for any hints of past experience, good luck on finding it!</p>
-          <span class="demo-404-hint">click to trigger exception</span>
-        </div>
-
+      <!-- Accordion toggle button -->
+      <div style="display:flex;justify-content:center;">
+        <button id="experience-toggle">
+          View Experience
+          <span class="exp-toggle-arrow">▼</span>
+        </button>
       </div>
+
+      <!-- Collapsible content -->
+      <div id="demo-content">
+        <div class="demo-grid">
+
+          <div class="glass-card demo-card reveal">
+            <span class="demo-emoji">📊</span>
+            <h3>Actual Skill Distribution</h3>
+            <p style="margin-bottom:14px">Based on hours spent vs. hours productive</p>
+            <div class="demo-progress-fake">
+              <div class="demo-progress-row">
+                <span class="demo-progress-label">Googling stuff</span>
+                <div class="demo-progress-bar-wrap">
+                  <div class="demo-progress-fill" data-w="97%" style="--clr:#f97316"></div>
+                </div>
+              </div>
+              <div class="demo-progress-row">
+                <span class="demo-progress-label">Reading docs</span>
+                <div class="demo-progress-bar-wrap">
+                  <div class="demo-progress-fill" data-w="15%" style="--clr:#a855f7"></div>
+                </div>
+              </div>
+              <div class="demo-progress-row">
+                <span class="demo-progress-label">Actual coding</span>
+                <div class="demo-progress-bar-wrap">
+                  <div class="demo-progress-fill" data-w="61%" style="--clr:#00ff41"></div>
+                </div>
+              </div>
+              <div class="demo-progress-row">
+                <span class="demo-progress-label">Debugging</span>
+                <div class="demo-progress-bar-wrap">
+                  <div class="demo-progress-fill" data-w="40%" style="--clr:#f87171"></div>
+                </div>
+              </div>
+              <div class="demo-progress-row">
+                <span class="demo-progress-label">It works locally</span>
+                <div class="demo-progress-bar-wrap">
+                  <div class="demo-progress-fill" data-w="85%" style="--clr:#22c55e"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card demo-card reveal">
+            <span class="demo-emoji">⭐</span>
+            <h3>Testimonials</h3>
+            <div style="display:flex;flex-direction:column;gap:12px;margin-top:4px">
+              <div
+                style="padding:12px;border-radius:10px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07)">
+                <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:6px">"He once spent 3 hours debugging a
+                  missing semicolon. Growth."</p>
+                <span style="font-size:0.68rem;color:var(--text-dim)">— Claude, probably </span>
+                <div class="demo-stars">★★★★☆</div>
+              </div>
+              <div
+                style="padding:12px;border-radius:10px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07)">
+                <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:6px">"Works perfectly. On my machine.
+                  Every time."</p>
+                <span style="font-size:0.68rem;color:var(--text-dim)">— localhost:5000</span>
+                <div class="demo-stars">★★★★★</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card demo-404 reveal" id="demo-404-card">
+            <div class="demo-404-corner tl"></div>
+            <div class="demo-404-corner br"></div>
+            <div class="demo-big">404</div>
+            <h3>Experience Not Found</h3>
+            <p>You scrolled all the way down here looking for any hints of past experience, good luck on finding it!</p>
+            <span class="demo-404-hint">click to trigger exception</span>
+          </div>
+
+        </div>
+      </div><!-- /#demo-content -->
     </div>
   </section>
 
-  <!-- ERROR POPUP (injected by JS, placed here for clarity) -->
+  <!-- ERROR POPUP -->
   <div id="error-popup" class="error-popup" aria-hidden="true">
     <div class="error-popup-bar">
       <span class="error-popup-trafficlight red"></span>
@@ -913,8 +945,11 @@
       <span class="error-popup-title">runtime_exception.log</span>
     </div>
     <div class="error-popup-body">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px">
-        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="12" />
+        <line x1="12" y1="16" x2="12.01" y2="16" />
       </svg>
       <div>
         <p class="error-popup-msg">ExperienceNotFoundException</p>
@@ -922,7 +957,9 @@
         <p class="error-popup-trace" style="opacity:0.5">No prior employment records found in scope.</p>
       </div>
     </div>
-    <div class="error-popup-timer"><div class="error-popup-timer-fill" id="error-timer-fill"></div></div>
+    <div class="error-popup-timer">
+      <div class="error-popup-timer-fill" id="error-timer-fill"></div>
+    </div>
   </div>
 
 
@@ -1051,7 +1088,6 @@
         </div>
       </div>
       <div class="timeline">
-
         <div class="timeline-item reveal">
           <div class="tl-dot"></div>
           <div class="tl-card glass-card">
@@ -1067,7 +1103,6 @@
             </div>
           </div>
         </div>
-
         <div class="timeline-item reveal">
           <div class="tl-dot"></div>
           <div class="tl-card glass-card">
@@ -1082,7 +1117,6 @@
             </div>
           </div>
         </div>
-
         <div class="timeline-item reveal">
           <div class="tl-dot"></div>
           <div class="tl-card glass-card">
@@ -1097,14 +1131,13 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </section>
 
 
   <div class="section-divider"></div>
-  <!-- SOCIALS -->
+  <!-- SOCIALS / CONTACT -->
   <section id="contact" class="section-in">
     <div class="ambient-glow"></div>
     <div class="section-inner">
@@ -1203,12 +1236,11 @@
 
             <a href="https://open.spotify.com/user/31ldw4ockaqhvr4syjpxp6hv4dge" target="_blank" rel="noopener"
               class="social-card spotify">
-              <div class="social-card-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="#1DB954">
+              <div class="social-card-icon"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
+                  viewBox="0 0 24 24" fill="#1DB954">
                   <path
                     d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" />
-                </svg>
-              </div>
+                </svg></div>
               <div class="social-card-text"><span class="social-card-name">Spotify</span><span
                   class="social-card-handle">muhammadasadk</span></div>
               <svg class="social-card-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
@@ -1237,7 +1269,6 @@
             </div>
           </div>
 
-
           <!-- Last.fm widget -->
           <div class="lastfm-widget">
             <div class="lastfm-widget-header">
@@ -1256,7 +1287,7 @@
             </div>
           </div>
 
-          <!-- GAMIFICATION: Visitor XP -->
+          <!-- Visitor XP -->
           <div class="xp-widget glass-card">
             <div class="xp-header">
               <span class="xp-label">Visitor XP</span>
@@ -1271,8 +1302,7 @@
             </div>
           </div>
 
-
-          <!-- CODING CLOCK -->
+          <!-- Coding Clock -->
           <div class="clock-widget glass-card" id="coding-clock">
             <div class="clock-face">
               <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1302,11 +1332,9 @@
           </div>
 
         </div>
-         </div><!-- /.social-cards-grid -->
-        </div><!-- /.contact-bottom -->
-      </div><!-- /.contact-wrap -->
-    </div><!-- /.section-inner -->
-  </section><!-- /#contact -->
+      </div>
+    </div>
+  </section>
 
   <footer>
     <strong>&lt;/Asad&gt;</strong> &mdash; Built with curiosity &amp; caffeine &middot; Karachi, Pakistan &middot; 2025
@@ -1320,4 +1348,5 @@
   <script src="js/modules/ui.js"></script>
   <script src="js/modules/widgets.js"></script>
 </body>
+
 </html>

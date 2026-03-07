@@ -1,9 +1,145 @@
 /* ============================================================
    js/modules/widgets.js
    External API widgets: Last.fm, Spotify, GitHub heatmap,
-   Coding clock, Visitor XP
+   Coding clock, Visitor XP, Currently Into (dynamic)
    ============================================================ */
 'use strict';
+
+/* ── Currently Into — Dynamic Card ─────────────────────────── */
+(function () {
+  /* ── Book Cover via Open Library ── */
+  var readingCover = document.getElementById('reading-cover');
+  var readingPlaceholder = document.getElementById('reading-placeholder');
+  if (readingCover) {
+    var img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = function () {
+      readingCover.src = img.src;
+      readingCover.style.display = 'block';
+      if (readingPlaceholder) readingPlaceholder.style.display = 'none';
+    };
+    img.onerror = function () {
+      if (readingPlaceholder) readingPlaceholder.style.display = 'flex';
+    };
+    // 1984 by George Orwell — ISBN 9780451524935
+    img.src = 'https://covers.openlibrary.org/b/isbn/9780451524935-M.jpg';
+  }
+
+  /* ── TV Poster via TVmaze ── */
+  var watchingPoster = document.getElementById('watching-poster');
+  var watchingPlaceholder = document.getElementById('watching-placeholder');
+  if (watchingPoster) {
+    fetch('https://api.tvmaze.com/singlesearch/shows?q=The+Pitt')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var url = data && data.image && (data.image.medium || data.image.original);
+        if (url) {
+          var img = new Image();
+          img.crossOrigin = 'anonymous';
+          img.onload = function () {
+            watchingPoster.src = url;
+            watchingPoster.style.display = 'block';
+            if (watchingPlaceholder) watchingPlaceholder.style.display = 'none';
+          };
+          img.onerror = function () {
+            if (watchingPlaceholder) watchingPlaceholder.style.display = 'flex';
+          };
+          img.src = url;
+        }
+      })
+      .catch(function () {
+        if (watchingPlaceholder) watchingPlaceholder.style.display = 'flex';
+      });
+  }
+
+  /* ── FC Barcelona Live Score via ESPN ── */
+  var barcaScoreEl = document.getElementById('barca-score');
+  var barcaItem    = document.querySelector('.rotating-item[data-index="2"]');
+  if (!barcaScoreEl && !barcaItem) return;
+
+  function setBarcaDisplay(scoreText, isLive) {
+    var valEl = barcaItem && barcaItem.querySelector('.rotating-value');
+    if (valEl && scoreText) valEl.textContent = scoreText;
+
+    if (!barcaItem) return;
+    // Remove old live badge first
+    var oldBadge = barcaItem.querySelector('.barca-live-badge');
+    if (oldBadge) oldBadge.remove();
+
+    if (isLive) {
+      barcaItem.classList.add('barca-live');
+      var badge = document.createElement('span');
+      badge.className = 'barca-live-badge';
+      badge.textContent = 'LIVE';
+      var lbl = barcaItem.querySelector('.rotating-label');
+      if (lbl) lbl.after(badge);
+    } else {
+      barcaItem.classList.remove('barca-live');
+    }
+  }
+
+  fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/teams/83/schedule?limit=5')
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function (data) {
+      var events = data && data.events;
+      if (!events || !events.length) return;
+
+      var liveEvent = null, recentEvent = null, upcomingEvent = null;
+      for (var i = 0; i < events.length; i++) {
+        var ev = events[i];
+        var state = ev.status && ev.status.type && ev.status.type.state;
+        if (state === 'in' && !liveEvent) liveEvent = ev;
+        else if (state === 'post' && !recentEvent) recentEvent = ev;
+        else if (state === 'pre' && !upcomingEvent) upcomingEvent = ev;
+      }
+
+      function getMatchInfo(ev) {
+        if (!ev || !ev.competitions || !ev.competitions[0]) return null;
+        var comp = ev.competitions[0];
+        var comps = comp.competitors || [];
+        var home = comps.find(function (c) { return c.homeAway === 'home'; });
+        var away = comps.find(function (c) { return c.homeAway === 'away'; });
+        if (!home || !away) return null;
+        var barcaIsHome = home.team && (home.team.id === '83' || (home.team.shortDisplayName || '').toLowerCase().indexOf('barcelona') >= 0);
+        var barcaSide = barcaIsHome ? home : away;
+        var oppSide   = barcaIsHome ? away : home;
+        return {
+          barcaScore: barcaSide.score || '0',
+          oppScore:   oppSide.score || '0',
+          oppName:    (oppSide.team && (oppSide.team.abbreviation || oppSide.team.shortDisplayName)) || '?',
+          barcaIsHome: barcaIsHome
+        };
+      }
+
+      if (liveEvent) {
+        var info = getMatchInfo(liveEvent);
+        var min = liveEvent.status && liveEvent.status.displayClock || '';
+        if (info) {
+          setBarcaDisplay('Barça ' + info.barcaScore + ' – ' + info.oppScore + ' ' + info.oppName + (min ? ' (' + min + ')' : ''), true);
+        }
+      } else if (recentEvent) {
+        var info = getMatchInfo(recentEvent);
+        if (info) {
+          var bs = parseInt(info.barcaScore, 10), os = parseInt(info.oppScore, 10);
+          var emoji = bs > os ? '✅' : bs === os ? '🤝' : '😭';
+          var result = bs > os ? 'W' : bs === os ? 'D' : 'L';
+          setBarcaDisplay(emoji + ' Barça ' + info.barcaScore + '–' + info.oppScore + ' ' + info.oppName + ' · ' + result, false);
+        }
+      } else if (upcomingEvent) {
+        var dateStr = '';
+        if (upcomingEvent.date) {
+          var d = new Date(upcomingEvent.date);
+          dateStr = ' · ' + d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+        }
+        var shortName = upcomingEvent.shortName || upcomingEvent.name || 'Next match TBD';
+        setBarcaDisplay('📅 Next: ' + shortName + dateStr, false);
+      }
+    })
+    .catch(function () {
+      // Silent fallback — keep static text
+    });
+})();
+
 
 /* ── Last.fm Recently Played ────────────────────────────── */
 (function () {
