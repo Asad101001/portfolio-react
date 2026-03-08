@@ -159,8 +159,11 @@
   mn.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { mn.removeAttribute('open'); }); });
 })();
 
-/* ── Marquee Duplication ────────────────────────────────── */
-document.querySelectorAll('.export-tech-marquee-lane').forEach(function (lane) { lane.innerHTML += lane.innerHTML; });
+    /* ── Marquee Duplication — 4× fill, no gaps on wide screens ── */
+    document.querySelectorAll('.export-tech-marquee-lane').forEach(function (lane) {
+      var original = lane.innerHTML;
+      lane.innerHTML = original + original + original + original;
+    });
 
 /* ── Nav Hide/Show ──────────────────────────────────────── */
 (function () {
