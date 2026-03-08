@@ -282,9 +282,13 @@ document.addEventListener('keydown', function (e) {
   }
   var obs = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
-      if (entry.isIntersecting) { entry.target.classList.add('visible'); obs.unobserve(entry.target); }
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        entry.target.style.willChange = 'auto'; // release GPU layer after reveal
+        obs.unobserve(entry.target);
+      }
     });
-  }, { threshold: 0.07, rootMargin: '0px 0px -30px 0px' });
+  }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
   document.querySelectorAll('.reveal').forEach(function (el) { obs.observe(el); });
 })();
 
@@ -299,8 +303,10 @@ document.addEventListener('keydown', function (e) {
     return;
   }
   var obs = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in-view'); obs.unobserve(e.target); } });
-  }, { threshold: 0.04, rootMargin: '0px 0px -40px 0px' });
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('in-view'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.03, rootMargin: '0px 0px -30px 0px' });
   document.querySelectorAll('.section-in').forEach(function (s) { obs.observe(s); });
 })();
 
@@ -355,9 +361,8 @@ document.addEventListener('keydown', function (e) {
   for (var i = 0; i < 2; i++) setTimeout(spawnParticle, i * 400);
 })();
 
-/* ── Whimsy: Hero Sparks only (no falling icons/confetti) ── */
+/* ── Whimsy: Hero Sparks only ───────────────────────────── */
 (function () {
-  // Hero name sparks — kept but further reduced interval
   if (!window._isMobile) {
     var heroName = document.querySelector('.hero-name');
     if (heroName) {
@@ -373,43 +378,14 @@ document.addEventListener('keydown', function (e) {
       }, 3500);
     }
   }
-
-  /* ── 404 Error Popup ── */
-  var card404  = document.getElementById('demo-404-card');
-  var popup    = document.getElementById('error-popup');
-  var timerBar = document.getElementById('error-timer-fill');
-  if (!card404 || !popup) return;
-  var popupTimer = null;
-  card404.addEventListener('click', function () {
-    clearTimeout(popupTimer);
-    popup.classList.remove('visible');
-    if (timerBar) timerBar.style.transition = 'none';
-    requestAnimationFrame(function () {
-      requestAnimationFrame(function () {
-        popup.classList.add('visible');
-        if (timerBar) {
-          timerBar.style.transition = 'none';
-          timerBar.style.transform  = 'scaleX(1)';
-          requestAnimationFrame(function () { timerBar.style.transition = 'transform 3s linear'; timerBar.style.transform = 'scaleX(0)'; });
-        }
-        popupTimer = setTimeout(function () { popup.classList.remove('visible'); }, 3000);
-      });
-    });
-  });
 })();
 
-/* ── Demo Progress Bars ─────────────────────────────────── */
+/* ── Demo Progress Bars — triggered by accordion open ───── */
 (function () {
   var fills = document.querySelectorAll('.demo-progress-fill');
   if (!fills.length) return;
-  fills.forEach(function (f) { if (f.getAttribute('data-w')) f.style.width = '0%'; });
-  function animateFills(isIn) {
-    fills.forEach(function (f) { f.style.width = isIn ? (f.getAttribute('data-w') || '0%') : '0%'; });
-  }
-  if (!window.IntersectionObserver) { animateFills(true); return; }
-  var demo = document.getElementById('demo');
-  if (!demo) return;
-  new IntersectionObserver(function (entries) { animateFills(entries[0].isIntersecting); }, { threshold: 0.05 }).observe(demo);
+  // Reset all bars to 0 on load
+  fills.forEach(function (f) { f.style.width = '0%'; f.style.transition = 'none'; });
 })();
 
 /* ── Experience Accordion ───────────────────────────────── */
@@ -429,8 +405,7 @@ document.addEventListener('keydown', function (e) {
     // Trigger progress bars when accordion opens
     if (isOpen) {
       setTimeout(function () {
-        var fills = content.querySelectorAll('.demo-progress-fill');
-        fills.forEach(function (f) {
+        content.querySelectorAll('.demo-progress-fill').forEach(function (f) {
           f.style.width = f.getAttribute('data-w') || '0%';
         });
       }, 80);
