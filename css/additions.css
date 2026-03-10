@@ -459,12 +459,12 @@
 }
 .social-platform-row:hover::before { opacity: 1; }
 
-.social-platform-row.github::before    { background: linear-gradient(90deg, rgba(255,255,255,0.04), transparent 60%); }
-.social-platform-row.linkedin::before  { background: linear-gradient(90deg, rgba(10,102,194,0.12), transparent 60%); }
-.social-platform-row.medium::before    { background: linear-gradient(90deg, rgba(255,255,255,0.04), transparent 60%); }
-.social-platform-row.discord::before   { background: linear-gradient(90deg, rgba(88,101,242,0.1), transparent 60%); }
-.social-platform-row.instagram::before { background: linear-gradient(90deg, rgba(228,64,95,0.09), transparent 60%); }
-.social-platform-row.spotify::before   { background: linear-gradient(90deg, rgba(29,185,84,0.09), transparent 60%); }
+.social-platform-row.github::before    { background: radial-gradient(350px circle at var(--x, 0px) var(--y, 0px), rgba(255,255,255,0.08), transparent 40%); }
+.social-platform-row.linkedin::before  { background: radial-gradient(350px circle at var(--x, 0px) var(--y, 0px), rgba(10,102,194,0.18), transparent 40%); }
+.social-platform-row.medium::before    { background: radial-gradient(350px circle at var(--x, 0px) var(--y, 0px), rgba(255,255,255,0.08), transparent 40%); }
+.social-platform-row.discord::before   { background: radial-gradient(350px circle at var(--x, 0px) var(--y, 0px), rgba(88,101,242,0.16), transparent 40%); }
+.social-platform-row.instagram::before { background: radial-gradient(350px circle at var(--x, 0px) var(--y, 0px), rgba(228,64,95,0.16), transparent 40%); }
+.social-platform-row.spotify::before   { background: radial-gradient(350px circle at var(--x, 0px) var(--y, 0px), rgba(29,185,84,0.16), transparent 40%); }
 
 .social-platform-row:hover { color: #fff; }
 
@@ -570,11 +570,6 @@
     0 24px 60px rgba(0,0,0,0.75) !important;
 }
 
-/* Social cards — old grid style kept for fallback but now unused */
-.social-card:hover {
-  transform: translateY(-6px) scale(1.01) !important;
-  box-shadow: 0 16px 40px rgba(0,0,0,0.5), 0 0 30px rgba(16,185,129,0.1) !important;
-}
 
 /* Focus items */
 .focus-item:hover {

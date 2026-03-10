@@ -237,6 +237,20 @@
   });
 })();
 
+/* ── Interactive Spotlight Hover for Social Cards ──────── */
+(function () {
+  if (window._isMobile) return;
+  document.querySelectorAll('.social-platform-row').forEach(function (row) {
+    row.addEventListener('mousemove', function (e) {
+      var rect = row.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      row.style.setProperty('--x', x + 'px');
+      row.style.setProperty('--y', y + 'px');
+    });
+  });
+})();
+
 /* ── Rotating Widget — smooth directional animation ─────── */
 (function () {
   var widget   = document.getElementById('rotating-widget');
