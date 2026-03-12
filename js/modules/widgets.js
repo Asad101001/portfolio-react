@@ -47,7 +47,8 @@ const CONFIG = {
   
   if (moviePoster) {
     var LB_USER = CONFIG.usernames.letterboxd;
-    var RSS_URL = 'https://api.rss2json.com/v1/api.json?rss_url=https://letterboxd.com/' + LB_USER + '/rss/';
+    // Add cache buster to bypass stale RSS proxy results
+    var RSS_URL = 'https://api.rss2json.com/v1/api.json?rss_url=https://letterboxd.com/' + LB_USER + '/rss/&_t=' + Date.now();
     
     function fetchMovie() {
       fetch(RSS_URL)
@@ -55,8 +56,15 @@ const CONFIG = {
         .then(function (data) {
           if (!data || !data.items || !data.items.length) throw new Error('No items');
           var latest = data.items[0];
+          
+          // Strategy 1: Check description for <img> tag (Standard Letterboxd RSS)
           var match = latest.description.match(/src="([^"]+)"/);
           var url = match ? match[1] : null;
+          
+          // Strategy 2: Check thumbnail or enclosure if rss2json parsed them
+          if (!url) {
+            url = latest.thumbnail || (latest.enclosure && latest.enclosure.link);
+          }
           
           if (url) {
             var img = new Image();
@@ -77,10 +85,11 @@ const CONFIG = {
           }
         })
         .catch(function () {
-          // Fallback is already in HTML ("The Pitt")
+          // Keep default fallback ("The Pitt") if RSS is empty or user hasn't "Logged" movies
         });
     }
     fetchMovie();
+    setInterval(fetchMovie, 60000 * 10); // Refresh every 10 mins
   }
 
   /* ── Media Hub: Series (TVmaze) ── */
