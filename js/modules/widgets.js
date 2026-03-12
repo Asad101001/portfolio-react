@@ -1,42 +1,59 @@
-/* ============================================================
-   js/modules/widgets.js
-   External API widgets.
-   ============================================================ */
-'use strict';
+/* ── Configuration ── */
+const CONFIG = {
+  usernames: {
+    letterboxd: 'asad_k',     // Movies
+    lastfm: 'Asad991',        // Music
+    github: 'Asad101001'      // Contributions
+  },
+  currently: {
+    reading: '1984 George Orwell', // Just type title & author
+    series: ['Severance', 'Succession', 'Better Call Saul', 'The Pitt', 'A Knight of the Seven Kingdoms'] // TV Shows pool
+  }
+};
 
 /* ── Currently Into - Dynamic Card ─────────────────────────── */
 (function () {
-  /* ── Book Cover via Open Library ── */
+  /* ── Book Cover via Open Library Search ── */
   var readingCover = document.getElementById('reading-cover');
   var readingPlaceholder = document.getElementById('reading-placeholder');
-  if (readingCover) {
-    var img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = function () {
-      readingCover.src = img.src;
-      readingCover.style.display = 'block';
-      if (readingPlaceholder) readingPlaceholder.style.display = 'none';
-    };
-    img.onerror = function () {
-      if (readingPlaceholder) readingPlaceholder.style.display = 'flex';
-    };
-    // 1984 by George Orwell - ISBN 9780451524935
-    img.src = 'https://covers.openlibrary.org/b/isbn/9780451524935-M.jpg';
+  
+  if (readingCover && CONFIG.currently.reading) {
+    // Search for the book to get an ID automatically
+    var query = encodeURIComponent(CONFIG.currently.reading);
+    fetch('https://openlibrary.org/search.json?q=' + query + '&limit=1')
+      .then(r => r.json())
+      .then(data => {
+        if (data.docs && data.docs[0] && data.docs[0].cover_i) {
+          var coverId = data.docs[0].cover_i;
+          var img = new Image();
+          img.crossOrigin = 'anonymous';
+          img.onload = function () {
+            readingCover.src = img.src;
+            readingCover.style.display = 'block';
+            if (readingPlaceholder) readingPlaceholder.style.display = 'none';
+          };
+          img.src = 'https://covers.openlibrary.org/b/id/' + coverId + '-M.jpg';
+        }
+      })
+      .catch(() => {
+        if (readingPlaceholder) readingPlaceholder.style.display = 'flex';
+      });
   }
 
-  /* ── Media Hub via Letterboxd RSS ── */
-  var watchingPoster = document.getElementById('watching-poster');
-  var watchingPlaceholder = document.getElementById('watching-placeholder');
+  /* ── Media Hub: Movies (Letterboxd RSS) ── */
+  var moviePoster = document.getElementById('watching-poster');
+  var moviePlaceholder = document.getElementById('watching-placeholder');
+  var movieTitle = document.getElementById('movie-title');
   
-  if (watchingPoster) {
-    var LB_USER = 'asad_k'; // 👈 ENTER YOUR LETTERBOXD USERNAME HERE
+  if (moviePoster) {
+    var LB_USER = CONFIG.usernames.letterboxd;
     var RSS_URL = 'https://api.rss2json.com/v1/api.json?rss_url=https://letterboxd.com/' + LB_USER + '/rss/';
     
     function fetchMovie() {
       fetch(RSS_URL)
         .then(function (r) { return r.json(); })
         .then(function (data) {
-          if (!data || !data.items || !data.items.length) return;
+          if (!data || !data.items || !data.items.length) throw new Error('No items');
           var latest = data.items[0];
           var match = latest.description.match(/src="([^"]+)"/);
           var url = match ? match[1] : null;
@@ -45,42 +62,65 @@
             var img = new Image();
             img.crossOrigin = 'anonymous';
             img.onload = function () {
-              watchingPoster.style.opacity = '0';
+              moviePoster.style.opacity = '0';
               setTimeout(function() {
-                watchingPoster.src = url;
-                watchingPoster.style.display = 'block';
-                watchingPoster.style.opacity = '1';
-                if (watchingPlaceholder) watchingPlaceholder.style.display = 'none';
+                moviePoster.src = url;
+                moviePoster.style.display = 'block';
+                moviePoster.style.opacity = '1';
+                if (moviePlaceholder) moviePlaceholder.style.display = 'none';
               }, 300);
             };
             img.src = url;
           }
-          
-          // Also update the text value if needed
-          var valEl = watchingPoster.closest('.rotating-item') && watchingPoster.closest('.rotating-item').querySelector('.currently-into-value');
-          if (valEl && latest.title) {
-            valEl.textContent = latest.title.replace('â˜…', '★'); // Clean up star rating characters if any
+          if (movieTitle && latest.title) {
+            movieTitle.textContent = latest.title.replace('â˜…', '★');
+          }
+        })
+        .catch(function () {
+          // Fallback is already in HTML ("The Pitt")
+        });
+    }
+    fetchMovie();
+  }
+
+  /* ── Media Hub: Series (TVmaze) ── */
+  var seriesPoster = document.getElementById('series-poster');
+  var seriesPlaceholder = document.getElementById('series-placeholder');
+  var seriesTitle = document.getElementById('series-title');
+  
+  if (seriesPoster) {
+    var favSeries = CONFIG.currently.series;
+    var randomShow = favSeries[Math.floor(Math.random() * favSeries.length)];
+    
+    function fetchSeries() {
+      fetch('https://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(randomShow))
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          var url = data && data.image && (data.image.medium || data.image.original);
+          if (url) {
+            seriesPoster.src = url;
+            seriesPoster.style.display = 'block';
+            if (seriesPlaceholder) seriesPlaceholder.style.display = 'none';
+          }
+          if (seriesTitle && data.name) {
+            seriesTitle.textContent = data.name + (data.network ? ' — ' + data.network.name : '');
           }
         })
         .catch(function () {});
     }
-    fetchMovie();
-    setInterval(fetchMovie, 60000 * 5); 
+    fetchSeries();
   }
 
   /* ── FC Barcelona Live Score via ESPN ── */
   var barcaScoreEl = document.getElementById('barca-score');
-  var barcaItem = document.querySelector('.rotating-item[data-index="2"]');
+  var barcaItem = document.querySelector('.rotating-item[data-index="3"]');
   if (barcaItem) barcaItem.classList.add('barca-slot');
-  if (!barcaScoreEl && !barcaItem) return;
+  if (!barcaItem) return;
 
   function setBarcaDisplay(scoreText, isLive) {
-    var valEl = barcaItem && barcaItem.querySelector('.rotating-value');
+    var valEl = barcaItem.querySelector('.currently-into-value');
     if (valEl && scoreText) valEl.textContent = scoreText;
 
-    if (!barcaItem) return;
-
-    /* Remove old live badge */
     var oldBadge = barcaItem.querySelector('.barca-live-badge');
     if (oldBadge) oldBadge.remove();
 
@@ -135,9 +175,7 @@
       if (liveEvent) {
         var info = getMatchInfo(liveEvent);
         var min = liveEvent.status && liveEvent.status.displayClock || '';
-        if (info) {
-          setBarcaDisplay('Barça ' + info.barcaScore + ' – ' + info.oppScore + ' ' + info.oppName + (min ? ' (' + min + ')' : ''), true);
-        }
+        if (info) setBarcaDisplay('Barça ' + info.barcaScore + ' – ' + info.oppScore + ' ' + info.oppName + (min ? ' (' + min + ')' : ''), true);
       } else if (recentEvent) {
         var info = getMatchInfo(recentEvent);
         if (info) {
@@ -166,7 +204,7 @@
 (function () {
   var container = document.getElementById('lastfm-tracks');
   if (!container) return;
-  var USER    = 'Asad991';
+  var USER    = CONFIG.usernames.lastfm;
   var API_KEY = 'eccfb681fcf620a63fcb300d526544ba';
   var LIMIT   = 8;
   var URL     = 'https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=' + USER + '&api_key=' + API_KEY + '&format=json&limit=' + LIMIT;
@@ -302,7 +340,7 @@
   }
 
   buildHeatmap(generatePattern());
-  fetch('https://github-contributions-api.jogruber.de/v4/Asad101001?y=last')
+  fetch('https://github-contributions-api.jogruber.de/v4/' + CONFIG.usernames.github + '?y=last')
     .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(function (data) {
       if (!data || !data.contributions) return;
@@ -374,7 +412,14 @@
     var t = data.track;
     var pct = t.duration > 0 ? Math.min((t.progress / t.duration) * 100, 100) : 0;
     var isPlaying = data.isPlaying;
-    if (dotEl) { dotEl.style.background = isPlaying ? '#1DB954' : 'rgba(255,255,255,0.25)'; dotEl.style.boxShadow = isPlaying ? '0 0 8px #1DB954' : 'none'; }
+    
+    // Randomize squiggle speed per song for a "matching" feel
+    var speed = isPlaying ? (0.8 + Math.random() * 0.8).toFixed(2) + 's' : '1.2s';
+    
+    if (dotEl) { 
+      dotEl.style.background = isPlaying ? '#1DB954' : 'rgba(255,255,255,0.25)'; 
+      dotEl.style.boxShadow = isPlaying ? '0 0 8px #1DB954' : 'none'; 
+    }
     var artInner = t.albumArt
       ? '<img class="spotify-art-expanded" src="' + t.albumArt + '" alt="" crossorigin="anonymous" />'
       : '<div class="spotify-art-expanded spotify-art--empty-expanded"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></div>';
@@ -406,11 +451,11 @@
 
     // Toggle between squiggle and normal bar
     var progressLineHTML = isPlaying 
-      ? '<div class="spotify-squiggle"></div>'
+      ? '<div class="spotify-squiggle" style="--squiggle-speed:' + speed + '"></div>'
       : '<div class="spotify-bar-expanded"><div class="spotify-bar-fill-expanded" style="width:' + pct.toFixed(1) + '%"></div></div>';
 
     var a = document.createElement('a');
-    a.href = t.url || '#'; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.className = 'spotify-track-expanded';
+    a.href = t.url || 'https://open.spotify.com/'; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.className = 'spotify-track-expanded';
     a.innerHTML = '<div class="spotify-art-wrap-expanded">' + artInner + '</div><div class="spotify-info-expanded"><div class="spotify-row-expanded"><div class="spotify-title-expanded">' + t.name + '</div>' + eqOrPause + '</div><div class="spotify-artist-expanded">' + t.artist + '</div></div><div class="spotify-progress-wrap-expanded"><div class="spotify-times-expanded"><span>' + fmtTime(t.progress) + '</span><span>' + fmtTime(t.duration) + '</span></div>' + progressLineHTML + '</div>' + controlsHTML;
     wrap.appendChild(a);
   }

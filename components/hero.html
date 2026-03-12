@@ -112,19 +112,30 @@
                         </div>
                     </div>
 
-                    <!-- Watching -->
+                    <!-- Movies (Letterboxd) -->
                     <div class="rotating-item currently-into-item" data-index="1">
-                        <img id="watching-poster" class="currently-into-thumb" src="" alt="Show poster"
+                        <img id="watching-poster" class="currently-into-thumb" src="https://image.tmdb.org/t/p/w500/y92VpWh7d2kIq4zT8B4rFm9S6f4.jpg" alt="Movie poster"
                             style="display:none" />
-                        <div id="watching-placeholder" class="currently-into-thumb-placeholder">📺</div>
+                        <div id="watching-placeholder" class="currently-into-thumb-placeholder">🎬</div>
                         <div class="currently-into-text">
-                            <span class="rotating-label currently-into-label">Watching</span>
-                            <span class="rotating-value currently-into-value">The Pitt — HBO</span>
+                            <span class="rotating-label currently-into-label">Last Watched</span>
+                            <span class="rotating-value currently-into-value" id="movie-title">The Pitt — HBO</span>
+                        </div>
+                    </div>
+
+                    <!-- Series (TV Shows) -->
+                    <div class="rotating-item currently-into-item" data-index="2">
+                        <img id="series-poster" class="currently-into-thumb" src="" alt="Series poster"
+                            style="display:none" />
+                        <div id="series-placeholder" class="currently-into-thumb-placeholder">📺</div>
+                        <div class="currently-into-text">
+                            <span class="rotating-label currently-into-label">Currently Watching</span>
+                            <span class="rotating-value currently-into-value" id="series-title">Severance — Apple TV+</span>
                         </div>
                     </div>
 
                     <!-- Football / Barca live score -->
-                    <div class="rotating-item currently-into-item" data-index="2">
+                    <div class="rotating-item currently-into-item" data-index="3">
                         <div class="currently-into-thumb-placeholder">⚽</div>
                         <div class="currently-into-text">
                             <span class="rotating-label currently-into-label">Football</span>
@@ -139,6 +150,7 @@
                     <button class="r-dot active" data-i="0"></button>
                     <button class="r-dot" data-i="1"></button>
                     <button class="r-dot" data-i="2"></button>
+                    <button class="r-dot" data-i="3"></button>
                 </div>
 
             </div>

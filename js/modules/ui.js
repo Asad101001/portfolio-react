@@ -262,7 +262,7 @@
 
   /* Mark the football slot permanently so CSS can target it */
   items.forEach(function (item) {
-    if (item.getAttribute('data-index') === '2') {
+    if (item.getAttribute('data-index') === '3') {
       item.classList.add('barca-slot');
     }
   });
@@ -274,7 +274,7 @@
     var outItem = items[current];
     var inItem  = items[index];
 
-    /* Exit: add class that slides current item OUT upward */
+    /* Exit */
     outItem.classList.add('exit-up');
     outItem.classList.remove('active');
 
@@ -285,19 +285,19 @@
       isAnimating = false;
     }, { once: true });
 
-    /* Enter: make new item active (CSS transition handles the rest) */
+    /* Enter */
     setTimeout(function () {
       inItem.classList.add('active');
-    }, 60); /* tiny delay so exit starts first */
+    }, 60);
 
     /* Dots */
     dots.forEach(function (d) { d.classList.remove('active'); });
-    dots[index].classList.add('active');
+    if (dots[index]) dots[index].classList.add('active');
 
     current = index;
 
-    /* Blaugrana activation */
-    if (index === 2) {
+    /* Blaugrana activation (now slot 3) */
+    if (index === 3) {
       dotsWrap.classList.add('barca-active');
       widget.classList.add('football-active');
     } else {
