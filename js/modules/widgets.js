@@ -410,7 +410,10 @@ const CONFIG = {
     wrap.innerHTML = '';
     if (!data || !data.track) {
       wrap.innerHTML = '<p class="spotify-offline">&#x1F3B5; Nothing playing right now</p>';
-      if (dotEl) { dotEl.style.background = 'rgba(255,255,255,0.2)'; dotEl.style.boxShadow = 'none'; }
+      if (dotEl) { 
+        dotEl.style.background = '#ef4444'; 
+        dotEl.style.boxShadow = '0 0 10px rgba(239, 68, 68, 0.4)'; 
+      }
       return;
     }
     var t = data.track;
@@ -455,7 +458,7 @@ const CONFIG = {
 
     // Toggle between squiggle and normal bar
     var progressLineHTML = isPlaying 
-      ? '<div class="spotify-squiggle" style="--squiggle-speed:' + speed + '"></div>'
+      ? '<div class="spotify-squiggle-wrap" style="width:' + pct.toFixed(1) + '%"><div class="spotify-squiggle" style="--squiggle-speed:' + speed + '"></div></div>'
       : '<div class="spotify-bar-expanded"><div class="spotify-bar-fill-expanded" style="width:' + pct.toFixed(1) + '%"></div></div>';
 
     var a = document.createElement('a');
