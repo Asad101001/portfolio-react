@@ -144,39 +144,109 @@
 .tag[data-tech="FAISS"] { --tech-color: #00c3ff; --tech-bg: rgba(0, 195, 255, 0.1); --tech-glow: rgba(0, 195, 255, 0.3); }
 .tag[data-tech="FastAPI"] { --tech-color: #009688; --tech-bg: rgba(0, 150, 136, 0.15); --tech-glow: rgba(0, 150, 136, 0.4); }
 
-/* --- Haphazard Spotify Squiggle --- */
+/* --- Chaotic Wave Interference Spotify Squiggle --- */
 .spotify-squiggle-wrap {
   width: 100%;
-  height: 12px;
+  height: 22px;
   position: relative;
   overflow: hidden;
   border-radius: 99px;
-  background: rgba(255,255,255,0.05);
+  background: rgba(0,0,0,0.4);
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
 }
 
 .spotify-squiggle {
+  position: absolute;
   height: 100%;
   width: 100%;
-  background-color: #1DB954;
-  mask-image: url("data:image/svg+xml,%3Csvg width='100' height='20' viewBox='0 0 100 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10 Q 12.5 0, 25 10 T 50 10 T 75 10 T 100 10' fill='transparent' stroke='black' stroke-width='4'/%3E%3C/svg%3E");
+  background: #1DB954;
+  mask-image: url("data:image/svg+xml,%3Csvg width='200' height='20' viewBox='0 0 200 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10 Q 5 0, 10 10 T 20 10 Q 25 20, 30 10 T 40 10 Q 45 0, 50 10 T 60 10 Q 65 20, 70 10 T 80 10 Q 85 0, 90 10 T 100 10 T 110 10 Q 115 0, 120 10 T 130 10 Q 135 20, 140 10 T 150 10 Q 155 0, 160 10 T 170 10 Q 175 20, 180 10 T 190 10 Q 195 0, 200 10' fill='transparent' stroke='black' stroke-width='6'/%3E%3C/svg%3E");
   mask-repeat: repeat-x;
-  mask-size: 50px 20px;
-  mask-position: center;
-  animation: squiggle-move var(--squiggle-speed, 0.8s) linear infinite, 
-             squiggle-haphazard 0.3s steps(4) infinite alternate;
-  transform-origin: center;
+  mask-size: 120px 20px;
+  animation: squiggle-move var(--squiggle-speed, 0.5s) linear infinite;
+  filter: drop-shadow(0 0 10px rgba(29, 185, 84, 0.8));
+  opacity: 0.8;
 }
 
-@keyframes squiggle-haphazard {
-  0% { transform: scaleY(0.6) translateY(1px) skewX(-3deg); filter: brightness(0.9); }
-  33% { transform: scaleY(1.3) translateY(-2px) skewX(5deg); filter: brightness(1.2); }
-  66% { transform: scaleY(0.8) translateY(2px) skewX(-2deg); filter: brightness(1); }
-  100% { transform: scaleY(1.5) translateY(-1px) skewX(4deg); filter: brightness(1.3); }
+/* Secondary layer for haphazard interference */
+.spotify-squiggle::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #1ed760;
+  mask-image: url("data:image/svg+xml,%3Csvg width='150' height='20' viewBox='0 0 150 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10 Q 10 20, 20 10 T 40 10 Q 50 0, 60 10 T 80 10 Q 90 20, 100 10 T 120 10 Q 130 0, 140 10 T 150 10' fill='transparent' stroke='black' stroke-width='4'/%3E%3C/svg%3E");
+  mask-repeat: repeat-x;
+  mask-size: 80px 20px;
+  animation: squiggle-move 0.7s linear infinite reverse,
+             squiggle-jitter-v2 0.1s steps(2) infinite;
+  opacity: 0.6;
+}
+
+@keyframes squiggle-jitter-v2 {
+  0%   { transform: scaleY(0.6) translateY(2px) rotate(1deg); }
+  50%  { transform: scaleY(1.5) translateY(-3px) rotate(-1deg); }
+  100% { transform: scaleY(0.8) translateY(1px) rotate(0deg); }
 }
 
 @keyframes squiggle-move {
   from { mask-position: 0 center; }
-  to { mask-position: 50px center; }
+  to { mask-position: 120px center; }
+}
+
+/* 🧊 Ultimate Liquid Glass Architecture */
+.liquid-glass {
+  position: relative !important;
+  background: rgba(10, 12, 18, 0.45) !important;
+  backdrop-filter: blur(45px) saturate(220%) contrast(115%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), inset 0 1px 1px rgba(255,255,255,0.12) !important;
+  overflow: visible !important; /* Allow some pop-out effects */
+}
+
+/* Animated Flowing Mesh Gradient */
+.liquid-glass::before {
+  content: '';
+  position: absolute;
+  inset: -100%;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(29, 185, 84, 0.3) 0%, transparent 45%),
+    radial-gradient(circle at 90% 10%, rgba(16, 185, 129, 0.25) 0%, transparent 45%),
+    radial-gradient(circle at 30% 80%, rgba(29, 185, 84, 0.2) 0%, transparent 45%),
+    radial-gradient(circle at 80% 90%, rgba(168, 85, 247, 0.15) 0%, transparent 45%);
+  animation: mesh-rotate 18s linear infinite;
+  filter: blur(90px);
+  z-index: -2;
+  pointer-events: none;
+}
+
+/* Grain Overlay for High-End Texture */
+.liquid-glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.055;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes mesh-rotate {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.3); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* Ensure Lastfm is not obscured */
+.lastfm-widget {
+  min-height: 480px;
+  overflow: visible !important;
+}
+.lastfm-tracks {
+  max-height: none !important;
+  overflow: visible !important;
 }
 
 /* ══════════════════════════════════════════════════════════

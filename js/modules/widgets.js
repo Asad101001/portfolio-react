@@ -398,6 +398,10 @@ const CONFIG = {
 (function () {
   var wrap  = document.getElementById('spotify-track-wrap');
   var dotEl = document.getElementById('spotify-live-dot');
+  var spotifyWidget = document.getElementById('spotify-widget');
+  var lastfmWidget = document.querySelector('.lastfm-widget');
+  if (spotifyWidget) spotifyWidget.classList.add('liquid-glass');
+  if (lastfmWidget) lastfmWidget.classList.add('liquid-glass');
   if (!wrap) return;
   var ENDPOINT = '/api/spotify';
 
@@ -420,12 +424,13 @@ const CONFIG = {
     var pct = t.duration > 0 ? Math.min((t.progress / t.duration) * 100, 100) : 0;
     var isPlaying = data.isPlaying;
     
+    
     // Randomize squiggle speed per song for a "matching" feel
-    var speed = isPlaying ? (0.8 + Math.random() * 0.8).toFixed(2) + 's' : '1.2s';
+    var speed = isPlaying ? (0.4 + Math.random() * 0.4).toFixed(2) + 's' : '0.8s';
     
     if (dotEl) { 
-      dotEl.style.background = isPlaying ? '#1DB954' : 'rgba(255,255,255,0.25)'; 
-      dotEl.style.boxShadow = isPlaying ? '0 0 8px #1DB954' : 'none'; 
+      dotEl.style.background = isPlaying ? '#1DB954' : '#ef4444'; 
+      dotEl.style.boxShadow = isPlaying ? '0 0 12px #1DB954' : '0 0 12px rgba(239, 68, 68, 0.6)'; 
     }
     var artInner = t.albumArt
       ? '<img class="spotify-art-expanded" src="' + t.albumArt + '" alt="" crossorigin="anonymous" />'
