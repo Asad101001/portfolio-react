@@ -597,8 +597,32 @@
 }
 .social-cards-grid > div { min-width: 0; }
 
-.spotify-widget, .lastfm-widget { grid-row: span 3; }
-.xp-widget, .game-widget, .dev-notes-widget { grid-column: 3; }
+.spotify-widget, .lastfm-widget { transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.xp-widget, .game-widget, .dev-notes-widget { transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+/* Polished Hover States for Right Column */
+.xp-widget:hover {
+  border-color: var(--cyan) !important;
+  background: rgba(16, 185, 129, 0.05) !important;
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.4), 0 0 20px rgba(16, 185, 129, 0.15);
+}
+.xp-widget:hover .xp-label { color: var(--cyan) !important; }
+
+.game-widget:hover {
+  border-color: #22c55e !important;
+  background: rgba(34, 197, 94, 0.03) !important;
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.4), 0 0 20px rgba(34, 197, 94, 0.15);
+}
+.game-widget:hover .game-label { color: #22c55e !important; }
+
+.dev-notes-widget:hover {
+  border-color: var(--purple) !important;
+  background: rgba(168, 85, 247, 0.03) !important;
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.4), 0 0 20px rgba(168, 85, 247, 0.15);
+}
 
 @media (max-width: 1200px) {
   .social-cards-grid { grid-template-columns: 1fr 1fr 1fr; }

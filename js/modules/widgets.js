@@ -144,68 +144,53 @@ const CONFIG = {
     }
   }
   function fetchBarca() {
-    fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/teams/83/schedule?limit=5')
+    // Scoreboard gets current Live, Recent, and Upcoming across the league - most accurate real-time feed
+    fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/scoreboard')
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(function (data) {
         var events = data && data.events;
-        if (!events || !events.length) {
-          setBarcaDisplay('⚽ Barça: No recent match data found.', false);
+        if (!events || !events.length) throw new Error('No events');
+
+        // Look for Barcelona (ID 83)
+        var barcaEvent = events.find(function(ev) {
+          return ev.competitions[0].competitors.some(function(c) { return c.team.id === '83'; });
+        });
+
+        // Fallback: If not found in current scoreboard (no game today/this week), use team summary summary
+        if (!barcaEvent) {
+          fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/teams/83')
+            .then(function(r) { return r.json(); })
+            .then(function(tData) {
+              var next = tData.team.nextEvent && tData.team.nextEvent[0];
+              if (next) {
+                var d = new Date(next.date);
+                setBarcaDisplay('📅 ' + next.shortName + ' (' + d.toLocaleDateString('en-GB', {day:'numeric', month:'short'}) + ')', false);
+              } else {
+                setBarcaDisplay('⚽ No upcoming/live match data available.', false);
+              }
+            }).catch(function(){});
           return;
         }
 
-        var liveEvent = null, recentEvent = null, upcomingEvent = null;
-        for (var i = 0; i < events.length; i++) {
-          var ev = events[i];
-          var state = ev.status && ev.status.type && ev.status.type.state;
-          if (state === 'in' && !liveEvent) liveEvent = ev;
-          else if (state === 'post' && !recentEvent) recentEvent = ev;
-          else if (state === 'pre' && !upcomingEvent) upcomingEvent = ev;
-        }
+        var comp = barcaEvent.competitions[0];
+        var barca = comp.competitors.find(function(c) { return c.team.id === '83'; });
+        var opp = comp.competitors.find(function(c) { return c.team.id !== '83'; });
+        var statusState = barcaEvent.status.type.state; // 'in' = live, 'post' = finished, 'pre' = upcoming
+        var scoreStr = 'Barça ' + barca.score + '–' + opp.score + ' ' + (opp.team.abbreviation || opp.team.shortDisplayName);
 
-        function getMatchInfo(ev) {
-          if (!ev || !ev.competitions || !ev.competitions[0]) return null;
-          var comp = ev.competitions[0];
-          var comps = comp.competitors || [];
-          var home = comps.find(function (c) { return c.homeAway === 'home'; });
-          var away = comps.find(function (c) { return c.homeAway === 'away'; });
-          if (!home || !away) return null;
-          var barcaIsHome = home.team && (home.team.id === '83' || (home.team.shortDisplayName || '').toLowerCase().indexOf('barcelona') >= 0);
-          var barcaSide = barcaIsHome ? home : away;
-          var oppSide   = barcaIsHome ? away : home;
-          return {
-            barcaScore: barcaSide.score || '0',
-            oppScore:   oppSide.score || '0',
-            oppName:    (oppSide.team && (oppSide.team.abbreviation || oppSide.team.shortDisplayName)) || '?',
-            barcaIsHome: barcaIsHome
-          };
-        }
-
-        if (liveEvent) {
-          var info = getMatchInfo(liveEvent);
-          var min = liveEvent.status && liveEvent.status.displayClock || '';
-          if (info) setBarcaDisplay('Barça ' + info.barcaScore + ' – ' + info.oppScore + ' ' + info.oppName + (min ? ' (' + min + ')' : ''), true);
-        } else if (recentEvent) {
-          var info = getMatchInfo(recentEvent);
-          if (info) {
-            var bs = parseInt(info.barcaScore, 10), os = parseInt(info.oppScore, 10);
-            var emoji = bs > os ? '✅' : bs === os ? '🤝' : '😭';
-            var result = bs > os ? 'W' : bs === os ? 'D' : 'L';
-            setBarcaDisplay(emoji + ' Barça ' + info.barcaScore + '–' + info.oppScore + ' ' + info.oppName + ' · ' + result, false);
-          }
-        } else if (upcomingEvent) {
-          var dateStr = '';
-          if (upcomingEvent.date) {
-            var d = new Date(upcomingEvent.date);
-            dateStr = ' · ' + d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-          }
-          var shortName = upcomingEvent.shortName || upcomingEvent.name || 'Next match TBD';
-          setBarcaDisplay('📅 Next: ' + shortName + dateStr, false);
+        if (statusState === 'in') {
+          var min = barcaEvent.status.displayClock || '';
+          setBarcaDisplay('🔥 ' + scoreStr + (min ? ' ('+min+')' : ''), true);
+        } else if (statusState === 'post') {
+          var res = parseInt(barca.score) > parseInt(opp.score) ? '✅ W' : (barca.score === opp.score ? '🤝 D' : '😭 L');
+          setBarcaDisplay(res + ' ' + scoreStr, false);
         } else {
-           setBarcaDisplay('⚽ Barça: Session break or TBD.', false);
+          var date = new Date(barcaEvent.date);
+          setBarcaDisplay('📅 ' + barcaEvent.shortName + ' (' + date.toLocaleDateString('en-GB', {day:'numeric', month:'short'}) + ')', false);
         }
       })
       .catch(function () {
-        setBarcaDisplay('⚽ Barça: Data offline. Check live scores.', false);
+        setBarcaDisplay('⚽ Barça: Schedule TBD.', false);
       });
   }
 
