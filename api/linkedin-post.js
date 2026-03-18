@@ -36,7 +36,7 @@ async function kv_get(key) {
 const DEFAULT_PROFILE = {
   name:     'Muhammad Asad Khan',
   headline: "CS Student @ UBIT '28 | Python · AWS · AI",
-  photo:    'https://media.licdn.com/dms/image/v2/D4D03AQHAXvV1pZT4Uw/profile-displayphoto-scale_200_200/B4DZwNavPQHgAY-/0/1769751641032?e=1775692800&amp;v=beta&amp;t=Zeya4BD7yQHomtvZXPvKFW00wN97pBiGJun9FK0Rvlg'
+  photo:    'https://media.licdn.com/dms/image/v2/D4D03AQHAXvV1pZT4Uw/profile-displayphoto-scale_200_200/B4DZwNavPQHgAY-/0/1769751641032?e=1775692800&v=beta&t=Zeya4BD7yQHomtvZXPvKFW00wN97pBiGJun9FK0Rvlg'
 };
 
 
