@@ -586,33 +586,28 @@ const CONFIG = {
   loop();
 })();
 
-/* ── Twitter (X) Feed ───────────────────────────────────── */
+/* ── Twitter (X) Feed — replace existing IIFE in widgets.js ── */
+/* 2 tweets max, clearly placeholder until real account added  */
+
 (function () {
   const container = document.getElementById('twitter-feed');
   if (!container) return;
 
   const tweets = [
-    { text: "Just discovered a coffee shop that stays open until 3am. My productivity (and heartbeat) just doubled. ☕⚡", time: "1h ago" },
-    { text: "Trying to explain RAG to my cat. He seems more interested in the mouse than the vector database. 🐱💻", time: "4h ago" },
-    { text: "Just realized the portfolio's star canvas looks like 3D space when you scroll. Accidental win. 🌌", time: "6h ago", img: "/images/pollpulse.png" },
-    { text: "Is it really a side project if you don't start a new one before finishing the last three? 🏗️", time: "1d ago" }
+    { text: "Just spent 3 hours debugging a missing semicolon. Growth. ☕", time: "2h ago" },
+    { text: "Is it really a side project if you start a new one before finishing the last three? 🏗️", time: "1d ago" }
   ];
 
-  function render() {
-    container.innerHTML = tweets.map(t => `
-      <div class="tweet-item" style="margin-bottom:16px; border-bottom: 1px solid var(--border); padding-bottom:12px; position:relative;">
-        <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-           <div style="width:20px; height:20px; border-radius:50%; background:var(--purple); font-size:9px; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#000;">AK</div>
-           <span style="font-size:0.65rem; font-weight:700;">Asad</span>
-           <span style="font-size:0.6rem; color:var(--text-dim);">@asad_dev • ${t.time}</span>
-        </div>
-        <p style="font-size:0.75rem; line-height:1.4; color:var(--text);">${t.text}</p>
-        ${t.img ? `<img src="${t.img}" style="width:100%; border-radius:8px; margin-top:8px; border:1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.2);" />` : ''}
+  container.innerHTML = tweets.map(t => `
+    <div class="tweet-item" style="margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:10px;">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;">
+        <div style="width:18px;height:18px;border-radius:50%;background:var(--text-dim);font-size:8px;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#000;flex-shrink:0;">A</div>
+        <span style="font-size:0.63rem;font-weight:700;color:var(--text-muted);">@asad_dev</span>
+        <span style="font-size:0.58rem;color:var(--text-dim);margin-left:auto;">${t.time}</span>
       </div>
-    `).join('');
-  }
-
-  render();
+      <p style="font-size:0.72rem;line-height:1.45;color:var(--text-muted);">${t.text}</p>
+    </div>
+  `).join('');
 })();
 
 /* ── LinkedIn Activity Snippet ─────────────────────────── */
