@@ -5,7 +5,7 @@
 'use strict';
 
 (function() {
-    const themes = ['cyberpunk', 'sunset', 'industrial', 'emerald'];
+    const themes = ['cyberpunk', 'industrial', 'sunset', 'emerald'];
     let currentThemeIndex = 0;
 
     // Load saved theme

@@ -55,5 +55,21 @@ window._scrollTasks = [];
 
 /* ── DOM Ready Initializations ────────────────────────────── */
 window.addEventListener('DOMContentLoaded', () => {
-  // Init other modules if needed
+  // Trigger SVG animations on scroll
+  const projectObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const paths = entry.target.querySelectorAll('svg path');
+        paths.forEach(p => {
+          // If it has a special class like draw-path-slow, keep it, otherwise use draw-path
+          if (!p.classList.contains('draw-path-slow')) {
+            p.classList.add('draw-path');
+          }
+        });
+        projectObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.25 });
+
+  document.querySelectorAll('.project-card').forEach(card => projectObserver.observe(card));
 });

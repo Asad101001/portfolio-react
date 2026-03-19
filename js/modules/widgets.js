@@ -106,33 +106,57 @@ const CONFIG = {
     fetchSeries();
   }
 
-  /* ── FC Barcelona Scorecard via ESPN ── */
-  var barcaItem = document.querySelector('.currently-into-item.barca-slot');
-  if (!barcaItem) {
-    // If not found by slot class, find by index
-    barcaItem = document.querySelector('.rotating-item[data-index="3"]');
-    if (barcaItem) barcaItem.classList.add('barca-slot');
-  }
+  /* ── FC Barcelona Scorecard Overhaul ── */
+  var barcaItem = document.querySelector('.rotating-item[data-index="3"]');
+  if (barcaItem) barcaItem.classList.add('barca-slot');
   if (!barcaItem) return;
 
-  function setBarcaDisplay(scoreText, isLive) {
-    var valEl = barcaItem.querySelector('.currently-into-value');
-    var labelEl = barcaItem.querySelector('.currently-into-label');
+  function setBarcaDisplay(data) {
+    const { barca, opp, isLive, state, barcaIsHost } = data;
+    const barcaScore = parseInt(barca.score);
+    const oppScore = parseInt(opp.score);
     
-    // Update label to pink "FC Barcelona"
-    if (labelEl) {
-      labelEl.textContent = 'FC Barcelona';
-      labelEl.style.color = '#ff0055'; // Pink
-      labelEl.style.textShadow = '0 0 10px rgba(255, 0, 85, 0.3)';
+    let emotion = '⚽';
+    if (state === 'post') {
+      if (barcaScore > oppScore) emotion = '🎉';
+      else if (barcaScore < oppScore) emotion = '😢';
+      else emotion = '😕';
+    } else if (state === 'in') {
+      emotion = '🔥';
     }
 
-    if (valEl && scoreText) {
-      // Add subtext "Mes que un club"
-      valEl.innerHTML = `
-        <div class="barca-score-row">${scoreText}</div>
-        <div class="barca-subtext">Més que un club</div>
-      `;
-    }
+    // Barça Logo (hardcoded for stability)
+    const barcaLogo = 'https://a.espncdn.com/i/teamlogos/soccer/500/83.png';
+    const oppLogo = opp.team.logo || 'https://a.espncdn.com/i/teamlogos/soccer/500/default.png';
+
+    barcaItem.innerHTML = `
+      <div class="barca-scorecard-wrap">
+        <div class="barca-header-title">FOOTBALL</div>
+        <div class="barca-layout-main">
+          <div class="barca-identity">
+            <img src="${barcaLogo}" class="barca-main-logo" alt="FCB">
+            <div class="barca-text-group">
+              <span class="barca-pink-name">FC Barcelona</span>
+              <span class="barca-mes-que">Més que un club</span>
+            </div>
+          </div>
+          <div class="barca-score-section">
+            <div class="score-row ${barcaIsHost ? 'is-host' : ''}">
+              <img src="${barcaIsHost ? barcaLogo : oppLogo}" class="tiny-logo">
+              <span class="score-team-name">${barcaIsHost ? 'Barça' : (opp.team.abbreviation || opp.team.shortDisplayName)}</span>
+              <span class="score-num">${barcaIsHost ? barca.score : opp.score}</span>
+            </div>
+            <div class="score-vs-divider">VS</div>
+            <div class="score-row ${!barcaIsHost ? 'is-host' : ''}">
+              <img src="${!barcaIsHost ? barcaLogo : oppLogo}" class="tiny-logo">
+              <span class="score-team-name">${!barcaIsHost ? 'Barça' : (opp.team.abbreviation || opp.team.shortDisplayName)}</span>
+              <span class="score-num">${!barcaIsHost ? barca.score : opp.score}</span>
+            </div>
+          </div>
+        </div>
+        <div class="barca-emotion-badge">${emotion}</div>
+      </div>
+    `;
 
     var oldBadge = barcaItem.querySelector('.barca-live-badge');
     if (oldBadge) oldBadge.remove();
@@ -142,7 +166,7 @@ const CONFIG = {
       var badge = document.createElement('span');
       badge.className = 'barca-live-badge';
       badge.textContent = 'LIVE';
-      if (labelEl) labelEl.after(badge);
+      barcaItem.querySelector('.barca-header-title').after(badge);
     } else {
       barcaItem.classList.remove('barca-live');
     }
@@ -151,9 +175,9 @@ const CONFIG = {
   function fetchBarca() {
     var d = new Date();
     var today = d.toISOString().split('T')[0].replace(/-/g, '');
-    d.setDate(d.getDate() - 5); // 5 days limit as requested
-    var fiveDaysAgo = d.toISOString().split('T')[0].replace(/-/g, '');
-    var dRange = fiveDaysAgo + '-' + today;
+    d.setDate(d.getDate() - 21); // 3 weeks back just to be sure we find the Newcastle game or others
+    var rangeStart = d.toISOString().split('T')[0].replace(/-/g, '');
+    var dRange = rangeStart + '-' + today;
 
     fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/scoreboard?dates=' + dRange)
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
@@ -172,22 +196,19 @@ const CONFIG = {
           var comp = barcaEvent.competitions[0];
           var barca = comp.competitors.find(function(c) { return c.team.id === '83'; });
           var opp = comp.competitors.find(function(c) { return c.team.id !== '83'; });
-          var statusState = barcaEvent.status.type.state; 
-          var scoreStr = barca.score + ' – ' + opp.score + ' vs ' + (opp.team.abbreviation || opp.team.shortDisplayName);
-
-          if (statusState === 'in') {
-            setBarcaDisplay(scoreStr, true);
-          } else {
-            var res = parseInt(barca.score) > parseInt(opp.score) ? 'W' : (barca.score === opp.score ? 'D' : 'L');
-            setBarcaDisplay(res + ' ' + scoreStr, false);
-          }
+          
+          setBarcaDisplay({
+            barca: barca,
+            opp: opp,
+            isLive: barcaEvent.status.type.state === 'in',
+            state: barcaEvent.status.type.state,
+            barcaIsHost: barca.homeAway === 'home'
+          });
           return;
         }
-        setBarcaDisplay('Full Matchday Data Pending', false);
+        setBarcaDisplay({ barca: {score:0}, opp: {score:0, team:{shortDisplayName:'---'}}, state:'none' });
       })
-      .catch(function () {
-        setBarcaDisplay('Match stats syncing...', false);
-      });
+      .catch(function () {});
   }
 
   fetchBarca();
@@ -689,7 +710,7 @@ const CONFIG = {
   }
 
   // Fetch fresh
-  fetch('/api/linkedin-post')
+  fetch('/api/linkedin-post?v=' + Date.now())
     .then(r => r.json())
     .then(data => {
       if (data && data.text) {

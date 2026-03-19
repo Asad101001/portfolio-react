@@ -362,6 +362,21 @@
 }
 .project-card.coming-soon .proj-desc { font-style: italic; }
 
+.rotating-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 14px;
+  border-radius: 2px;
+  background: rgba(16,185,129,0.04);
+  border: 1px solid rgba(16,185,129,0.12);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+
 .rotating-item.active {
   position: relative !important;
   opacity: 1 !important;
@@ -370,6 +385,7 @@
   pointer-events: all;
   z-index: 2;
 }
+
 .rotating-item.exit-up {
   position: absolute !important;
   top: 0; left: 0; right: 0;
@@ -383,20 +399,21 @@
 /* Dots — match active item color */
 .rotating-dots { display: flex; gap: 6px; margin-bottom: 12px; }
 .r-dot {
-  width: 6px; height: 6px; border-radius: 3px; border: none; cursor: pointer; padding: 0;
+  width: 6px; height: 6px; border-radius: 50%; border: none; cursor: pointer; padding: 0;
   background: rgba(255,255,255,0.1);
   transition: background 0.35s, width 0.35s cubic-bezier(0.22,1,0.36,1), transform 0.3s;
 }
 .r-dot.active {
   background: var(--cyan);
-  width: 18px; /* pill expand */
-  transform: scaleY(1.1);
+  width: 6px;
+  transform: scale(1.3);
 }
 .r-dot:hover:not(.active) { background: rgba(255,255,255,0.3); transform: scale(1.3); }
 
 /* ══════════════════════════════════════════════════════════
    FOOTBALL / BARCA — full blaugrana bleed on active slot
    ══════════════════════════════════════════════════════════ */
+
 
 /* The ENTIRE currently-into card gets a blaugrana border when football is active */
 #rotating-widget.football-active {
@@ -418,50 +435,139 @@
     0 0 24px rgba(163,30,45,0.18),
     inset 0 0 20px rgba(4,55,119,0.1);
 }
-.rotating-item.barca-slot .currently-into-label {
-  color: #c8102e;
-}
-.rotating-item.barca-slot .currently-into-value {
-  color: rgba(230,210,230,0.92);
-}
-.rotating-item.barca-slot .currently-into-thumb-placeholder {
-  background: linear-gradient(135deg, rgba(163,30,45,0.3), rgba(4,55,119,0.25));
-  border-color: rgba(163,30,45,0.4);
-  font-size: 1.3rem;
+/* Barca Scorecard Redesign */
+.barca-scorecard-wrap {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 4px 0;
+  position: relative;
 }
 
-/* Barca Scorecard Subtext */
-.barca-score-row {
-  font-size: 0.85rem;
-  font-weight: 700;
-  margin-bottom: 2px;
-}
-.barca-subtext {
-  font-size: 0.62rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #ffb114; /* Barca Gold/Yellow */
-  font-weight: 800;
-  font-style: italic;
+.barca-header-title {
+  text-align: center;
   font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  font-weight: 800;
 }
 
-/* Dots pulse blaugrana when football slot active */
-#rotating-dots.barca-active .r-dot.active {
-  background: #A50044;
-  box-shadow: 0 0 8px rgba(165,0,68,0.8);
-  width: 18px;
+.barca-layout-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
 }
 
-/* LIVE badge */
-.barca-live-badge {
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 2px 7px; border-radius: 2px;
-  font-size: 0.58rem; font-weight: 800;
-  background: rgba(163,30,45,0.9); color: #fff;
-  letter-spacing: 0.1em; font-family: 'JetBrains Mono', monospace;
-  margin-left: 6px; vertical-align: middle;
-  animation: barca-live-pulse 1.4s ease-in-out infinite;
+.barca-identity {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 85px;
+}
+
+.barca-main-logo {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(255, 0, 85, 0.3));
+}
+
+.barca-text-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.barca-pink-name {
+  color: #ff0055;
+  font-size: 0.85rem;
+  font-weight: 900;
+  text-shadow: 0 0 10px rgba(255, 0, 85, 0.2);
+  line-height: 1.1;
+}
+
+.barca-mes-que {
+  font-size: 0.5rem;
+  text-transform: uppercase;
+  color: #ffb114;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  margin-top: 1px;
+}
+
+.barca-score-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.78rem;
+  opacity: 0.6;
+}
+
+.score-row.is-host {
+  opacity: 1;
+  font-weight: 800;
+  color: #fff;
+}
+
+.score-num {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--cyan);
+  font-weight: 800;
+}
+
+.score-vs-divider {
+  font-size: 0.55rem;
+  text-align: center;
+  color: var(--text-dim);
+  font-weight: 900;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 3px;
+  letter-spacing: 0.1em;
+}
+
+.barca-emotion-badge {
+  position: absolute;
+  top: -4px;
+  right: -2px;
+  font-size: 1.2rem;
+}
+
+.tiny-logo {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+/* live badge positioning */
+.rotating-item.barca-live .barca-live-badge {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.5rem;
+  background: #ff0055;
+  color: white;
+  padding: 1px 5px;
+  border-radius: 2px;
+  font-weight: 900;
+  box-shadow: 0 0 10px #ff0055;
 }
 .barca-live-badge::before {
   content: ''; display: inline-block; width: 5px; height: 5px;
@@ -481,7 +587,7 @@
   border-color: rgba(163,30,45,0.6) !important;
   box-shadow: 0 0 30px rgba(163,30,45,0.22), inset 0 0 20px rgba(4,55,119,0.1) !important;
 }
-.rotating-item.barca-live .currently-into-label { color: #c8102e; }
+
 
 /* ══════════════════════════════════════════════════════════
    FUN FACTS — completely separate card/section
@@ -958,11 +1064,14 @@ section::before {
 }
 
 /* Project cards rotation offsets removed in favor of 3D tilt */
-.projects-grid .project-card:nth-child(odd),
-.projects-grid .project-card:nth-child(even) {
-  /* Inherit base .project-card tilt */
+.project-card {
+  contain: paint; /* Performance optimization */
+  transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1), box-shadow 0.4s ease;
 }
-.projects-grid .project-card:hover { transform: translateY(-10px) perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1.025) !important; }
+
+.projects-grid .project-card:hover { 
+  transform: translateY(-8px) scale(1.02) !important; 
+}
 
 /* Hero cards subtle scatter */
 .hero-grid .glass-card:nth-child(3) { transform: rotate(0.4deg); }
