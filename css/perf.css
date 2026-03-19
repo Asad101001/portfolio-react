@@ -62,7 +62,6 @@ body::before {
 /* Elements that scroll/move — promote */
 .hero-backdrop-inner,
 .hero-backdrop,
-.scroll-progress,
 #cursor-glow,
 #bg-canvas {
   will-change: transform;
@@ -214,4 +213,46 @@ body:not(.theme-industrial)::after {
 .ambient-glow {
   /* Already does opacity transition — just ensure it's on own layer */
   will-change: opacity;
+}
+
+/* ── 14. AGGRESSIVE MOBILE PERFORMANCE ────────────────────────
+   Native scrolling on mobile shouldn't compete with JS.
+   Kill all expensive filters and complex transitions.
+   ──────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Disable all blur effects on mobile - huge battery/FPS win */
+  *, *::before, *::after {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Disable parallax/scale on hero to allow native scroll speed */
+  .hero-backdrop, .hero-backdrop-inner {
+    transform: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
+
+  /* Simplify cards for mobile */
+  .glass-card, .project-card, .social-platform-card {
+    transition: border-color 0.2s, background 0.2s !important;
+    transform: none !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
+  }
+  
+  /* Disable magnetic/tilt logic in CSS */
+  .magnetic, .tilt-card, .btn-primary, .btn-secondary {
+    transform: none !important;
+  }
+
+  /* Reduce paint surface for glow */
+  body::before {
+    display: none !important;
+  }
+  
+  /* Kill scrolling indicator line animation */
+  .scroll-indicator-line {
+    animation: none !important;
+    height: 16px;
+  }
 }

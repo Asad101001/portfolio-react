@@ -15,12 +15,15 @@
     el.className = 'shooting-star';
     el.style.top  = (Math.random() * 45) + '%';
     el.style.left = (25 + Math.random() * 65) + '%';
-    el.style.animationDuration = (1.1 + Math.random() * 1.4) + 's';
+    el.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
     document.body.appendChild(el);
-    setTimeout(function () { el.remove(); }, 2800);
+    setTimeout(function () { el.remove(); }, 3000);
   }
-  setInterval(function () { if (Math.random() < 0.4) spawn(); }, 4500);
-  setTimeout(spawn, 1200);
+  // Reduced frequency for better performance
+  setInterval(function () { 
+    if (Math.random() < 0.25 && !document.hidden) spawn(); 
+  }, 6000);
+  setTimeout(spawn, 2500);
 })();
 
 /* ── Global Mouse Tracking for Glows ────────────────────── */
@@ -329,6 +332,26 @@ document.addEventListener('keydown', function (e) {
   if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
   if (e.key === 't' || e.key === 'T') { window.scrollTo({ top:0, behavior:'smooth' }); window.showToast('⬆ Back to top!'); }
 });
+
+/* ── Copy Email ────────────────────────────────────────── */
+(function () {
+  var emailLinks = document.querySelectorAll('a[href^="mailto:"]');
+  emailLinks.forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      // If user holds Ctrl/Cmd, let it open the mail client
+      if (e.ctrlKey || e.metaKey) return;
+      
+      e.preventDefault();
+      var email = this.href.replace('mailto:', '');
+      navigator.clipboard.writeText(email).then(function() {
+        window.showToast('📧 Email copied to clipboard!');
+      }).catch(function() {
+        // Fallback for older browsers
+        window.location.href = this.href;
+      });
+    });
+  });
+})();
 
 /* ── Scroll Reveal ──────────────────────────────────────── */
 (function () {

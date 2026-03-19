@@ -593,21 +593,15 @@ const CONFIG = {
   const container = document.getElementById('twitter-feed');
   if (!container) return;
 
-  const tweets = [
-    { text: "Just spent 3 hours debugging a missing semicolon. Growth. ☕", time: "2h ago" },
-    { text: "Is it really a side project if you start a new one before finishing the last three? 🏗️", time: "1d ago" }
-  ];
-
-  container.innerHTML = tweets.map(t => `
-    <div class="tweet-item" style="margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:10px;">
-      <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;">
-        <div style="width:18px;height:18px;border-radius:50%;background:var(--text-dim);font-size:8px;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#000;flex-shrink:0;">A</div>
-        <span style="font-size:0.63rem;font-weight:700;color:var(--text-muted);">@asad_dev</span>
-        <span style="font-size:0.58rem;color:var(--text-dim);margin-left:auto;">${t.time}</span>
-      </div>
-      <p style="font-size:0.72rem;line-height:1.45;color:var(--text-muted);">${t.text}</p>
+  container.innerHTML = `
+    <div style="padding: 24px 12px; text-align: center; color: var(--text-dim);">
+      <div style="font-size: 1.5rem; margin-bottom: 8px; opacity: 0.5;">📭</div>
+      <p style="font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.02em;">
+        Error fetching tweets.<br>
+        <span style="opacity: 0.6; font-size: 0.65rem;">Please check connection or try again later.</span>
+      </p>
     </div>
-  `).join('');
+  `;
 })();
 
 /* ── LinkedIn Activity Snippet ─────────────────────────── */

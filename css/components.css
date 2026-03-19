@@ -2,11 +2,6 @@
    css/components.css
    Nav, Buttons, Cards, Hero, Sections — all component styles
    ============================================================ */
-.scroll-progress {
-  position: fixed; top: 0; left: 0; width: 0%; height: 2px;
-  background: var(--cyan); z-index: 200; box-shadow: 0 0 8px var(--cyan);
-  transition: width 0.1s linear;
-}
 
 /* ── Space Background Canvas ─────────────────────────────── */
 #bg-canvas {

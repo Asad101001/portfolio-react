@@ -115,46 +115,42 @@
         });
     }
 
-    /* ── Scroll Progress + Parallax (registered into master rAF loop) ── */
-    function initParallax() {
-        var progressBar = document.querySelector('.scroll-progress');
+    /* ── Consolidate Scroll Tasks ── */
+    function initScrollAnimations() {
         var heroBackdropInner = document.querySelector('.hero-backdrop-inner');
         var heroContainer = document.querySelector('.hero-backdrop');
         var indicator = document.getElementById('scroll-indicator');
-        var prevProgress = -1;
         var prevShrink = -1;
 
         window._scrollTasks.push(function() {
             var y = window._scrollY;
             var ly = window._lerpY;
-            var docH = window._docH || 1;
-            var progress = (y / docH) * 100;
-
-            // Only write if changed meaningfully (avoids unnecessary paint)
-            if (progressBar && Math.abs(progress - prevProgress) > 0.3) {
-                progressBar.style.width = progress.toFixed(1) + '%';
-                prevProgress = progress;
+            
+            // Skip expensive parallax on mobile for performance
+            if (window._isMobile) {
+                if (indicator) indicator.classList.toggle('hidden', y > 80);
+                return;
             }
 
-            if (window._isMobile) return;
-
-            if (heroBackdropInner) {
-                heroBackdropInner.style.transform = 'translate3d(0,' + (ly * 0.3).toFixed(1) + 'px,0)';
+            // High performance Parallax for desktop
+            if (heroBackdropInner && ly < 1200) {
+                heroBackdropInner.style.transform = 'translate3d(0,' + (ly * 0.32).toFixed(1) + 'px,0)';
             }
 
-            var shrink = Math.min(ly / 800, 1);
-            if (heroContainer && Math.abs(shrink - prevShrink) > 0.002) {
+            // Smooth scale/shrink for hero
+            var shrink = Math.min(ly / 900, 1);
+            if (heroContainer && Math.abs(shrink - prevShrink) > 0.0015) {
                 var scale = Math.max(0.88, 1 - shrink * 0.12);
-                var opacity = Math.max(0, 1 - shrink * 1.0);
-                var radius = Math.min(20, shrink * 20);
-                // Use CSS vars to avoid forcing style recalc
-                heroContainer.style.transform = 'scale(' + scale.toFixed(3) + ')';
+                var opacity = Math.max(0, 1 - shrink * 1.15);
+                var radius = Math.min(24, shrink * 24);
+                
+                heroContainer.style.transform = 'scale(' + scale.toFixed(3) + ') translate3d(0,0,0)';
                 heroContainer.style.opacity   = opacity.toFixed(3);
                 heroContainer.style.borderRadius = radius.toFixed(1) + 'px';
                 prevShrink = shrink;
             }
 
-            if (indicator) indicator.classList.toggle('hidden', y > 120);
+            if (indicator) indicator.classList.toggle('hidden', y > 150);
         });
     }
 
@@ -170,7 +166,7 @@
         initMagnetic();
         initSpotlight();
         initTilt();
-        initParallax();
+        initScrollAnimations();
         initLoadReveal();
     });
 

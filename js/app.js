@@ -34,15 +34,24 @@ window._scrollTasks = [];
 })();
 
 /* ── Master rAF Loop ─────────────────────────────────────── */
-/* Uses a frame budget system: expensive tasks only run when
-   there's headroom. Target is 60fps (16.67ms per frame).    */
 (function loop(timestamp) {
-  // Smooth lerp — intentionally gentle (0.06) to avoid over-shooting
-  var factor = 0.06;
-  window._lerpY += (window._scrollY - window._lerpY) * factor;
+  // Disable lerp on mobile for native smoothness
+  if (!window._isMobile) {
+    var factor = 0.065;
+    window._lerpY += (window._scrollY - window._lerpY) * factor;
+  } else {
+    window._lerpY = window._scrollY;
+  }
 
+  // Run scroll tasks
   var len = window._scrollTasks.length;
-  for (var i = 0; i < len; i++) window._scrollTasks[i](timestamp);
+  for (var i = 0; i < len; i++) {
+    try {
+      window._scrollTasks[i](timestamp);
+    } catch (e) {
+      console.error('Scroll Task Error:', e);
+    }
+  }
 
   requestAnimationFrame(loop);
 })();
