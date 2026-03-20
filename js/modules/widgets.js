@@ -358,7 +358,7 @@ const CONFIG = {
       var ts = t.date && t.date.uts ? t.date.uts : null;
       var a = document.createElement('a');
       a.className = 'lastfm-track'; a.href = t.url || '#'; a.target = '_blank'; a.rel = 'noopener noreferrer';
-      var imgHTML = art ? '<img class="lastfm-track-art" src="' + art + '" alt="" crossorigin="anonymous" />' : '<div class="lastfm-track-art lastfm-track-art--empty">&#x1F3B5;</div>';
+      var imgHTML = art ? '<img class="lastfm-track-art" src="' + art + '" alt="" crossorigin="anonymous" loading="lazy" decoding="async" fetchpriority="low" />' : '<div class="lastfm-track-art lastfm-track-art--empty">&#x1F3B5;</div>';
       var timeHTML = nowPlaying
         ? '<span class="lastfm-now-playing"><span class="lastfm-eq"><span></span><span></span><span></span><span></span></span>&nbsp;now</span>'
         : '<span class="lastfm-track-time">' + timeAgo(ts) + '</span>';

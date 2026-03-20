@@ -643,50 +643,268 @@
   box-shadow: -3px 0 0 rgba(168,85,247,0.4);
 }
 
+
 /* ══════════════════════════════════════════════════════════
-   MARQUEE — GPU-only, zero confetti, hover expand only
+   ARSENAL — Domain Intelligence Grid
    ══════════════════════════════════════════════════════════ */
 #tech .section-inner {
   display: flex; flex-direction: column; align-items: center;
 }
-.marquee-wrap {
-  width: 100%; max-width: 960px; margin: 0 auto; box-sizing: border-box;
-  overflow: hidden; padding: 28px 0 !important;
+
+/* Filter Bar */
+.arsenal-filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 36px;
+  margin-top: 8px;
+}
+.af-btn {
+  padding: 6px 16px;
+  border-radius: 2px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.02);
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s, box-shadow 0.25s;
+}
+.af-btn:hover {
+  border-color: rgba(16,185,129,0.4);
+  color: var(--cyan);
+  background: rgba(16,185,129,0.05);
+}
+.af-btn.active {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: rgba(16,185,129,0.08);
+  box-shadow: 0 0 14px rgba(16,185,129,0.15);
+}
+
+/* Arsenal Grid — Narrowed for centering */
+.arsenal-grid {
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Domain Block */
+.arsenal-domain {
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 4px;
+  background: rgba(8,10,20,0.6);
+  overflow: hidden;
+  /* Scroll-reveal: starts hidden */
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22,1,0.36,1),
+              border-color 0.3s, box-shadow 0.3s;
+  will-change: opacity, transform;
+  contain: layout paint;
+}
+.arsenal-domain.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+.arsenal-domain.hidden-domain {
+  display: none;
+}
+.arsenal-domain:hover {
+  border-color: rgba(16,185,129,0.2);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+}
+
+/* Domain Header */
+.arsenal-domain-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 20px;
+  background: rgba(255,255,255,0.02);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.adom-badge {
+  font-size: 0.6rem;
+  font-weight: 900;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 2px;
+  background: rgba(16,185,129,0.08);
+  border: 1px solid rgba(16,185,129,0.22);
+  color: var(--cyan);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.adom-desc {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.adom-count {
+  font-size: 0.6rem;
+  font-family: 'JetBrains Mono', monospace;
+  color: rgba(255,255,255,0.15);
+  white-space: nowrap;
+}
+
+/* Arsenal Row — centered icons */
+.arsenal-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 16px;
+  gap: 12px;
+}
+
+/* Arsenal Card — icon only by default, expands on hover */
+.acard {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  padding: 9px;
+  border-radius: 3px;
+  border: 1px solid rgba(255,255,255,0.07);
+  background: rgba(255,255,255,0.025);
+  width: 42px;          /* collapsed: icon only */
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: default;
   position: relative;
-  border: 1px solid rgba(16,185,129,0.08) !important;
-  border-radius: 8px;
-  background: rgba(10,12,25,0.4);
+  /* GPU-safe: width + opacity are composited when parent has contain:paint */
+  transition: width 0.32s cubic-bezier(0.22,1,0.36,1),
+              gap 0.32s cubic-bezier(0.22,1,0.36,1),
+              border-color 0.22s,
+              background 0.22s,
+              box-shadow 0.22s,
+              transform 0.22s;
+  /* Scroll-reveal entrance */
+  opacity: 0;
+  transform: scale(0.88);
 }
-.marquee-fade-l { left: 0;  background: linear-gradient(to right, rgba(4,6,13,0.97), transparent); }
-.marquee-fade-r { right: 0; background: linear-gradient(to left,  rgba(4,6,13,0.97), transparent); }
-.marquee-rows {
-  width: 100%; overflow: visible;
-  display: flex; flex-direction: column; gap: 12px;
+.acard.in-view {
+  opacity: 1;
+  transform: scale(1);
+}
+.acard:hover {
+  width: 148px;          /* expanded: icon + name */
+  gap: 9px;
+  padding: 9px 12px;
+  border-color: var(--ac, rgba(16,185,129,0.45));
+  background: var(--ag, rgba(16,185,129,0.06));
+  box-shadow: 0 0 18px var(--ag, rgba(16,185,129,0.2)),
+              0 4px 16px rgba(0,0,0,0.4);
+  transform: translateY(-2px);
 }
 
-/* Slower = smoother, GPU translateX only */
-@keyframes marquee-fwd {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+/* Icon */
+.acard-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ac, var(--cyan));
+  filter: drop-shadow(0 0 3px var(--ag, rgba(16,185,129,0.1)));
+  transition: filter 0.22s;
 }
-@keyframes marquee-rev {
-  from { transform: translateX(-50%); }
-  to   { transform: translateX(0); }
+.acard:hover .acard-icon {
+  filter: drop-shadow(0 0 8px var(--ag, rgba(16,185,129,0.5)));
 }
-.export-tech-marquee-lane {
-  display: flex; gap: 10px; width: max-content;
-  animation: marquee-fwd 32s linear infinite;
+.acard-icon svg { width: 22px; height: 22px; display: block; }
+
+/* Name — hidden in collapsed state, shown in expanded */
+.acard-name {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.18s ease 0.1s;
+  pointer-events: none;
+}
+.acard:hover .acard-name { opacity: 1; }
+
+
+/* Stats Footer */
+.arsenal-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 32px;
+  padding: 18px 32px;
+  background: rgba(8,10,20,0.5);
+  border: 1px solid rgba(16,185,129,0.08);
+  border-radius: 4px;
+  width: 100%;
+  max-width: 400px;
+}
+.astat { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.astat-n {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--cyan);
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1;
+  text-shadow: 0 0 20px rgba(16,185,129,0.4);
+}
+.astat-l {
+  font-size: 0.58rem;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.astat-divider {
+  width: 1px;
+  height: 30px;
+  background: rgba(255,255,255,0.07);
+}
+
+@media (max-width: 768px) {
+  .acard { flex: 1 1 140px; min-width: 140px; }
+  .adom-desc { display: none; }
+  .arsenal-stats { gap: 18px; padding: 14px 20px; }
+}
+
+/* Organic Floating Animation */
+@keyframes skill-float {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25%  { transform: translate(var(--x, 5px), var(--y, -5px)) rotate(1deg); }
+  50%  { transform: translate(calc(var(--x, 5px) * -1.2), calc(var(--y, -5px) * 0.8)) rotate(-1deg); }
+  75%  { transform: translate(calc(var(--x, 5px) * 0.5), calc(var(--y, -5px) * 1.5)) rotate(0.5deg); }
+}
+
+.floating-chip {
+  animation: skill-float 8s ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
   will-change: transform;
-  transform: translateZ(0); /* promote to own layer */
-  position: relative; z-index: 0;
+  transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1) !important;
 }
-.export-tech-marquee-lane--reverse {
-  animation: marquee-rev 38s linear infinite;
-}
-/* Pause on hover of the whole marquee wrap */
-.marquee-wrap:hover .export-tech-marquee-lane { animation-play-state: paused; }
 
-/* Chip: collapsed by default, expand on hover — no particles, no confetti */
+.floating-chip:hover {
+  animation-play-state: paused;
+  z-index: 20;
+  transform: translateY(-8px) scale(1.15) rotate(0deg) !important;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 22px var(--chip-color, var(--cyan)) !important;
+}
+
+/* Chip: collapsed by default, expand on hover — icon-color glow */
 .skill-chip {
   isolation: isolate; z-index: 0;
   overflow: hidden;
@@ -696,14 +914,14 @@
 .skill-chip:hover {
   z-index: 2;
   overflow: visible;
-  /* Stronger hover: bigger lift, glow, scale */
   transform: translateY(-5px) scale(1.1) !important;
-  border-color: rgba(16,185,129,0.6) !important;
-  background: rgba(16,185,129,0.14) !important;
+  border-color: var(--chip-color, rgba(16,185,129,0.6)) !important;
+  background: var(--chip-bg, rgba(16,185,129,0.14)) !important;
   box-shadow:
-    0 0 20px rgba(16,185,129,0.28),
+    0 0 22px var(--chip-glow, rgba(16,185,129,0.28)),
+    0 0 8px var(--chip-glow, rgba(16,185,129,0.15)),
     0 8px 24px rgba(0,0,0,0.5),
-    inset 0 0 12px rgba(16,185,129,0.06) !important;
+    inset 0 0 12px rgba(255,255,255,0.04) !important;
   color: #fff !important;
 }
 .skill-chip:hover .chip-label {

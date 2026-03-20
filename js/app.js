@@ -31,12 +31,14 @@ window._scrollTasks = [];
 
 /* ── Master rAF Loop ─────────────────────────────────────── */
 (function loop(timestamp) {
-  // Disable lerp on mobile for native smoothness
+  // Enable smooth lerp on desktop for "behemoth level" premium smoothness
   if (!window._isMobile) {
-    // UPDATED: Disable lerp by setting it to 1.0 for "behemoth level" smoothness (native)
-    var factor = 1.0; 
-    window._lerpY = window._scrollY;
+    // Smoother factor (0.065-0.075 is the sweet spot for "buttery" feel)
+    var factor = 0.068; 
+    var targetY = window._scrollY;
+    window._lerpY += (targetY - window._lerpY) * factor;
   } else {
+    // Native scroll on mobile needs immediate value
     window._lerpY = window._scrollY;
   }
 

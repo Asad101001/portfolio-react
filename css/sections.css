@@ -118,7 +118,7 @@
 .skill-chip:hover::before { left: 100%; }
 .chip-svg { width: 15px; height: 15px; flex-shrink: 0; display: block; }
 .chip-label { display: inline-block; overflow: hidden; max-width: 0; opacity: 0; font-size: 0.72rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; transition: max-width 0.38s cubic-bezier(0.22,1,0.36,1), opacity 0.22s ease; }
-.skill-chip:hover { max-width: 180px; gap: 7px; padding: 7px 11px; border-color: rgba(16,185,129,0.45); color: #fff; background: rgba(16,185,129,0.09); box-shadow: 0 0 14px rgba(16,185,129,0.18), inset 0 0 12px rgba(16,185,129,0.04); transform: translateY(-2px) scale(1.04); }
+.skill-chip:hover { max-width: 180px; gap: 7px; padding: 7px 11px; border-color: var(--chip-color, rgba(16,185,129,0.45)); color: #fff; background: var(--chip-bg, rgba(16,185,129,0.09)); box-shadow: 0 0 18px var(--chip-glow, rgba(16,185,129,0.22)), 0 0 6px var(--chip-glow, rgba(16,185,129,0.12)), inset 0 0 12px rgba(255,255,255,0.03); transform: translateY(-2px) scale(1.04); }
 .skill-chip:hover .chip-label { max-width: 160px; opacity: 1; }
 @keyframes chip-pulse { 0%, 100% { box-shadow: none; } 50% { box-shadow: 0 0 10px rgba(16,185,129,0.25); } }
 .skill-chip.pulsing { animation: chip-pulse 3s ease-in-out infinite; }
