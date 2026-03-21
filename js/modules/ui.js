@@ -270,29 +270,56 @@
   });
 })();
 
-/* ── Arsenal: Filter + Reveal ── */
-(function() {
-  var grid = document.getElementById('arsenal-grid'), fBar = document.getElementById('arsenal-filter');
-  if (!grid || !fBar) return;
-  var domains = grid.querySelectorAll('.arsenal-domain');
-  var dObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('in-view');
-        e.target.querySelectorAll('.acard').forEach((c, i) => setTimeout(() => c.classList.add('in-view'), i * 35));
-        dObs.unobserve(e.target);
-      }
+  /* --- Arsenal: Filter + Reveal + Touch Expansion --- */
+  (function() {
+    var grid = document.getElementById('arsenal-grid'), fBar = document.getElementById('arsenal-filter');
+    if (!grid || !fBar) return;
+    var domains = grid.querySelectorAll('.arsenal-domain');
+    
+    // Reveal Observer
+    var dObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          e.target.querySelectorAll('.acard').forEach((c, i) => setTimeout(() => c.classList.add('in-view'), i * 35));
+          dObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    domains.forEach(d => dObs.observe(d));
+
+    // Filtering
+    fBar.addEventListener('click', (e) => {
+      var b = e.target.closest('.af-btn'); if (!b) return;
+      fBar.querySelectorAll('.af-btn').forEach(x => x.classList.remove('active')); b.classList.add('active');
+      var f = b.getAttribute('data-filter');
+      domains.forEach(d => {
+        var k = d.getAttribute('data-domain');
+        if (f === 'all' || k === f) { 
+          d.style.display = 'block'; 
+          setTimeout(() => d.classList.remove('hidden-domain'), 10); 
+        } else { 
+          d.classList.add('hidden-domain'); 
+          setTimeout(() => d.style.display = 'none', 300); 
+        }
+      });
     });
-  }, { threshold: 0.1 });
-  domains.forEach(d => dObs.observe(d));
-  fBar.addEventListener('click', (e) => {
-    var b = e.target.closest('.af-btn'); if (!b) return;
-    fBar.querySelectorAll('.af-btn').forEach(x => x.classList.remove('active')); b.classList.add('active');
-    var f = b.getAttribute('data-filter');
-    domains.forEach(d => {
-      var k = d.getAttribute('data-domain');
-      if (f === 'all' || k === f) { d.style.display = 'block'; setTimeout(() => d.classList.remove('hidden-domain'), 10); }
-      else { d.classList.add('hidden-domain'); setTimeout(() => d.style.display = 'none', 300); }
-    });
-  });
-})();
+
+    // Mobile Expansion Toggle (Touch devices)
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+      grid.addEventListener('touchstart', (e) => {
+        const card = e.target.closest('.acard');
+        if (card) {
+          // If already expanded, let it be (standard tap behavior)
+          // If not, expand it and collapse others in the same row
+          const row = card.closest('.arsenal-row');
+          if (row) {
+            row.querySelectorAll('.acard').forEach(c => {
+              if (c !== card) c.classList.remove('manual-expand');
+            });
+          }
+          card.classList.toggle('manual-expand');
+        }
+      }, { passive: true });
+    }
+  })();

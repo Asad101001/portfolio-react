@@ -5,26 +5,19 @@ const COMMANDS = [
     { id: 'projects', label: 'Jump to Projects', icon: '📁', action: () => scrollTo('#projects') },
     { id: 'about', label: 'Jump to About', icon: '👤', action: () => scrollTo('#about') },
     { id: 'contact', label: 'Jump to Contact', icon: '✉️', action: () => scrollTo('#contact') },
-    { id: 'theme-sunset', label: 'Theme: Sunset Cyberpunk', icon: '🌆', action: () => setTheme('sunset') },
-    { id: 'theme-industrial', label: 'Theme: Industrial Stark', icon: '🏗️', action: () => setTheme('industrial') },
-    { id: 'theme-cycle', label: 'Toggle Light/Dark Mode', icon: '🌓', action: () => toggleTheme() },
+    { id: 'theme-cycle', label: 'Cycle Themes (4 Modes)', icon: '🎨', action: () => toggleTheme() },
     { id: 'resume', label: 'Download Resume', icon: '📄', action: () => window.open('./resume.pdf', '_blank') },
     { id: 'email', label: 'Email Me', icon: '📨', action: () => window.location.href = 'mailto:muhammadasadk42@gmail.com' }
 ];
 
 function toggleTheme() {
-    const nextBtn = document.querySelector('.theme-btn:not(.active)');
-    if (nextBtn) nextBtn.click();
+    const btn = document.querySelector('.theme-toggle');
+    if (btn) btn.click();
 }
 
 function scrollTo(selector) {
     const el = document.querySelector(selector);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
-}
-
-function setTheme(name) {
-    const btn = document.querySelector(`.theme-btn[data-theme="${name}"]`);
-    if (btn) btn.click();
 }
 
 export function initCommandPalette() {
@@ -116,7 +109,6 @@ export function initCommandPalette() {
                 const idx = parseInt(item.dataset.index);
                 if (!isNaN(idx)) {
                     selectedIndex = idx;
-                    // Minimal re-render of styles only to avoid losing focus/scroll or being too heavy
                     items.forEach((it, j) => it.classList.toggle('selected', j === selectedIndex));
                 }
             };
