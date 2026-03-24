@@ -155,16 +155,26 @@
             if (heroContainer && Math.abs(shrink - prevShrink) > 0.0015) {
                 var scale = Math.max(0.88, 1 - shrink * 0.12);
                 var opacity = Math.max(0, 1 - shrink * 1.15);
-                var radius = Math.min(24, shrink * 24);
                 
                 heroContainer.style.transform = 'scale(' + scale.toFixed(3) + ') translate3d(0,0,0)';
                 heroContainer.style.opacity   = opacity.toFixed(3);
-                heroContainer.style.borderRadius = radius.toFixed(1) + 'px';
                 prevShrink = shrink;
             }
 
             if (indicator) indicator.classList.toggle('hidden', y > 150);
         });
+
+        // Global Scroll Jank Fix: Disable heavy paints while scrolling
+        var scrollTimeout;
+        window.addEventListener('scroll', function() {
+            if (!document.body.classList.contains('is-scrolling')) {
+                document.body.classList.add('is-scrolling');
+            }
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(function() {
+                document.body.classList.remove('is-scrolling');
+            }, 100);
+        }, { passive: true });
     }
 
     /* ── Text Scramble Effect ── */

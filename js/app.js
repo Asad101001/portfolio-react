@@ -71,4 +71,16 @@ window.addEventListener('DOMContentLoaded', () => {
   }, { threshold: 0.1 }); // Trigger earlier so drawing starts as it fades in
 
   document.querySelectorAll('.project-card').forEach(card => projectObserver.observe(card));
+
+  // --- Smooth Scroll to Hash on Load ---
+  if (window.location.hash) {
+    const targetId = window.location.hash.substring(1);
+    const targetEl = document.getElementById(targetId);
+    if (targetEl) {
+      setTimeout(() => {
+        const top = targetEl.offsetTop - 80;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }, 600); // Wait for animations/load to settle
+    }
+  }
 });

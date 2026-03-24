@@ -53,8 +53,8 @@
     }, { once: true });
   }
 
-  // Dismiss after page is ready (ultra-fast flash)
-  var minDuration = 40;
+  // Dismiss after page is ready (steady loading duration)
+  var minDuration = 500;
   var startTime   = Date.now();
 
   function tryDismiss() {
@@ -73,7 +73,7 @@
     window.addEventListener('load', tryDismiss);
   }
 
-  // Hard cap: 0.15s max
-  setTimeout(dismiss, 150);
+  // Hard cap: 1.5s max
+  setTimeout(dismiss, 1500);
 
 })();

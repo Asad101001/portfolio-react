@@ -1,68 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>AWS Config - Detail View</title>
-    <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x26A1;</text></svg>" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x26A1;</text></svg>" />
     <link rel="stylesheet" href="/css/style.css" />
     <style>
-        .social-sidebar,
-        .scroll-indicator,
-        #experience-accordion {
-            display: none !important;
-        }
-
-        body {
-            padding-top: 100px;
-        }
-
-        .submodule-return {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 600;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            color: var(--cyan);
-            text-decoration: none;
-            padding: 10px 0;
-            transition: transform 0.2s;
-        }
-
-        .submodule-return:hover {
-            transform: translateX(-5px);
-            color: var(--lime);
-        }
+        .social-sidebar, .scroll-indicator, #experience-accordion { display: none !important; }
+        body { padding-top: 100px; }
+        .submodule-return { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--cyan); text-decoration: none; padding: 10px 0; transition: transform 0.2s; }
+        .submodule-return:hover { transform: translateX(-5px); color: var(--lime); }
+        .proj-content-grid { display: grid; grid-template-columns: 1fr; gap: 40px; margin-top: 40px; }
+        .proj-card { background: rgba(10, 10, 10, 0.4); border: 1px solid rgba(255, 153, 0, 0.1); border-radius: 12px; padding: 32px; }
+        .feature-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+        .feature-list li { display: flex; align-items: flex-start; gap: 10px; }
+        .feature-list li:before { content: '⚡'; color: #FF9900; font-size: 0.9em; margin-top: 2px; }
+        .tech-list span { display: inline-block; padding: 4px 10px; border-radius: 4px; background: rgba(255,255,255,0.05); margin: 0 8px 8px 0; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.1); }
     </style>
 </head>
-
 <body class="theme-cyberpunk project-body">
+    <div class="hero-backdrop" style="opacity: 0.15;">
+        <div class="hero-backdrop-inner" style="background-image: url('/images/projects/aws.png');"></div>
+    </div>
+    <div class="ambient-glow" style="position: fixed; inset: 0; z-index: -1; background: var(--spotlight-gradient); opacity: 0.6;"></div>
     <nav>
         <div class="nav-inner" style="justify-content: space-between; padding: 12px 24px;">
             <a href="/#projects" class="submodule-return">&larr; Return to Projects</a>
         </div>
     </nav>
-    <include src="../components/loading-screen.html"></include>
+    <include src="/components/loading-screen.html"></include>
     <main id="main-content" style="max-width: 1000px; margin: 0 auto; padding: 40px 20px; position: relative;">
-        <div class="glass-card reveal" style="padding: 40px; border-top: 2px solid var(--cyan); text-align: center;">
-            <h1 class="section-title">AWS Nginx Subgraph</h1>
-            <p style="color: var(--text-dim); margin-top: 16px;">This project's deep-dive case study is currently being
-                written. Stay tuned for architectural diagrams, code breakdowns, and production statistics.</p>
-            <div style="margin: 40px auto 0 auto; max-width: 600px;">
-                <img src="/images/aws-hero.png" alt="AWS Infrastructure Screenshot" onerror="this.src='/images/aws.png'"
-                    style="width:100%; border-radius:12px; border:1px solid rgba(255,255,255,0.05); box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+        <div class="glass-card reveal" style="padding: 40px; border-top: 2px solid #FF9900;">
+            
+            <div style="text-align: center;">
+                <h1 class="section-title">AWS EC2 Deployment</h1>
+                <p style="color: #FF9900; font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; margin-top: 8px;">Static Website & Cloud Infrastructure</p>
+                
+                <div style="margin: 40px auto 0 auto; max-width: 800px;">
+                    <img src="/images/projects/aws.png" alt="AWS Infrastructure Screenshot" style="width:100%; border-radius:12px; border:1px solid rgba(255,153,0,0.2); box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+                </div>
             </div>
-            <div style="margin-top: 30px;">
-                <a href="/#projects" class="btn-primary">Return to Projects</a>
+
+            <div class="proj-content-grid">
+                <div class="proj-card">
+                    <h3 style="color: #FF9900; margin-bottom: 24px;">Infrastructure Documentation</h3>
+                    <p style="color: var(--text-dim); line-height: 1.6; margin-bottom: 24px;">
+                        A foundational cloud hosting project aimed at hands-on deployment mechanics over native Linux server environments. Involved root-level manual provisioning bridging VPC networking, instance scaling limitations, and direct Nginx routing methodologies.
+                    </p>
+                    
+                    <ul class="feature-list" style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 32px;">
+                        <li><strong>Manual EC2 Provisioning:</strong> Created and maintained an active `t3.micro` Ubuntu instance within the `eu-north-1` availability zone.</li>
+                        <li><strong>Protocol Restrictions:</strong> Designed precise Inbound/Outbound ICMP and TCP mapping rules mapping onto a configured AWS Security Group natively preserving server closure.</li>
+                        <li><strong>SSH Terminal Binding:</strong> Bound explicit root authorization certificates utilizing `.pem` private keys.</li>
+                        <li><strong>Nginx Routing:</strong> Bootstrapped raw web logic pipelines hosting static assets reliably via daemon routing mapping over default proxy limits.</li>
+                    </ul>
+
+                    <div class="tech-list" style="margin-top: 16px;">
+                        <span>AWS EC2</span>
+                        <span>AWS VPC/Security Groups</span>
+                        <span>Ubuntu Server (Linux)</span>
+                        <span>Nginx Software Proxy</span>
+                        <span>SSH</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; text-align: center; display: flex; gap: 16px; justify-content: center;">
+                <a href="https://github.com/Asad101001/aws-static-website" target="_blank" class="btn-secondary">GitHub Repo ↗</a>
             </div>
         </div>
     </main>
     <script type="module" src="/js/app.js"></script>
     <script type="module" src="/js/modules/loader.js"></script>
+    <script type="module" src="/js/modules/animations.js"></script>
+    <script type="module" src="/js/modules/ui.js"></script>
     <script type="module" src="/js/modules/theme.js"></script>
 </body>
-
 </html>

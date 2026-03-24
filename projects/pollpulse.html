@@ -11,29 +11,82 @@
         body { padding-top: 100px; }
         .submodule-return { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--cyan); text-decoration: none; padding: 10px 0; transition: transform 0.2s; }
         .submodule-return:hover { transform: translateX(-5px); color: var(--lime); }
+        .proj-content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px; }
+        .proj-card { background: rgba(10, 10, 10, 0.4); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 12px; padding: 24px; }
+        @media (max-width: 768px) { .proj-content-grid { grid-template-columns: 1fr; } }
+        .feature-list { list-style: none; padding: 0; }
+        .feature-list li { margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px; }
+        .feature-list li:before { content: '⚡'; color: #a855f7; font-size: 0.9em; margin-top: 2px; }
+        .tech-list span { display: inline-block; padding: 4px 10px; border-radius: 4px; background: rgba(255,255,255,0.05); margin: 0 8px 8px 0; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.1); }
     </style>
 </head>
 <body class="theme-cyberpunk project-body">
+    <div class="hero-backdrop" style="opacity: 0.15;">
+        <div class="hero-backdrop-inner" style="background-image: url('/images/projects/pollpulse.png');"></div>
+    </div>
+    <div class="ambient-glow" style="position: fixed; inset: 0; z-index: -1; background: var(--spotlight-gradient); opacity: 0.6;"></div>
     <nav>
         <div class="nav-inner" style="justify-content: space-between; padding: 12px 24px;">
             <a href="/#projects" class="submodule-return">&larr; Return to Projects</a>
         </div>
     </nav>
-    <include src="../components/loading-screen.html"></include>
+    <include src="/components/loading-screen.html"></include>
     <main id="main-content" style="max-width: 1000px; margin: 0 auto; padding: 40px 20px; position: relative;">
-        <div class="glass-card reveal" style="padding: 40px; border-top: 2px solid var(--cyan); text-align: center;">
-            <h1 class="section-title">PollPulse Overview</h1>
-            <p style="color: var(--text-dim); margin-top: 16px;">This project's deep-dive case study is currently being written. Stay tuned for architectural diagrams, code breakdowns, and production statistics.</p>
-            <div style="margin: 40px auto 0 auto; max-width: 600px;">
-                <img src="/images/pollpulse-hero.png" alt="PollPulse Interface Screenshot" onerror="this.src='/images/pollpulse.png'" style="width:100%; border-radius:12px; border:1px solid rgba(255,255,255,0.05); box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+        <div class="glass-card reveal" style="padding: 40px; border-top: 2px solid #a855f7;">
+            
+            <div style="text-align: center;">
+                <h1 class="section-title">PollPulse</h1>
+                <p style="color: #a855f7; font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; margin-top: 8px;">Interactive Voting Platform & Analytics</p>
+                
+                <div style="margin: 40px auto 0 auto; max-width: 800px;">
+                    <img src="/images/projects/pollpulse.png" alt="PollPulse Interface" style="width:100%; border-radius:12px; border:1px solid rgba(168,85,247,0.2); box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+                </div>
             </div>
-            <div style="margin-top: 30px;">
-                <a href="https://github.com/Asad101001/pollpulse" target="_blank" class="btn-primary">View GitHub Repository ↗</a>
+
+            <div class="proj-content-grid">
+                <div class="proj-card">
+                    <h3 style="color: #a855f7; margin-bottom: 16px;">The Idea</h3>
+                    <p style="color: var(--text-dim); line-height: 1.6;">
+                        A modern web application built for the Cloud Computing Capstone that transforms ordinary polls into engaging, visual experiences using glassmorphism UI, real-time data visualization, and an integrated gamification system with badges and leaderboards.
+                    </p>
+                </div>
+                
+                <div class="proj-card">
+                    <h3 style="color: #a855f7; margin-bottom: 16px;">System Capabilities</h3>
+                    <ul class="feature-list" style="color: var(--text-muted); font-size: 0.95rem;">
+                        <li><strong>Real-time Votes:</strong> Live data updates via client-server polling.</li>
+                        <li><strong>Live Analytics:</strong> Geographic vote tracking and charting dashboards.</li>
+                        <li><strong>Gamification Engine:</strong> Session-based tracking issuing Badges (Speed Demon, Globe Trotter) and 3-Day Streaks.</li>
+                        <li><strong>Cloud-native Scale:</strong> Deployed reliably over AWS utilizing 100% Free Tier infrastructure constraints.</li>
+                    </ul>
+                </div>
+
+                <div class="proj-card" style="grid-column: 1 / -1;">
+                    <h3 style="color: #a855f7; margin-bottom: 16px;">Architecture & Stack</h3>
+                    <p style="color: var(--text-dim); margin-bottom: 16px; font-size: 0.95rem;">
+                        A multi-tier architecture hosted completely on AWS. Utilizing EC2 for web application hosting connected cleanly to a managed RDS instance running MySQL 8, storing complex entities like `users`, `poll_options`, and `user_badges`. The backend API is constructed with Node.js 18 & Express serving a decoupled vanilla JS frontend augmented by Chart.js.
+                    </p>
+                    <div class="tech-list">
+                        <span>Node.js / Express</span>
+                        <span>MySQL 8</span>
+                        <span>AWS EC2</span>
+                        <span>AWS RDS</span>
+                        <span>Vanilla JS (ES6)</span>
+                        <span>Chart.js</span>
+                        <span>CSS Glassmorphism</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; text-align: center; display: flex; gap: 16px; justify-content: center;">
+                <a href="https://github.com/Asad101001/pollpulse" target="_blank" class="btn-secondary">GitHub Repo ↗</a>
             </div>
         </div>
     </main>
     <script type="module" src="/js/app.js"></script>
     <script type="module" src="/js/modules/loader.js"></script>
+    <script type="module" src="/js/modules/animations.js"></script>
+    <script type="module" src="/js/modules/ui.js"></script>
     <script type="module" src="/js/modules/theme.js"></script>
 </body>
 </html>

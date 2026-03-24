@@ -1,231 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>LegalEaseAI - Component Briefing</title>
-    <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x26A1;</text></svg>" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
-        rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
-    
+    <title>LegalEaseAI - Detail View</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x26A1;</text></svg>" />
     <link rel="stylesheet" href="/css/style.css" />
-    
     <style>
         .social-sidebar, .scroll-indicator, #experience-accordion { display: none !important; }
         body { padding-top: 100px; }
-        
-        .sm-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; margin-bottom: 40px; }
-        
-        /* ── DOM Flowchart Diagram ── */
-        .flow-container {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            padding: 30px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 16px;
-            margin: 30px 0;
-            border: 1px solid rgba(255,255,255,0.04);
-            box-shadow: inset 0 0 40px rgba(0,0,0,0.4);
-        }
-        .flow-node {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            background: var(--surface);
-            padding: 16px 20px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            position: relative;
-            transition: transform 0.3s, border-color 0.3s;
-        }
-        .flow-node:hover { transform: translateX(8px); border-color: var(--cyan); }
-        .flow-arrow {
-            display: flex;
-            justify-content: center;
-            color: var(--cyan);
-            font-size: 1.5rem;
-            height: 24px;
-            line-height: 24px;
-            animation: float-down 2.5s infinite ease-in-out alternate;
-        }
-        .flow-icon {
-            width: 42px; height: 42px;
-            background: rgba(16,185,129,0.1);
-            border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            color: var(--cyan);
-            font-size: 1.4rem;
-            flex-shrink: 0;
-        }
-        .flow-text h4 { margin: 0 0 4px 0; font-size: 1rem; color: #fff; font-family: 'JetBrains Mono', monospace; }
-        .flow-text p { margin: 0; font-size: 0.85rem; color: var(--text-dim); line-height: 1.5; }
-
-        @keyframes float-down { 0% { transform: translateY(-4px); } 100% { transform: translateY(4px); } }
-
-        .api-block {
-            background: rgba(0,0,0,0.4);
-            border-left: 4px solid var(--cyan);
-            border-radius: 4px 12px 12px 4px;
-            padding: 20px;
-            margin-bottom: 16px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-        }
-        .api-method { color: var(--lime); font-weight: 700; margin-right: 8px; }
-        .api-route { color: #fff; font-weight: 600; }
-        .api-desc { color: var(--text-muted); margin-top: 12px; line-height: 1.6; }
-        
-        .showcase-img {
-            width: 100%; border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); object-fit: cover;
-            transition: transform 0.4s;
-        }
-        .showcase-img:hover { transform: scale(1.02); border-color: rgba(16,185,129,0.3); }
-        
         .submodule-return { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--cyan); text-decoration: none; padding: 10px 0; transition: transform 0.2s; }
         .submodule-return:hover { transform: translateX(-5px); color: var(--lime); }
+        .proj-content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px; }
+        .proj-card { background: rgba(10, 10, 10, 0.4); border: 1px solid rgba(0, 255, 65, 0.1); border-radius: 12px; padding: 24px; }
+        @media (max-width: 768px) { .proj-content-grid { grid-template-columns: 1fr; } }
+        .feature-list { list-style: none; padding: 0; }
+        .feature-list li { margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px; }
+        .feature-list li:before { content: '⚡'; color: var(--cyan); font-size: 0.9em; margin-top: 2px; }
+        .tech-list span { display: inline-block; padding: 4px 10px; border-radius: 4px; background: rgba(255,255,255,0.05); margin: 0 8px 8px 0; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.1); }
     </style>
 </head>
-
 <body class="theme-cyberpunk project-body">
-
-    <!-- Extract just a clean nav element so I don't use nav-submodule.html -->
+    <div class="hero-backdrop" style="opacity: 0.15;">
+        <div class="hero-backdrop-inner" style="background-image: url('/images/projects/legalease.png');"></div>
+    </div>
+    <div class="ambient-glow" style="position: fixed; inset: 0; z-index: -1; background: var(--spotlight-gradient); opacity: 0.6;"></div>
     <nav>
         <div class="nav-inner" style="justify-content: space-between; padding: 12px 24px;">
-            <a href="/#projects" class="submodule-return">
-                &larr; Return to Projects
-            </a>
+            <a href="/#projects" class="submodule-return">&larr; Return to Projects</a>
         </div>
     </nav>
-    <include src="./components/loading-screen.html"></include>
-    <include src="./components/overlays.html"></include>
-
-    <main id="main-content" style="max-width: 1000px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 2;">
-        
-        <!-- Hero Section -->
-        <div class="glass-card reveal" style="padding: 40px; border-top: 2px solid var(--cyan); margin-bottom: 40px; position: relative; overflow: hidden;">
-            <div style="position: absolute; top: -100px; right: -100px; width: 300px; height: 300px; background: radial-gradient(circle, var(--cyan) 0%, transparent 70%); opacity: 0.1; filter: blur(50px); pointer-events: none;"></div>
+    <include src="/components/loading-screen.html"></include>
+    <main id="main-content" style="max-width: 1000px; margin: 0 auto; padding: 40px 20px; position: relative;">
+        <div class="glass-card reveal" style="padding: 40px; border-top: 2px solid #00ff41;">
             
-            <p style="color: var(--cyan); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 2px;">Heuristic Legal Analysis</p>
-            <h1 class="section-title" style="margin-bottom: 24px;">LegalEaseAI</h1>
-            <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-dim); max-width: 800px; margin-bottom: 30px;">
-                Pakistan has over 220M people, yet contracts strictly use dense English legalese. LegalEase AI bridges this gap by translating complex technical conditions into plain Urdu securely, providing mathematical risk assessments via native RAG memory pipelines.
-            </p>
-            
-            <img src="/images/legalease-hero.png" alt="LegalEase Hero Screenshot" class="showcase-img" onerror="this.src='/images/legalease.png'" style="aspect-ratio: 16/9;">
-        </div>
-
-        <div class="sm-grid">
-            <!-- Features -->
-            <div class="glass-card reveal" style="padding: 30px;">
-                <h3 style="font-size: 1.4rem; color: #fff; margin-bottom: 16px;">Key Outcomes</h3>
-                <ul style="color: var(--text-dim); line-height: 1.8; font-size: 0.95rem; list-style: none; padding: 0;">
-                    <li style="margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 15px;"><strong style="color:var(--lime);">Risk Detection:</strong> Clauses automatically parsed into High/Medium/Safe buckets using semantic pattern matching.</li>
-                    <li style="margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 15px;"><strong style="color:var(--cyan);">RAG Chatbot:</strong> Users can query their exact document and receive context-grounded completions using LPU infrastructure.</li>
-                    <li><strong style="color:#a855f7;">Report Generation:</strong> Executing on-demand physical PDF outputs for offline auditing.</li>
-                </ul>
-            </div>
-            
-            <div class="glass-card reveal" style="padding: 30px; display: flex; flex-direction: column; gap: 20px;">
-                <img src="/images/legalease-qa.png" alt="RAG Overview" class="showcase-img" onerror="this.src='/images/legalease.png'" style="height: 100%;">
-            </div>
-        </div>
-
-        <!-- Technical Architecture (DOM Flowchart) -->
-        <div class="glass-card reveal" style="padding: 40px; margin-bottom: 40px; position: relative;">
-             <div style="position: absolute; top: 0; left: 0; width: 100px; height: 100%; background: linear-gradient(90deg, rgba(16,185,129,0.05), transparent); pointer-events: none;"></div>
-             
-             <h2 class="section-title" style="font-size: 2rem; margin-bottom: 20px;">Precision Architecture Pipeline</h2>
-             
-             <!-- Native CSS Flowchart -->
-             <div class="flow-container">
-                 <div class="flow-node">
-                     <div class="flow-icon"><i class="devicon-python-plain"></i></div>
-                     <div class="flow-text">
-                         <h4>Upload Phase</h4>
-                         <p>Client payloads are extracted securely into raw text arrays utilizing <code>pdfplumber</code> and <code>PyPDF2</code>.</p>
-                     </div>
-                 </div>
-                 <div class="flow-arrow">↓</div>
-                 
-                 <div class="flow-node">
-                     <div class="flow-icon" style="color: var(--lime); background: rgba(16,185,129,0.1);"><svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M12 2L1 21h22L12 2zm0 3.45l8.15 14.1H3.85L12 5.45z" /></svg></div>
-                     <div class="flow-text">
-                         <h4>RAG Chunking</h4>
-                         <p><code>LangChain</code> overlapping splitters vectorize data and aggressively sync it to a <code>FAISS</code> vector DB.</p>
-                     </div>
-                 </div>
-                 <div class="flow-arrow">↓</div>
-
-                 <div class="flow-node">
-                     <div class="flow-icon" style="color: #f97316; background: rgba(249,115,22,0.1);"><svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><circle cx="12" cy="12" r="10"></circle></svg></div>
-                     <div class="flow-text">
-                         <h4 style="color: #f97316;">Risk Detection & Fallback Logic</h4>
-                         <p>Execution logic determines heuristic safety using semantic matching, handing generation to <code>GPT</code> or <code>Gemini</code>.</p>
-                     </div>
-                 </div>
-                 <div class="flow-arrow">↓</div>
-
-                 <div class="flow-node">
-                     <div class="flow-icon" style="color: #a855f7; background: rgba(168,85,247,0.1);"><i class="devicon-archlinux-plain"></i></div>
-                     <div class="flow-text">
-                         <h4 style="color: #a855f7;">PDF Reporting Output</h4>
-                         <p>Offboarding payloads are rigorously styled using <code>ReportLab</code> or <code>WeasyPrint</code> binary generation.</p>
-                     </div>
-                 </div>
-             </div>
-        </div>
-
-        <div class="sm-grid">
-            <div class="glass-card reveal" style="padding: 30px;">
-                <h3 style="font-size: 1.5rem; color: #fff; margin-bottom: 20px;">Core Server Endpoints</h3>
-                <div class="api-block">
-                    <div><span class="api-method">POST</span> <span class="api-route">/api/analyze</span></div>
-                    <div class="api-desc">Triggers full document ingestion natively, spinning up concurrent processing logic.</div>
-                </div>
-                <div class="api-block" style="border-color: #f97316;">
-                    <div><span class="api-method" style="color: #f97316;">POST</span> <span class="api-route">/api/qa</span></div>
-                    <div class="api-desc">Retrieves precise vector arrays mapping conversational requests directly to source contracts.</div>
-                </div>
-                <div class="api-block" style="border-color: #a855f7;">
-                    <div><span class="api-method" style="color: #a855f7;">GET</span> <span class="api-route">/api/report/{id}</span></div>
-                    <div class="api-desc">Initiates immediate bytecode delivery of the fully assessed physical audit.</div>
+            <div style="text-align: center;">
+                <h1 class="section-title">LegalEaseAI</h1>
+                <p style="color: var(--cyan); font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; margin-top: 8px;">اردو قانونی معاون — Urdu Legal Assistant</p>
+                
+                <div style="margin: 40px auto 0 auto; max-width: 800px;">
+                    <img src="/images/projects/legalease.png" alt="LegalEaseAI Interface" style="width:100%; border-radius:12px; border:1px solid rgba(0,255,65,0.2); box-shadow:0 10px 30px rgba(0,0,0,0.5);">
                 </div>
             </div>
 
-            <div class="glass-card reveal" style="padding: 30px; display: flex; flex-direction: column; justify-content: center;">
-                 <img src="/images/legalease-report.png" alt="PDF Reporting Output" class="showcase-img" onerror="this.src='/images/legalease.png'">
-                 <div style="margin-top: 24px; display: flex; gap: 12px; justify-content: center;">
-                    <a href="https://legal-ease-ai-iota.vercel.app/" target="_blank" rel="noopener" class="btn-primary" style="text-decoration: none;">Launch Output ↗</a>
-                    <a href="https://github.com/Asad101001/LegalEaseAI" target="_blank" rel="noopener" class="btn-secondary" style="text-decoration: none;">Source</a>
-                 </div>
+            <div class="proj-content-grid">
+                <div class="proj-card">
+                    <h3 style="color: #00ff41; margin-bottom: 16px;">The Problem & Solution</h3>
+                    <p style="color: var(--text-dim); line-height: 1.6;">
+                        Millions sign contracts written in dense English legalese they cannot understand, leading to exploitation. LegalEaseAI bridges this gap by allowing users to upload any legal document and receive instant, plain-Urdu explanations of every clause, color-coded risk ratings, and a full Q&A chatbot that answers questions directly from the document itself.
+                    </p>
+                </div>
+                
+                <div class="proj-card">
+                    <h3 style="color: #00ff41; margin-bottom: 16px;">Key Features</h3>
+                    <ul class="feature-list" style="color: var(--text-muted); font-size: 0.95rem;">
+                        <li><strong>Risk Detection:</strong> Clauses auto-classified as High, Medium, or Safe.</li>
+                        <li><strong>Urdu Explanations:</strong> Plain, culturally appropriate Urdu.</li>
+                        <li><strong>RAG Chatbot:</strong> Ask anything in Urdu or English, grounded only in your document.</li>
+                        <li><strong>PDF Reports:</strong> Downloadable color-coded risk report.</li>
+                        <li><strong>Concurrent Processing:</strong> Heavy AI calls fire simultaneously using asyncio.</li>
+                    </ul>
+                </div>
+
+                <div class="proj-card" style="grid-column: 1 / -1;">
+                    <h3 style="color: #00ff41; margin-bottom: 16px;">Technical Architecture</h3>
+                    <div style="margin-bottom: 20px; text-align: center;">
+                        <img src="/images/projects/legalease-arch.png" alt="Architecture Diagram" onerror="this.style.display='none'" style="max-width: 100%; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                    </div>
+                    <p style="color: var(--text-dim); margin-bottom: 16px; font-size: 0.95rem;">
+                        The backend extracts text via <code style="color: var(--cyan);">pdfplumber</code> and <code style="color: var(--cyan);">python-docx</code>, parses it using a LangChain <code style="color: var(--cyan);">RecursiveCharacterTextSplitter</code>, and indexes it with <code style="color: var(--cyan);">sentence-transformers</code> into a <code style="color: var(--cyan);">FAISS</code> vector space. It processes the text concurrently through Gemini/Groq APIs to generate Urdu insights and serve a RAG pipeline.
+                    </p>
+                    <div class="tech-list">
+                        <span>FastAPI</span>
+                        <span>LangChain</span>
+                        <span>FAISS</span>
+                        <span>Gemini AI / Groq</span>
+                        <span>Vanilla JS (ES6+)</span>
+                        <span>Vite</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; text-align: center; display: flex; gap: 16px; justify-content: center;">
+                <a href="https://legal-ease-ai-iota.vercel.app/" target="_blank" class="btn-primary" style="background: rgba(0,255,65,0.1); border-color: #00ff41; color: #00ff41;">View Live App ↗</a>
+                <a href="https://github.com/Asad101001/LegalEaseAI" target="_blank" class="btn-secondary">GitHub Repo ↗</a>
             </div>
         </div>
     </main>
-
-    <footer class="main-footer reveal">
-        <div class="footer-inner">
-            <div class="footer-bottom">
-                <p>&copy; 2025 Muhammad Asad Khan. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
     <script type="module" src="/js/app.js"></script>
     <script type="module" src="/js/modules/loader.js"></script>
-    <script type="module" src="/js/modules/canvas.js"></script>
     <script type="module" src="/js/modules/animations.js"></script>
     <script type="module" src="/js/modules/ui.js"></script>
     <script type="module" src="/js/modules/theme.js"></script>
-    <script type="module" src="/js/modules/mobile.js"></script>
-    <script type="module" src="/js/modules/desktop.js"></script>
 </body>
 </html>
