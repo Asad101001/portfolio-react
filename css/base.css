@@ -77,7 +77,7 @@ a { text-decoration: none; color: inherit; }
 }
 #loading-screen.hidden {
   opacity: 0; visibility: hidden;
-  transition: opacity 0.4s ease, visibility 0.4s ease;
+  transition: opacity 0.1s ease, visibility 0.1s ease;
 }
 
 /* ── 3D Intro / Loading Inner ─────────────────────────────
@@ -222,7 +222,7 @@ a { text-decoration: none; color: inherit; }
   width: 0%;
   background: linear-gradient(90deg, var(--cyan), var(--lime));
   border-radius: 99px;
-  animation: bar-fill 0.8s cubic-bezier(0.22,1,0.36,1) 0.1s forwards;
+  animation: bar-fill 0.1s cubic-bezier(0.22,1,0.36,1) forwards;
 }
 @keyframes bar-fill {
   to { width: 100%; }

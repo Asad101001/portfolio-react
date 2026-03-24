@@ -79,6 +79,9 @@
     overflow: hidden;
     will-change: transform;
   }
+  .parallax-layer {
+    will-change: transform;
+  }
 }
 
 /* Extra large screens */

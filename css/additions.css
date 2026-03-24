@@ -774,6 +774,7 @@
 .acard {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0;
   padding: 9px;
   border-radius: 3px;
@@ -852,10 +853,15 @@
   color: #fff;
   white-space: nowrap;
   opacity: 0;
-  transition: opacity 0.18s ease 0.1s;
+  max-width: 0;
+  overflow: hidden;
+  transition: opacity 0.18s ease 0.1s, max-width 0.35s cubic-bezier(0.22,1,0.36,1);
   pointer-events: none;
 }
-.acard:hover .acard-name { opacity: 1; }
+.acard:hover .acard-name, .acard.manual-expand .acard-name { 
+  opacity: 1; 
+  max-width: 150px; 
+}
 
 
 /* Stats Footer */
@@ -1580,10 +1586,11 @@ section::before {
 /* ── AWS Merged & Expandable ── */
 .acard.aws-merged {
     position: relative;
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 12px;
-    padding: 10px 16px !important;
+    padding: 9px !important;
     min-width: 42px !important;
     max-width: 42px !important; /* Start as icon only */
     width: auto;
@@ -1592,6 +1599,7 @@ section::before {
 }
 
 .acard.aws-merged:hover {
+    padding: 9px 12px !important;
     max-width: 800px !important; /* Allow massive growth */
     z-index: 10;
 }

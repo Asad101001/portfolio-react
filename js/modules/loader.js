@@ -54,7 +54,7 @@
   }
 
   // Dismiss after page is ready (ultra-fast flash)
-  var minDuration = 150;
+  var minDuration = 40;
   var startTime   = Date.now();
 
   function tryDismiss() {
@@ -73,7 +73,7 @@
     window.addEventListener('load', tryDismiss);
   }
 
-  // Hard cap: 0.5s max
-  setTimeout(dismiss, 500);
+  // Hard cap: 0.15s max
+  setTimeout(dismiss, 150);
 
 })();

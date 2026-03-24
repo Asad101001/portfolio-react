@@ -33,16 +33,20 @@
     });
 
     // Premium Micro-animations for desktop only
+    let parallaxFrame;
     document.addEventListener('mousemove', function(e) {
       if (!window._isMobile) {
-        // Subtle move effect for any .parallax-layer elements that might be added later
-        const layers = document.querySelectorAll('.parallax-layer');
-        const x = (window.innerWidth - e.pageX * 2) / 100;
-        const y = (window.innerHeight - e.pageY * 2) / 100;
-        layers.forEach(layer => {
-          layer.style.transform = `translateX(${x}px) translateY(${y}px)`;
+        if (parallaxFrame) cancelAnimationFrame(parallaxFrame);
+        parallaxFrame = requestAnimationFrame(() => {
+          const layers = document.querySelectorAll('.parallax-layer:not(.parallax-disabled)');
+          if (layers.length === 0) return;
+          const x = (window.innerWidth - e.pageX * 2) / 100;
+          const y = (window.innerHeight - e.pageY * 2) / 100;
+          layers.forEach(layer => {
+            layer.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+          });
         });
       }
-    });
+    }, { passive: true });
   }
 })();

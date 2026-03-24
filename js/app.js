@@ -36,7 +36,9 @@ window._scrollTasks = [];
     // Smoother factor (0.065-0.075 is the sweet spot for "buttery" feel)
     var factor = 0.068; 
     var targetY = window._scrollY;
-    window._lerpY += (targetY - window._lerpY) * factor;
+    var rawLerp = window._lerpY + (targetY - window._lerpY) * factor;
+    // Snap to target if very close to avoid endless sub-pixel calculating
+    window._lerpY = Math.abs(targetY - rawLerp) < 0.1 ? targetY : rawLerp;
   } else {
     // Native scroll on mobile needs immediate value
     window._lerpY = window._scrollY;

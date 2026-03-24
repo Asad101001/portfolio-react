@@ -120,6 +120,7 @@
 
   .reveal {
     transform: translateY(15px);
+    will-change: transform, opacity;
   }
 
   /* ── Navigation ────────────────────────────────────────── */
