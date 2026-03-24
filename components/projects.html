@@ -26,7 +26,7 @@
             <div class="projects-grid stagger">
 
                 <!-- LegalEaseAI -->
-                <div class="project-card glass-card reveal">
+                <div class="project-card glass-card reveal" onclick="if(!event.target.closest('a') && !event.target.closest('button') && !event.target.closest('.proj-links')) window.location.href='/projects/legaleaseai.html'" style="cursor: pointer;">
                     <div class="proj-img-wrap" style="background:linear-gradient(135deg,#00ff4118,#18181b)">
                         <img src="/images/legalease.png" alt="LegalEaseAI screenshot" class="proj-img"
                             onerror="this.style.display='none';var p=this.parentNode.querySelector('.proj-img-placeholder');if(p)p.style.display='flex'" />
