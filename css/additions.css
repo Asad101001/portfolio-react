@@ -1584,13 +1584,15 @@ section::before {
     align-items: center;
     gap: 12px;
     padding: 10px 16px !important;
-    min-width: unset !important;
-    width: fit-content;
+    min-width: 42px !important;
+    max-width: 42px !important; /* Start as icon only */
+    width: auto;
     overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .acard.aws-merged:hover {
-    overflow: visible !important;
+    max-width: 800px !important; /* Allow massive growth */
     z-index: 10;
 }
 
@@ -1606,7 +1608,7 @@ section::before {
 }
 
 .acard.aws-merged:hover .aws-services {
-    overflow: visible;
+    /* natural growth */
 }
 
 .aws-svc {

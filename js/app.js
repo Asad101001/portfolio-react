@@ -58,20 +58,15 @@ window._scrollTasks = [];
 /* ── DOM Ready Initializations ────────────────────────────── */
 window.addEventListener('DOMContentLoaded', () => {
   // Trigger SVG animations on scroll
+  // Project SVG Drawing Trigger Task
   const projectObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        const paths = entry.target.querySelectorAll('svg path');
-        paths.forEach(p => {
-          // If it has a special class like draw-path-slow, keep it, otherwise use draw-path
-          if (!p.classList.contains('draw-path-slow')) {
-            p.classList.add('draw-path');
-          }
-        });
+        entry.target.classList.add('is-drawing'); // Trigger the drawing in CSS
         projectObserver.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.25 });
+  }, { threshold: 0.1 }); // Trigger earlier so drawing starts as it fades in
 
   document.querySelectorAll('.project-card').forEach(card => projectObserver.observe(card));
 });

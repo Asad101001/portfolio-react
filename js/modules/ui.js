@@ -20,7 +20,40 @@
     if (Math.random() < 0.25 && !document.hidden) spawn(); 
   }, 6000);
   setTimeout(spawn, 2500);
+
+  /* New Fizz Effect */
+  function spawnFizz() {
+    if (document.hidden) return;
+    var f = document.createElement('div');
+    f.style.cssText = `
+      position: fixed;
+      width: ${2 + Math.random() * 4}px;
+      height: ${2 + Math.random() * 4}px;
+      background: var(--cyan);
+      opacity: 0.4;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: -1;
+      left: ${Math.random() * 100}vw;
+      bottom: -10px;
+      box-shadow: 0 0 10px var(--cyan);
+      animation: fizz-up ${6 + Math.random() * 6}s linear forwards;
+    `;
+    document.body.appendChild(f);
+    setTimeout(() => f.remove(), 12000);
+  }
+  setInterval(spawnFizz, 800);
 })();
+
+/* Add Fizz CSS to head */
+var fizzStyle = document.createElement('style');
+fizzStyle.textContent = `@keyframes fizz-up { 
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  10% { opacity: 0.4; }
+  50% { transform: translateY(-50vh) translateX(${Math.random() * 40 - 20}px); }
+  100% { transform: translateY(-110vh) translateX(${Math.random() * 60 - 30}px); opacity: 0; }
+}`;
+document.head.appendChild(fizzStyle);
 
 /* ── Global Mouse Tracking for Glows ────────────────────── */
 (function () {

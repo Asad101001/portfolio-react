@@ -21,6 +21,31 @@
         r.classList.add('visible');
       }
     });
+
+    /* Pull to Refresh Logic (Native Feel) */
+    let touchStart = 0;
+    document.addEventListener('touchstart', (e) => {
+      if (window._scrollY === 0) touchStart = e.touches[0].clientY;
+    }, { passive: true });
+
+    document.addEventListener('touchmove', (e) => {
+      if (touchStart > 0 && e.touches[0].clientY - touchStart > 180 && window._scrollY === 0) {
+        window.location.reload();
+        touchStart = 0;
+      }
+    }, { passive: true });
+  }
+
+  // Stagger Ladder for Education on Mobile
+  if (window._isMobile) {
+    const ladderItems = document.querySelectorAll('.timeline-item');
+    ladderItems.forEach((item, idx) => {
+      if (idx % 2 !== 0) {
+        item.style.paddingLeft = '55px'; // Offset downward steps
+        const card = item.querySelector('.tl-card');
+        if (card) card.style.maxWidth = '92%'; // Chop right side
+      }
+    });
   }
 
   // Handle subtle touch feedback on cards (active state)
