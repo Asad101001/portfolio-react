@@ -32,5 +32,4 @@ portfolio-context.md
 .env
 scripts/
 dist/
-/public/images/projects/
-# Keep public/images/main if needed, but ignore specific project dumps if asked
+# /public/images/projects/ removed to allow deployment
