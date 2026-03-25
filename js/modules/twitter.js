@@ -56,16 +56,26 @@ import { CONFIG } from './widgets.js';
                 twitterLink = `https://twitter.com/${USER}`;
             }
 
-            // Extract media (Image/GIF/Video thumbnail)
+            // Extract media (Image/GIF/Video)
             let mediaHtml = '';
             const desc = item.description || item.content || '';
-            const imgMatch = desc.match(/<img[^>]+src="([^">]+)"/);
-            if (imgMatch && imgMatch[1]) {
+            const videoMatch = desc.match(/<video[^>]*>[\s\S]*?<source[^>]+src="([^">]+)"/i) || desc.match(/<video[^>]+src="([^">]+)"/i);
+            
+            if (videoMatch && videoMatch[1]) {
                 mediaHtml = `
-                    <div class="x-card-media">
-                        <img src="${imgMatch[1]}" alt="Post media" loading="lazy">
+                    <div class="x-card-media" style="margin-top: 12px; display: flex; align-items: center; justify-content: center; border-radius: 12px; overflow: hidden; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05);">
+                        <video src="${videoMatch[1]}" autoplay loop muted playsinline style="max-width: 100%; max-height: 450px; object-fit: contain;"></video>
                     </div>
                 `;
+            } else {
+                const imgMatch = desc.match(/<img[^>]*src="([^">]+)"/i);
+                if (imgMatch && imgMatch[1]) {
+                    mediaHtml = `
+                        <div class="x-card-media" style="margin-top: 12px; display: flex; align-items: center; justify-content: center; border-radius: 12px; overflow: hidden; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05);">
+                            <img src="${imgMatch[1]}" alt="Post media" loading="lazy" style="max-width: 100%; max-height: 450px; object-fit: contain;">
+                        </div>
+                    `;
+                }
             }
 
             const tweetEl = document.createElement('div');
