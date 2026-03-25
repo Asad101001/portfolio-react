@@ -6,7 +6,7 @@ body.theme-cyberpunk {
     --orange:    #ffb000; /* Cyber Orange */
     --bg:        #000000;
     --bg2:       #0d0216;
-    --bg-img:    url('/images/cyberpunk_bg.png'); /* We will move the generated image here */
+    --bg-img:    url('../images/cyberpunk_bg.png'); /* We will move the generated image here */
     --surface:   rgba(13, 2, 22, 0.90);
     --border:    rgba(0, 255, 249, 0.45);
     --border-h:  #00fff9;

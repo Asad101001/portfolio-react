@@ -133,7 +133,7 @@
 }
 
 .tag:hover, .tag.active { 
-  max-width: 400px; /* Allow natural expansion without limit */
+  max-width: fit-content; /* Remove hard upper limit, rely on content */
   padding: 5px 12px;
   color: #fff;
   background: var(--tech-bg, rgba(16, 185, 129, 0.12));
@@ -155,8 +155,7 @@
 }
 
 .tag:hover .tag-label, .tag.active .tag-label {
-  max-width: fit-content; /* THIS is the key for dynamic sizing */
-  max-width: 250px;       /* Hard upper bound for transition */
+  max-width: fit-content;
   opacity: 1;
   margin-left: 8px;
 }
@@ -806,7 +805,7 @@
 }
 @media (hover: hover) and (pointer: fine) {
   .acard:hover {
-    max-width: 200px; /* Large enough for any name, but will only expand to fit content */
+    max-width: fit-content; /* Fit exactly to content rather than 200px */
     gap: 10px;
     padding: 9px 12px;
     border-color: var(--ac, rgba(16,185,129,0.45));
@@ -817,7 +816,7 @@
   }
 }
 .acard.manual-expand {
-  max-width: 200px;
+  max-width: fit-content;
   gap: 10px;
   padding: 9px 12px;
   border-color: var(--ac, rgba(16,185,129,0.45));
@@ -872,12 +871,12 @@
 }
 .acard.manual-expand .acard-name { 
   opacity: 1; 
-  max-width: 150px; 
+  max-width: fit-content; 
 }
 @media (hover: hover) and (pointer: fine) {
   .acard:hover .acard-name {
     opacity: 1; 
-    max-width: 150px; 
+    max-width: fit-content; 
   }
 }
 
