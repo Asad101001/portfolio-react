@@ -266,10 +266,10 @@ document.head.appendChild(fizzStyle);
     start();
   }
 
-  // Hero Activity Hub (5 items)
+  // Hero Activity Hub (4 items: Book, Movie, TV Series, Football)
   initRotation('rotating-widget', 'rotating-dots', 5000);
   
-  // Socials Big 3 (3 items)
+  // Socials "The Big 3" (4 items: Films, Series, Players, Artists)
   initRotation('big3-social-widget', 'big3-social-dots', 6000);
 })();
 

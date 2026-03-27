@@ -4,9 +4,14 @@ export default async function handler(req, res) {
 
   const TRAKT_CLIENT_ID = process.env.TRAKT_CLIENT_ID;
   const TMDB_API_KEY = process.env.TMDB_API_KEY;
-  const USERNAME = 'Asad991'; 
+  const USERNAME = process.env.TRAKT_USERNAME || 'Asad991';
+
+  if (!TRAKT_CLIENT_ID) {
+    return res.status(200).json({ watching: null, error: 'TRAKT_CLIENT_ID not configured' });
+  }
 
   try {
+    // 1. Check if currently watching something
     const response = await fetch(
       `https://api.trakt.tv/users/${USERNAME}/watching`,
       {
@@ -22,6 +27,7 @@ export default async function handler(req, res) {
     let watching = false;
 
     if (response.status === 204) {
+      // 2. Nothing currently watching → fallback to last watched episode
       const historyRes = await fetch(
         `https://api.trakt.tv/users/${USERNAME}/history/episodes?limit=1`,
         {
@@ -32,46 +38,56 @@ export default async function handler(req, res) {
           },
         }
       );
+      if (!historyRes.ok) throw new Error('Trakt history fetch failed: ' + historyRes.status);
       const historyData = await historyRes.json();
       if (historyData && historyData.length > 0) {
         data = historyData[0];
         watching = false;
       }
-    } else {
+    } else if (response.ok) {
       data = await response.json();
       watching = true;
+    } else {
+      throw new Error('Trakt watching fetch failed: ' + response.status);
     }
 
     if (!data) return res.status(200).json({ watching: null });
 
-    const show = data.show || data.track?.show; // Depending on endpoint
-    const episode = data.episode || data.track?.episode;
+    const show = data.show;
+    const episode = data.episode;
+
+    if (!show || !episode) {
+      return res.status(200).json({ watching: null, error: 'Unexpected data format' });
+    }
 
     const formatted = {
-      watching: watching,
+      watching,
       title: show.title,
       season: episode.season,
       episode: episode.number,
-      tmdbId: show.ids.tmdb || null,
-      poster: null
+      tmdbId: show.ids?.tmdb || null,
+      poster: null,
     };
 
-    // TMDb Enrichment
+    // 3. TMDb Poster Enrichment (optional)
     if (formatted.tmdbId && TMDB_API_KEY) {
       try {
-        const tmdbRes = await fetch(`https://api.themoviedb.org/3/tv/${formatted.tmdbId}?api_key=${TMDB_API_KEY}`);
-        const tmdbData = await tmdbRes.json();
-        if (tmdbData.poster_path) {
-          formatted.poster = `https://image.tmdb.org/t/p/w500${tmdbData.poster_path}`;
+        const tmdbRes = await fetch(
+          `https://api.themoviedb.org/3/tv/${formatted.tmdbId}?api_key=${TMDB_API_KEY}`
+        );
+        if (tmdbRes.ok) {
+          const tmdbData = await tmdbRes.json();
+          if (tmdbData.poster_path) {
+            formatted.poster = `https://image.tmdb.org/t/p/w500${tmdbData.poster_path}`;
+          }
         }
-      } catch (err) {
-        console.error("TMDb fetch error:", err);
+      } catch (_) {
+        // Poster enrichment is optional — fail silently
       }
     }
 
     res.status(200).json(formatted);
-
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch Trakt data", detail: error.message });
+    res.status(500).json({ error: 'Failed to fetch Trakt data', detail: error.message });
   }
 }

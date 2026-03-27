@@ -1783,4 +1783,41 @@ section::before {
     border-color: var(--cyan);
     z-index: 10;
 }
+
+/* ── Twitter Centering ────────────────────────── */
+.twitter-post-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.twitter-centering-wrap {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    margin: 15px 0;
+    min-height: 300px;
+}
+
+/* Force override Twitter's internal style if possible */
+.twitter-tweet {
+    margin: 0 auto !important;
+}
+
+.twitter-tweet-rendered {
+    display: flex !important;
+    justify-content: center !important;
+}
+
+/* ── Social Widget Refinements ────────────────── */
+.barca-slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.player-headshots-row {
+    justify-content: center; /* Center player icons */
+}
 

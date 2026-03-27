@@ -90,14 +90,18 @@
             <!-- RIGHT: Twitter + LinkedIn + XP stacked -->
             <div class="social-right-col stagger-item" style="display:flex;flex-direction:column;gap:20px;">
 
-                <!-- Twitter (2 tweets, dummy for now) -->
-                <div class="glass-card twitter-widget" style="padding:14px;">
-                    <div style="margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+                <!-- Twitter Snippet (Centered) -->
+                <div class="glass-card twitter-widget" style="padding:18px;">
+                    <div style="margin-bottom:12px;display:flex;align-items:center;gap:8px;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                        <span style="font-size:0.68rem;font-weight:700;color:#fff;text-transform:uppercase;">X / Twitter</span>
-
+                        <span style="font-size:0.75rem;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:0.05em;">Latest Brainrot</span>
                     </div>
-                    <div id="twitter-feed" class="twitter-feed"></div>
+                    <div class="twitter-centering-wrap" style="display:flex; justify-content:center; width:100%;">
+                        <blockquote class="twitter-tweet" data-theme="dark" data-align="center">
+                            <a href="https://twitter.com/As4d_41/status/1815152341490262198"></a>
+                        </blockquote>
+                    </div>
+                    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
                 </div>
 
                 <!-- LinkedIn Latest Post -->
@@ -128,22 +132,13 @@
                     </div>
                 </div>
 
-                <!-- Media Watchlist (4 Slots) -->
+                <!-- The Big 3 (4 Slots) -->
                 <div class="card glass-card reveal" style="padding:18px;">
-                    <p class="card-label" style="color:var(--cyan); margin-bottom:12px;">Media Watchlist</p>
+                    <p class="card-label" style="color:var(--cyan); margin-bottom:12px;">The Big 3</p>
                     
                     <div class="rotating-widget" id="big3-social-widget">
-                        <!-- 1. Series Watchlist (Trakt) -->
+                        <!-- 1. Movies Watchlist (Letterboxd) -->
                         <div class="rotating-item currently-into-item active" data-index="0">
-                            <div class="currently-into-thumb-placeholder">📺</div>
-                            <div class="currently-into-text">
-                                <span class="rotating-label currently-into-label">Series Watchlist</span>
-                                <span class="rotating-value currently-into-value" id="big3-series">Loading Trakt...</span>
-                            </div>
-                        </div>
-
-                        <!-- 2. Movie Watchlist (Letterboxd) -->
-                        <div class="rotating-item currently-into-item" data-index="1">
                             <div class="currently-into-thumb-placeholder">🎬</div>
                             <div class="currently-into-text">
                                 <span class="rotating-label currently-into-label">Film Watchlist</span>
@@ -151,23 +146,32 @@
                             </div>
                         </div>
 
-                        <!-- 3. Top Artists (Last.fm) -->
-                        <div class="rotating-item currently-into-item" data-index="2">
-                            <div class="currently-into-thumb-placeholder">🎵</div>
+                        <!-- 2. Series Watchlist (Trakt) -->
+                        <div class="rotating-item currently-into-item" data-index="1">
+                            <div class="currently-into-thumb-placeholder">📺</div>
                             <div class="currently-into-text">
-                                <span class="rotating-label currently-into-label">Top Artists (7d)</span>
-                                <span class="rotating-value currently-into-value" id="big3-artists">Loading Last.fm...</span>
+                                <span class="rotating-label currently-into-label">Series Watchlist</span>
+                                <span class="rotating-value currently-into-value" id="big3-series">Loading Trakt...</span>
                             </div>
                         </div>
 
-                        <!-- 4. Favorite Players (Headshots) -->
-                        <div class="rotating-item currently-into-item barca-slot" data-index="3">
+                        <!-- 3. Favorite Players (Headshots) -->
+                        <div class="rotating-item currently-into-item barca-slot" data-index="2">
                             <div class="player-headshots-row" id="player-headshots-wrap">
                                 <!-- Headshots will be injected via JS -->
                             </div>
                             <div class="currently-into-text">
                                 <span class="rotating-label currently-into-label">Favorite Players</span>
                                 <span class="rotating-value currently-into-value" id="big3-players">Lamine Yamal, Pedri, Nuno Mendes</span>
+                            </div>
+                        </div>
+
+                        <!-- 4. Top Artists (Last.fm) -->
+                        <div class="rotating-item currently-into-item" data-index="3">
+                            <div class="currently-into-thumb-placeholder">🎵</div>
+                            <div class="currently-into-text">
+                                <span class="rotating-label currently-into-label">Top Artists (7d)</span>
+                                <span class="rotating-value currently-into-value" id="big3-artists">Loading Last.fm...</span>
                             </div>
                         </div>
                     </div>

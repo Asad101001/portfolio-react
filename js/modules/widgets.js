@@ -25,26 +25,34 @@ export const CONFIG = {
   /* ── Book Cover via Open Library Search ── */
   var readingCover = document.getElementById('reading-cover');
   var readingPlaceholder = document.getElementById('reading-placeholder');
+  var readingTitle = document.getElementById('reading-title');
   
   if (readingCover && CONFIG.currently.reading) {
-    var query = encodeURIComponent(CONFIG.currently.reading);
-    fetch('https://openlibrary.org/search.json?q=' + query + '&limit=8')
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (data.docs && data.docs.length) {
-          // Find first doc with a cover
-          var doc = data.docs.find(function(d) { return d.cover_i; });
-          if (doc) {
-            var url = 'https://covers.openlibrary.org/b/id/' + doc.cover_i + '-M.jpg';
-            readingCover.src = url;
-            readingCover.style.display = 'block';
-            if (readingPlaceholder) readingPlaceholder.style.display = 'none';
+    function fetchBook(query) {
+      fetch('https://openlibrary.org/search.json?q=' + encodeURIComponent(query) + '&limit=5')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.docs && data.docs.length) {
+            var doc = data.docs.find(function(d) { return d.cover_i; }) || data.docs[0];
+            if (doc) {
+              if (doc.cover_i) {
+                var url = 'https://covers.openlibrary.org/b/id/' + doc.cover_i + '-L.jpg';
+                readingCover.src = url;
+                readingCover.style.display = 'block';
+                if (readingPlaceholder) readingPlaceholder.style.display = 'none';
+              }
+              if (readingTitle) readingTitle.textContent = doc.title + (doc.author_name ? ' — ' + doc.author_name[0] : '');
+            }
+          } else if (query !== CONFIG.currently.reading.split(' ')[0]) {
+            // Fallback to just the first word (likely the title)
+            fetchBook(CONFIG.currently.reading.split(' ')[0]);
           }
-        }
-      })
-      .catch(function() {
-        if (readingPlaceholder) readingPlaceholder.style.display = 'flex';
-      });
+        })
+        .catch(function() {
+          if (readingPlaceholder) readingPlaceholder.style.display = 'flex';
+        });
+    }
+    fetchBook(CONFIG.currently.reading);
   }
 
   /* ── Media Hub: Movies (Letterboxd RSS) ── */
@@ -87,33 +95,7 @@ export const CONFIG = {
     setInterval(fetchMovie, 60000 * 15);
   }
 
-  /* ── Media Hub: Series (TVmaze) ── */
-  var seriesPoster = document.getElementById('series-poster');
-  var seriesPlaceholder = document.getElementById('series-placeholder');
-  var seriesTitle = document.getElementById('series-title');
-  
-  if (seriesPoster) {
-    var favSeries = CONFIG.currently.series;
-    var randomShow = favSeries[Math.floor(Math.random() * favSeries.length)];
-    
-    function fetchSeries() {
-      fetch('https://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(randomShow))
-        .then(function (r) { return r.json(); })
-        .then(function (data) {
-          var url = data && data.image && (data.image.medium || data.image.original);
-          if (url) {
-            seriesPoster.src = url;
-            seriesPoster.style.display = 'block';
-            if (seriesPlaceholder) seriesPlaceholder.style.display = 'none';
-          }
-          if (seriesTitle && data.name) {
-            seriesTitle.textContent = data.name + (data.network ? ' — ' + data.network.name : '');
-          }
-        })
-        .catch(function () {});
-    }
-    fetchSeries();
-  }
+  // Removed redundant TVmaze fetching logic in favor of Trakt
 
   /* ── Media Hub: TV Tracking (Trakt) ── */
   var tvPoster = document.getElementById('tv-tracking-poster');
@@ -138,7 +120,6 @@ export const CONFIG = {
           var progressFill = document.getElementById('tv-progress-fill');
           if (progressWrap && progressFill) {
             progressWrap.style.display = 'block';
-            // If watching, show some progress (e.g. 45%), if last watched show 100%
             progressFill.style.width = data.watching ? '45%' : '100%';
           }
 
@@ -152,7 +133,12 @@ export const CONFIG = {
           }
         })
         .catch(function () {
-          if (tvTitle) tvTitle.textContent = "Trakt API error";
+          // Graceful fallback: show a random series from CONFIG
+          if (tvTitle && CONFIG.currently.series.length) {
+            var pick = CONFIG.currently.series[Math.floor(Math.random() * CONFIG.currently.series.length)];
+            tvTitle.textContent = pick;
+          }
+          if (tvStatus) tvStatus.textContent = "Watching Series";
         });
     }
     fetchTV();
@@ -908,27 +894,46 @@ export const CONFIG = {
     fetch(LASTFM_URL)
       .then(function(r) { return r.json(); })
       .then(function(data) {
+        if (data.error) throw new Error(data.message || 'Last.fm error');
+        if (!data.topartists || !data.topartists.artist) throw new Error('No artist data');
         var artists = data.topartists.artist;
-        if (artists && artists.length >= 3) {
-          var names = artists.slice(0, 3).map(function(a) { return a.name; }).join(', ');
+        if (artists.length >= 3) {
+          var names = artists.slice(0, 3).map(function(a, idx) { 
+            var count = a.playcount ? ' (' + a.playcount + ')' : '';
+            return (idx + 1) + '. ' + a.name + count; 
+          }).join(', ');
           artistsEl.textContent = names;
+        } else if (artists.length > 0) {
+          artistsEl.textContent = artists.map(function(a) { return a.name; }).join(', ');
         }
       })
-      .catch(function() { artistsEl.textContent = "Error loading artists"; });
+      .catch(function(err) { 
+        console.warn('Last.fm fetch failed:', err.message);
+        artistsEl.textContent = 'Refresh to load artists'; 
+      });
   }
   fetchArtists();
 
-  // 3. Watchlist (Trakt API)
+  // 3. Watchlist (Trakt API — only works on Vercel with env vars)
   function fetchWatchlist() {
     fetch('/api/watchlist')
-      .then(function(r) { return r.json(); })
+      .then(function(r) { 
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json(); 
+      })
       .then(function(data) {
-        if (seriesEl && data.shows) seriesEl.textContent = data.shows.join(', ');
-        if (watchlistEl && data.movies) watchlistEl.textContent = data.movies.join(', ');
+        if (seriesEl && data.shows && data.shows.length) seriesEl.textContent = data.shows.join(', ');
+        if (watchlistEl && data.movies && data.movies.length) watchlistEl.textContent = data.movies.join(', ');
       })
       .catch(function() {
-        if (seriesEl) seriesEl.textContent = "Error loading watchlist";
-        if (watchlistEl) watchlistEl.textContent = "Error loading watchlist";
+        // Fallback to CONFIG static data if API not available
+        if (seriesEl) {
+          var fallbackSeries = CONFIG.currently.series.slice(0, 3).join(', ');
+          seriesEl.textContent = fallbackSeries;
+        }
+        if (watchlistEl && CONFIG.big3.watchlist) {
+          watchlistEl.textContent = CONFIG.big3.watchlist.join(', ');
+        }
       });
   }
   fetchWatchlist();
