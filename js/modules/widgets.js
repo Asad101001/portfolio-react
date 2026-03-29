@@ -1,10 +1,10 @@
 /* ── Configuration ── */
 export const CONFIG = {
   usernames: {
-    letterboxd: 'asad_k',     // Movies
-    lastfm: 'Asad991',        // Music
-    github: 'Asad101001',     // Contributions
-    twitter: 'As4d_41'        // Twitter (X) Handle
+    letterboxd: 'asad_k',
+    lastfm: 'Asad991',
+    github: 'Asad101001',
+    twitter: 'As4d_41'
   },
   currently: {
     reading: '1984 George Orwell',
@@ -21,38 +21,70 @@ export const CONFIG = {
 };
 
 /* ══════════════════════════════════════════════════════════
-   IMAGE / DATA UTILITY HELPERS
+   IMAGE / DATA UTILITY HELPERS — FIXED VERSION
    ══════════════════════════════════════════════════════════ */
 
-/** TVmaze — free, no key, CORS-safe. Returns medium poster URL or null. */
+/**
+ * TVmaze — free, no key, CORS-safe.
+ * Falls back to iTunes TV show search for better coverage.
+ */
 function _tvmazePoster(title) {
   return fetch('https://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(title))
     .then(function(r) { return r.ok ? r.json() : null; })
     .then(function(d) {
       return d && d.image ? (d.image.medium || d.image.original || null) : null;
     })
-    .catch(function() { return null; });
-}
-
-/**
- * Deezer public search — CORS-safe, no key.
- * Last.fm artist image endpoints were deprecated in 2024; Deezer is the replacement.
- */
-function _deezerArtistImage(name) {
-  return fetch('https://api.deezer.com/search/artist?q=' + encodeURIComponent(name) + '&limit=1')
-    .then(function(r) { return r.ok ? r.json() : null; })
-    .then(function(d) {
-      if (d && d.data && d.data[0]) {
-        return d.data[0].picture_medium || d.data[0].picture_big || d.data[0].picture || null;
-      }
-      return null;
+    .then(function(url) {
+      if (url) return url;
+      // iTunes TV fallback — free, CORS-safe, no key
+      return fetch(
+        'https://itunes.apple.com/search?term=' + encodeURIComponent(title) +
+        '&media=tvShow&entity=tvSeason&limit=1'
+      )
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(d) {
+          if (d && d.results && d.results[0] && d.results[0].artworkUrl100) {
+            return d.results[0].artworkUrl100.replace('100x100bb', '600x600bb');
+          }
+          return null;
+        })
+        .catch(function() { return null; });
     })
     .catch(function() { return null; });
 }
 
 /**
- * TheSportsDB free API — CORS-safe, no key required.
- * Returns strThumb (cutout headshot) or strCutout/strRender fallbacks.
+ * FIXED: Artist image via iTunes Search API.
+ * Replaces deprecated Deezer approach (CORS-blocked in browsers).
+ * iTunes is fully CORS-safe, no API key, returns high-quality artwork.
+ */
+function _artistImage(name) {
+  return fetch(
+    'https://itunes.apple.com/search?term=' + encodeURIComponent(name) +
+    '&media=music&entity=musicArtist&limit=1&country=US'
+  )
+    .then(function(r) { return r.ok ? r.json() : null; })
+    .then(function(d) {
+      if (d && d.results && d.results[0]) {
+        var img = d.results[0].artworkUrl100 || d.results[0].artworkUrl60;
+        if (img) {
+          // Upgrade to 300x300 for better quality
+          return img.replace('100x100', '300x300').replace('60x60', '300x300');
+        }
+      }
+      return null;
+    })
+    .then(function(url) {
+      if (url) return url;
+      // Last.fm artist page image fallback via unavatar.io
+      return 'https://unavatar.io/lastfm/' + encodeURIComponent(name);
+    })
+    .catch(function() { return null; });
+}
+
+/**
+ * FIXED: Footballer headshot via TheSportsDB + Wikipedia API fallback.
+ * TheSportsDB free tier + Wikipedia summary thumbnail.
  */
 function _sportsdbPlayer(name) {
   return fetch(
@@ -61,29 +93,40 @@ function _sportsdbPlayer(name) {
     .then(function(r) { return r.ok ? r.json() : null; })
     .then(function(d) {
       var p = d && d.player && d.player[0];
-      return p ? (p.strThumb || p.strCutout || p.strRender || null) : null;
+      return p ? (p.strThumb || p.strCutout || p.strRender || p.strFanart1 || null) : null;
+    })
+    .then(function(url) {
+      if (url) return url;
+      // Wikipedia API fallback — free, CORS-safe, great footballer coverage
+      return fetch(
+        'https://en.wikipedia.org/api/rest_v1/page/summary/' +
+        encodeURIComponent(name.replace(/ /g, '_'))
+      )
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(d) {
+          return d && d.thumbnail && d.thumbnail.source ? d.thumbnail.source : null;
+        })
+        .catch(function() { return null; });
     })
     .catch(function() { return null; });
 }
 
 /**
  * Parse a Letterboxd RSS title into clean title + star string.
- * Handles: "Film Title, 2024 - ★★★½"  →  { title: "Film Title", starsStr: "★★★½" }
  */
 function _parseLetterboxd(rawTitle) {
   var ratingMatch = rawTitle.match(/\s*[-–]\s*(★+½?)\s*$/);
   var starsStr = ratingMatch ? ratingMatch[1] : '';
   var title = rawTitle
-    .replace(/\s*[-–]\s*★.*$/, '')  // strip " - ★..." portion
-    .replace(/,\s*\d{4}\s*$/, '')   // strip ", 2024" year
-    .split('...')[0]                  // truncated titles
+    .replace(/\s*[-–]\s*★.*$/, '')
+    .replace(/,\s*\d{4}\s*$/, '')
+    .split('...')[0]
     .trim();
   return { title: title || rawTitle.split('...')[0].trim(), starsStr: starsStr };
 }
 
 /**
- * Build HTML for a 5-star display (amber filled, dim empty, half-star supported).
- * e.g. "★★★½" → 3 amber + ½ amber + 1.5 dim
+ * Build HTML for a 5-star display.
  */
 function _starsHTML(starsStr) {
   if (!starsStr) return '';
@@ -192,7 +235,6 @@ function _starsHTML(starsStr) {
           if (!data || !data.items || !data.items.length) throw new Error('No items');
           var latest = data.items[0];
 
-          // Poster thumbnail from RSS
           var url = latest.thumbnail || '';
           if (!url) {
             var source = (latest.description || '') + (latest.content || '');
@@ -205,12 +247,10 @@ function _starsHTML(starsStr) {
             if (moviePlaceholder) moviePlaceholder.style.display = 'none';
           }
 
-          // Title + star rating
           if (movieTitle && latest.title) {
             var parsed = _parseLetterboxd(latest.title);
             movieTitle.textContent = parsed.title;
 
-            // Insert or update star rating element
             var starsEl = document.getElementById('movie-rating-stars');
             if (!starsEl) {
               starsEl = document.createElement('span');
@@ -228,7 +268,7 @@ function _starsHTML(starsStr) {
     setInterval(fetchMovie, 60000 * 15);
   }
 
-  /* ── Media Hub: TV Tracking (Trakt) — with TVmaze poster fallback ── */
+  /* ── Media Hub: TV Tracking (Trakt) ── */
   var tvPoster      = document.getElementById('tv-tracking-poster');
   var tvPlaceholder = document.getElementById('tv-tracking-placeholder');
   var tvTitle       = document.getElementById('tv-tracking-title');
@@ -243,6 +283,14 @@ function _starsHTML(starsStr) {
             if (tvTitle && CONFIG.currently.series.length) {
               var pick = CONFIG.currently.series[Math.floor(Math.random() * CONFIG.currently.series.length)];
               tvTitle.textContent = pick;
+              // Try to get a poster for the fallback show too
+              _tvmazePoster(pick).then(function(posterUrl) {
+                if (posterUrl && tvPoster) {
+                  tvPoster.src = posterUrl;
+                  tvPoster.style.display = 'block';
+                  if (tvPlaceholder) tvPlaceholder.style.display = 'none';
+                }
+              });
             }
             if (tvStatus) tvStatus.textContent = 'Currently Watching';
             return;
@@ -264,12 +312,11 @@ function _starsHTML(starsStr) {
           }
 
           if (data.poster && tvPoster) {
-            // API already provided a poster (TMDB or TVmaze server-side)
             tvPoster.src = data.poster;
             tvPoster.style.display = 'block';
             if (tvPlaceholder) tvPlaceholder.style.display = 'none';
           } else if (data.title) {
-            // Client-side TVmaze fallback — server had no TMDB key
+            // Client-side fallback with improved multi-source lookup
             _tvmazePoster(data.title).then(function(posterUrl) {
               if (posterUrl && tvPoster) {
                 tvPoster.src = posterUrl;
@@ -283,6 +330,13 @@ function _starsHTML(starsStr) {
           if (tvTitle && CONFIG.currently.series.length) {
             var pick = CONFIG.currently.series[Math.floor(Math.random() * CONFIG.currently.series.length)];
             tvTitle.textContent = pick;
+            _tvmazePoster(pick).then(function(posterUrl) {
+              if (posterUrl && tvPoster) {
+                tvPoster.src = posterUrl;
+                tvPoster.style.display = 'block';
+                if (tvPlaceholder) tvPlaceholder.style.display = 'none';
+              }
+            });
           }
           if (tvStatus) tvStatus.textContent = 'Currently Watching';
         });
@@ -950,7 +1004,7 @@ function _starsHTML(starsStr) {
 
   if (!artistsEl) return;
 
-  /* ── FOOTBALLER HEADSHOTS — TheSportsDB (free, CORS-safe) ── */
+  /* ── FOOTBALLER HEADSHOTS — TheSportsDB + Wikipedia fallback ── */
   if (playersEl && CONFIG.big3.players) {
     playersEl.textContent = CONFIG.big3.players.map(function(p) { return p.name; }).join(', ');
 
@@ -970,13 +1024,12 @@ function _starsHTML(starsStr) {
         var podiumWrap = document.createElement('div');
         podiumWrap.className = 'podium-avatar-wrap';
 
-        // Emoji placeholder while image loads
         var avatarEl = document.createElement('div');
         avatarEl.className   = 'footballer-emoji-avatar';
         avatarEl.textContent = p.fallback || '⚽';
         podiumWrap.appendChild(avatarEl);
 
-        // Fetch from TheSportsDB — closed over per-iteration variables via forEach callback
+        // FIXED: TheSportsDB + Wikipedia fallback
         _sportsdbPlayer(p.name).then(function(imgUrl) {
           if (imgUrl && avatarEl.parentNode) {
             var img = document.createElement('img');
@@ -1005,7 +1058,7 @@ function _starsHTML(starsStr) {
     }
   }
 
-  /* ── TOP WEEKLY ARTISTS — Deezer images (Last.fm images deprecated 2024) ── */
+  /* ── TOP WEEKLY ARTISTS — FIXED: iTunes Search API (replaces deprecated Deezer) ── */
   var USER       = CONFIG.usernames.lastfm;
   var API_KEY    = 'eccfb681fcf620a63fcb300d526544ba';
   var LASTFM_URL = 'https://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user=' + USER +
@@ -1045,7 +1098,7 @@ function _starsHTML(starsStr) {
                 ? a.name.substring(0, 9) + '\u2026'
                 : (a.name || '---');
 
-              // Emoji placeholder while Deezer fetch resolves
+              // Emoji placeholder while fetch resolves
               var emojiEl = document.createElement('div');
               emojiEl.className   = 'artist-thumb-emoji';
               emojiEl.textContent = '\ud83c\udfb5';
@@ -1053,8 +1106,8 @@ function _starsHTML(starsStr) {
               wrap.appendChild(nameLabel);
               artistThumbsEl.appendChild(wrap);
 
-              // Deezer: CORS-safe public API, replaces deprecated Last.fm image endpoints
-              _deezerArtistImage(a.name).then(function(imgUrl) {
+              // FIXED: iTunes Search API (was Deezer — CORS-blocked in browsers)
+              _artistImage(a.name).then(function(imgUrl) {
                 if (imgUrl && emojiEl.parentNode) {
                   var img = document.createElement('img');
                   img.className = 'artist-thumb-img';
@@ -1077,7 +1130,7 @@ function _starsHTML(starsStr) {
   }
   fetchArtists();
 
-  /* ── WATCHLIST (Trakt API) — TVmaze fallback for series posters ── */
+  /* ── WATCHLIST (Trakt API) — TVmaze + iTunes fallback for series posters ── */
   function fetchWatchlist() {
     fetch('/api/watchlist')
       .then(function(r) {
@@ -1104,8 +1157,8 @@ function _starsHTML(starsStr) {
               if (s.poster) {
                 wrap.innerHTML = '<img class="media-thumb-img" src="' + s.poster + '" alt="' + s.title + '" loading="lazy" />';
               } else {
-                // TVmaze client-side fallback when server had no TMDB key
                 wrap.innerHTML = '<div class="media-thumb-emoji">📺</div>';
+                // FIXED: multi-source TVmaze + iTunes fallback
                 _tvmazePoster(s.title).then(function(url) {
                   if (url && wrap.parentNode) {
                     wrap.innerHTML = '<img class="media-thumb-img" src="' + url + '" alt="' + s.title + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;" />';
@@ -1136,8 +1189,22 @@ function _starsHTML(starsStr) {
               if (m.poster) {
                 wrap.innerHTML = '<img class="media-thumb-img" src="' + m.poster + '" alt="' + m.title + '" loading="lazy" />';
               } else {
-                // Movie posters come from TMDB server-side; upcoming/unreleased movies won't have one
+                // FIXED: iTunes movie search as fallback for upcoming movies
                 wrap.innerHTML = '<div class="media-thumb-emoji">🎬</div>';
+                fetch(
+                  'https://itunes.apple.com/search?term=' + encodeURIComponent(m.title) +
+                  '&media=movie&limit=1&country=US'
+                )
+                  .then(function(r) { return r.ok ? r.json() : null; })
+                  .then(function(d) {
+                    if (d && d.results && d.results[0] && d.results[0].artworkUrl100) {
+                      var posterUrl = d.results[0].artworkUrl100.replace('100x100bb', '600x600bb');
+                      if (wrap.parentNode) {
+                        wrap.innerHTML = '<img class="media-thumb-img" src="' + posterUrl + '" alt="' + m.title + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;" />';
+                      }
+                    }
+                  })
+                  .catch(function() {});
               }
 
               movieThumbsEl.appendChild(wrap);
@@ -1147,7 +1214,7 @@ function _starsHTML(starsStr) {
       })
       .catch(function() {
 
-        /* ── Series fallback (Trakt API failed) — TVmaze for posters ── */
+        /* ── Series fallback — TVmaze + iTunes ── */
         if (seriesEl) {
           var fallbackSeries = CONFIG.currently.series.slice(0, 3);
           seriesEl.textContent = fallbackSeries.join(', ');
@@ -1159,10 +1226,9 @@ function _starsHTML(starsStr) {
               var wrap = document.createElement('div');
               wrap.className = 'media-thumb-card';
               wrap.title     = title;
-
               wrap.innerHTML = '<div class="media-thumb-emoji">📺</div>';
 
-              // TVmaze: free, no key, great show coverage
+              // FIXED: multi-source fallback
               _tvmazePoster(title).then(function(posterUrl) {
                 if (posterUrl && wrap.parentNode) {
                   wrap.innerHTML = '<img class="media-thumb-img" src="' + posterUrl + '" alt="' + title + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;" />';
@@ -1174,7 +1240,7 @@ function _starsHTML(starsStr) {
           }
         }
 
-        /* ── Movies fallback — static config, mostly unreleased → emoji is correct ── */
+        /* ── Movies fallback — iTunes for upcoming films ── */
         if (watchlistEl && CONFIG.big3.watchlist) {
           var fallbackMovies = CONFIG.big3.watchlist;
           watchlistEl.textContent = fallbackMovies.join(', ');
@@ -1186,8 +1252,24 @@ function _starsHTML(starsStr) {
               var wrap = document.createElement('div');
               wrap.className = 'media-thumb-card';
               wrap.title     = title;
-              // Upcoming/unreleased movies — no public image source available; emoji is intentional
               wrap.innerHTML = '<div class="media-thumb-emoji">🎬</div>';
+
+              // FIXED: Try iTunes for upcoming/announced movies
+              fetch(
+                'https://itunes.apple.com/search?term=' + encodeURIComponent(title) +
+                '&media=movie&limit=1&country=US'
+              )
+                .then(function(r) { return r.ok ? r.json() : null; })
+                .then(function(d) {
+                  if (d && d.results && d.results[0] && d.results[0].artworkUrl100) {
+                    var posterUrl = d.results[0].artworkUrl100.replace('100x100bb', '600x600bb');
+                    if (wrap.parentNode) {
+                      wrap.innerHTML = '<img class="media-thumb-img" src="' + posterUrl + '" alt="' + title + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;" />';
+                    }
+                  }
+                })
+                .catch(function() {});
+
               movieThumbsElFb.appendChild(wrap);
             });
           }
