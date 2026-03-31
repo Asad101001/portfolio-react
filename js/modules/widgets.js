@@ -63,36 +63,19 @@ function _tvmazePoster(title) {
  * iTunes is fully CORS-safe, no API key, returns high-quality artwork.
  */
 function _artistImage(name) {
-  // First try iTunes Artist search
-  return fetch(
-    'https://itunes.apple.com/search?term=' + encodeURIComponent(name) +
-    '&media=music&entity=musicArtist&limit=1&country=US'
-  )
-    .then(function(r) { return r.ok ? r.json() : null; })
-    .then(function(d) {
-      if (d && d.results && d.results[0] && d.results[0].artistLinkUrl) {
-        // iTunes Artist search often lacks artworkUrl, so we fall back to a song search by the same artist
-        return fetch(
-          'https://itunes.apple.com/search?term=' + encodeURIComponent(name) +
-          '&media=music&entity=song&limit=1'
-        )
-          .then(function(r) { return r.ok ? r.json() : null; })
-          .then(function(d2) {
-            if (d2 && d2.results && d2.results[0]) {
-              var img = d2.results[0].artworkUrl100 || d2.results[0].artworkUrl60;
-              return img ? img.replace('100x100', '400x400') : null;
-            }
-            return null;
-          });
-      }
-      return null;
-    })
+  // Use unavatar with spotify provider for actual artist portraits
+  var unavatarUrl = 'https://unavatar.io/spotify/' + encodeURIComponent(name);
+  
+  return fetch(unavatarUrl)
+    .then(function(r) { return r.ok ? unavatarUrl : null; })
     .then(function(url) {
       if (url) return url;
-      // Last.fm artist image fallback via unavatar.io (high reliability)
+      // Fallback to Last.fm artist image via unavatar
       return 'https://unavatar.io/lastfm/' + encodeURIComponent(name);
     })
-    .catch(function() { return 'https://unavatar.io/lastfm/' + encodeURIComponent(name); });
+    .catch(function() { 
+      return 'https://unavatar.io/lastfm/' + encodeURIComponent(name); 
+    });
 }
 
 /**
@@ -1019,16 +1002,25 @@ function _starsHTML(starsStr) {
 
   /* ── FOOTBALLER HEADSHOTS — TheSportsDB + Wikipedia fallback ── */
   if (playersEl && CONFIG.big3.players) {
-    playersEl.textContent = CONFIG.big3.players.map(function(p) { return p.name; }).join(', ');
+    // Re-order for Podium: index 1 (Silver), 0 (Gold), 2 (Bronze)
+    var podiumOrder = [
+      CONFIG.big3.players[1], 
+      CONFIG.big3.players[0], 
+      CONFIG.big3.players[2]
+    ].filter(Boolean);
+
+    playersEl.textContent = podiumOrder.map(function(p) { return p.name; }).join(', ');
 
     var headshotsEl = headshotsWrap || document.getElementById('player-headshots-wrap');
     if (headshotsEl) {
       headshotsEl.innerHTML = '';
-      CONFIG.big3.players.slice(0, 3).forEach(function(p, idx) {
+      podiumOrder.forEach(function(p, i) {
         if (!p) return;
 
-        var rankClass  = ['medal-gold', 'medal-silver', 'medal-bronze'][idx] || '';
-        var medalEmoji = ['\ud83e\udd47', '\ud83e\udd48', '\ud83e\udd49'][idx] || '';
+        // Correct medal based on original index: p[0]=gold, p[1]=silver, p[2]=bronze
+        var originalIdx = CONFIG.big3.players.indexOf(p);
+        var rankClass  = ['medal-gold', 'medal-silver', 'medal-bronze'][originalIdx] || '';
+        var medalEmoji = ['\ud83e\udd47', '\ud83e\udd48', '\ud83e\udd49'][originalIdx] || '';
 
         var wrap = document.createElement('div');
         wrap.className = 'footballer-card ' + rankClass;
@@ -1187,7 +1179,7 @@ function _starsHTML(starsStr) {
         /* ── Movies ── */
         if (watchlistEl) {
           var mnames = data.movies && data.movies.length
-            ? data.movies.map(function(m) { return m.title; }).join(', ')
+            ? data.movies.map(function(m) { return m.title || m; }).join(', ')
             : '';
           watchlistEl.textContent = mnames;
 
@@ -1253,10 +1245,10 @@ function _starsHTML(starsStr) {
           }
         }
 
-        /* ── Movies fallback — iTunes for upcoming films ── */
+        /* ── Movies fallback ── */
         if (watchlistEl && CONFIG.big3.watchlist) {
           var fallbackMovies = CONFIG.big3.watchlist;
-          watchlistEl.textContent = fallbackMovies.join(', ');
+          watchlistEl.textContent = fallbackMovies.map(function(m) { return m.title || m; }).join(', ');
 
           var movieThumbsElFb = document.getElementById('big3-movie-thumbs');
           if (movieThumbsElFb) {
