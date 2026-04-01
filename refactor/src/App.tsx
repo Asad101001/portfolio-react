@@ -1,33 +1,28 @@
-import { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-
-// Layout Components (To be implemented)
-import Navbar from './components/layout/Navbar'
-import Footer from './components/layout/Footer'
-import Overlays from './components/layout/Overlays'
-
-// Pages
-import HomePage from './pages/HomePage'
-import ProjectAwsPage from './pages/ProjectAwsPage'
-import ProjectPrsPage from './pages/ProjectPrsPage'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useTheme } from './hooks/useTheme';
+import Background from './components/layout/Background';
+import Overlays from './components/layout/Overlays';
+import CertsDrawer from './components/layout/CertsDrawer';
+import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
+import HomePage from './pages/HomePage';
+import ProjectAwsPage from './pages/ProjectAwsPage';
+import ProjectPrsPage from './pages/ProjectPrsPage';
 
 function App() {
-  const [theme, setTheme] = useState('cyberpunk')
-
-  useEffect(() => {
-    // Apply theme class to body
-    document.body.className = `theme-${theme}`
-  }, [theme])
+  const { theme, setTheme, rotateTheme } = useTheme();
 
   return (
     <Router>
       <div className="min-h-screen flex flex-col relative w-full overflow-hidden">
-        {/* Ambient Glows and Grid Backgrounds */}
-        <Overlays theme={theme} />
+        {/* Dynamic Background and Overlays */}
+        <Background />
+        <Overlays />
+        <CertsDrawer />
 
-        <Navbar activeTheme={theme} setActiveTheme={setTheme} />
+        <Navbar activeTheme={theme} setActiveTheme={setTheme} rotateTheme={rotateTheme} />
         
-        <main id="main-content" className="flex-grow w-full max-w-[1000px] mx-auto px-5 py-10 relative z-10">
+        <main id="main-content" className="flex-grow w-full relative z-10 m-0 p-0">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/projects/aws" element={<ProjectAwsPage />} />
@@ -45,7 +40,7 @@ function App() {
         <Footer />
       </div>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

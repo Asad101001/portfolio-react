@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronDown, Star } from 'lucide-react'
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useReveal } from '../../hooks/useReveal';
 
 const skillDist = [
   { label: 'Googling stuff', pct: '97%', color: '#f97316' },
@@ -8,7 +8,7 @@ const skillDist = [
   { label: 'Actual coding', pct: '61%', color: '#00ff41' },
   { label: 'Debugging', pct: '40%', color: '#f87171' },
   { label: 'It works locally', pct: '85%', color: '#22c55e' }
-]
+];
 
 const testimonials = [
   { 
@@ -21,30 +21,49 @@ const testimonials = [
     author: '— localhost:5000', 
     stars: 5 
   }
-]
+];
 
 export default function ExperienceSection() {
-  const [isOpen, setIsOpen] = useState(false)
+  useReveal();
+  const [isOpen, setIsOpen] = useState(false);
+  const [showError, setShowError] = useState(false);
+
+  useEffect(() => {
+    let timer: any;
+    if (showError) {
+      timer = setTimeout(() => setShowError(false), 4200);
+    }
+    return () => clearTimeout(timer);
+  }, [showError]);
+
+  const handleToggle = () => {
+    const nextState = !isOpen;
+    setIsOpen(nextState);
+    if (nextState) {
+      setTimeout(() => setShowError(true), 200);
+    }
+  };
 
   return (
-    <section id="experience" className="w-full py-20 relative">
-      <div className="section-header text-center mb-8">
-        <p className="text-xs font-mono uppercase tracking-[0.3em] text-customCyan mb-2">Background</p>
-        <h2 className="text-3xl md:text-4xl font-bold">Experience</h2>
-        <p className="text-customTextMuted mt-4 max-w-lg mx-auto">Where I've spent my time, energy, and sanity.</p>
+    <section id="experience" className="section-in py-20 relative">
+      <div className="section-header text-center mb-12">
+        <p className="label-xs text-xs font-mono uppercase tracking-[0.3em] text-customCyan mb-2">Background</p>
+        <h2 className="section-title text-4xl font-bold">Experience</h2>
       </div>
 
-      <div className="flex justify-center mb-12">
-        <button 
-          onClick={() => setIsOpen(!isOpen)}
-          className="group flex items-center gap-3 px-8 py-3 rounded-full bg-customBg2 border border-customBorderH text-customCyan font-mono text-sm hover:border-customCyan transition-all shadow-lg active:scale-95"
+      <div className="experience-trigger flex justify-center mb-12">
+        <div 
+          className="demo-404 reveal cursor-pointer" 
+          onClick={handleToggle}
+          style={{ width: '100%', maxWidth: '800px' }}
         >
-          {isOpen ? 'Hide' : 'View'} Experience
-          <ChevronDown 
-            size={16} 
-            className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
-          />
-        </button>
+          <div className="demo-404-corner tl"></div>
+          <div className="demo-404-corner br"></div>
+          <div className="demo-big">404</div>
+          <h3>SECTOR_DATA_OFFLINE</h3>
+          <p>The experience logs are restricted or haven't been decrypted yet.</p>
+          <span className="demo-404-hint">{isOpen ? 'Click to terminate session' : 'Click to force decryption'}</span>
+        </div>
       </div>
 
       <AnimatePresence>
@@ -53,32 +72,27 @@ export default function ExperienceSection() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-10">
+            <div className="demo-grid grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
               {/* Skill Distribution */}
-              <div className="glass-card p-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <span className="text-2xl">📊</span>
-                  <h3 className="font-bold">Actual Skill Distribution</h3>
-                </div>
-                <p className="text-xs text-customTextDim mb-8 italic">Based on hours spent vs. hours productive</p>
+              <div className="demo-card glass-card reveal">
+                <span className="demo-emoji block text-3xl mb-4">📊</span>
+                <h3 className="text-lg font-bold mb-2">Actual Skill Distribution</h3>
+                <p className="text-sm text-customTextMuted mb-6 italic">Based on hours spent vs. hours productive</p>
                 
-                <div className="space-y-6">
+                <div className="demo-progress-fake space-y-4">
                   {skillDist.map((skill, i) => (
-                    <div key={i} className="space-y-2">
-                      <div className="flex justify-between text-[11px] font-mono tracking-tight text-customTextMuted">
-                        <span>{skill.label}</span>
-                        <span>{skill.pct}</span>
-                      </div>
-                      <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                    <div key={i} className="demo-progress-row flex items-center gap-4">
+                      <span className="demo-progress-label w-32 text-right font-mono text-[10px] uppercase text-customTextDim">{skill.label}</span>
+                      <div className="demo-progress-bar-wrap flex-grow h-1 bg-white/5 rounded-full overflow-hidden">
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: skill.pct }}
-                          transition={{ duration: 1.5, delay: i * 0.1, ease: "easeOut" }}
-                          className="h-full rounded-full"
-                          style={{ background: skill.color }}
+                          transition={{ duration: 1.5, delay: 0.3 + (i * 0.1), ease: "easeOut" }}
+                          className="demo-progress-fill h-full rounded-full"
+                          style={{ background: skill.color, boxShadow: `0 0 10px ${skill.color}80` }}
                         />
                       </div>
                     </div>
@@ -87,29 +101,24 @@ export default function ExperienceSection() {
               </div>
 
               {/* Testimonials */}
-              <div className="glass-card p-8">
-                <div className="flex items-center gap-3 mb-8">
-                   <span className="text-2xl">⭐</span>
-                   <h3 className="font-bold">Testimonials</h3>
-                </div>
+              <div className="demo-card glass-card reveal">
+                <span className="demo-emoji block text-3xl mb-4">⭐</span>
+                <h3 className="text-lg font-bold mb-4">Testimonials</h3>
                 
-                <div className="flex flex-col gap-6">
+                <div className="space-y-6">
                   {testimonials.map((t, i) => (
-                    <div key={i} className="p-5 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:border-white/10 transition-colors">
-                       <p className="text-sm text-customTextMuted leading-relaxed mb-4 italic">{t.text}</p>
-                       <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-mono text-customTextDim">{t.author}</span>
-                          <div className="flex gap-0.5">
-                            {[...Array(5)].map((_, idx) => (
-                              <Star 
-                                key={idx} 
-                                size={10} 
-                                fill={idx < t.stars ? "#facc15" : "transparent"} 
-                                className={idx < t.stars ? "text-yellow-400" : "text-white/10"} 
-                              />
-                            ))}
-                          </div>
-                       </div>
+                    <div key={i} className="p-4 rounded-xl bg-black/40 border border-white/5 hover:border-white/10 transition-all">
+                      <p className="text-sm text-zinc-400 italic mb-4 leading-relaxed line-clamp-3">
+                        {t.text}
+                      </p>
+                      <div className="flex items-center justify-between">
+                         <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-zinc-600">{t.author}</span>
+                         <div className="demo-stars flex gap-1 text-yellow-500 text-xs">
+                           {[...Array(5)].map((_, idx) => (
+                             <span key={idx}>{idx < t.stars ? '★' : '☆'}</span>
+                           ))}
+                         </div>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -118,6 +127,34 @@ export default function ExperienceSection() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Error Popup Quirk */}
+      <div className={`error-popup ${showError ? 'visible' : ''}`}>
+        <div className="error-popup-bar">
+          <div className="error-popup-trafficlight red"></div>
+          <div className="error-popup-trafficlight yellow"></div>
+          <div className="error-popup-trafficlight green"></div>
+          <div className="error-popup-title">KERNEL EXCEPTION: DECRYPTION_FAILURE</div>
+        </div>
+        <div className="error-popup-body">
+           <div className="flex flex-col">
+             <p className="error-popup-msg">SYSTEM_THREAD_EXCEPTION_NOT_HANDLED</p>
+             <p className="error-popup-trace opacity-50">
+               At 0x0000FF01 (experience.sys)<br />
+               Internal decrypt error: access_denied<br />
+               Experience log is missing or Corrupt.
+             </p>
+           </div>
+        </div>
+        <div className="error-popup-timer">
+          <motion.div 
+            className="error-popup-timer-fill" 
+            initial={{ scaleX: 1 }}
+            animate={showError ? { scaleX: 0 } : { scaleX: 1 }}
+            transition={{ duration: 4, ease: "linear" }}
+          />
+        </div>
+      </div>
     </section>
-  )
+  );
 }

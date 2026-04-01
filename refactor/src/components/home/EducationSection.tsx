@@ -1,5 +1,4 @@
-import { motion } from 'framer-motion'
-import { Calendar, MapPin } from 'lucide-react'
+import { useReveal } from '../../hooks/useReveal';
 
 const education = [
   {
@@ -23,55 +22,46 @@ const education = [
     logo: './images/institutions/kps.jpg',
     color: '#f97316'
   }
-]
+];
 
 export default function EducationSection() {
+  useReveal();
+
   return (
-    <section id="education" className="w-full py-20 relative">
+    <section id="education" className="section-in py-20 relative">
       <div className="section-header mb-12">
-        <p className="text-xs font-mono uppercase tracking-[0.3em] text-customCyan mb-2">Background</p>
-        <h2 className="text-3xl md:text-4xl font-bold">Education</h2>
+        <p className="label-xs text-xs font-mono uppercase tracking-[0.3em] text-customCyan mb-2">Background</p>
+        <h2 className="section-title text-4xl font-bold">Education</h2>
       </div>
 
-      <div className="relative border-l-2 border-white/5 ml-4 pl-8 space-y-12 py-4">
+      <div className="timeline">
         {education.map((edu, i) => (
-          <motion.div 
-            key={i}
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.15 }}
-            className="relative"
-          >
+          <div key={i} className="timeline-item reveal" style={{ '--delay': `${i * 150}ms` } as React.CSSProperties}>
             {/* Timeline Dot */}
             <div 
-              className="absolute -left-[41px] top-0 w-4 h-4 rounded-full border-2 border-customBg ring-4 ring-customBg2"
-              style={{ background: edu.color }}
-            />
+              className="tl-dot"
+              style={{ borderColor: edu.color, boxShadow: `0 0 10px ${edu.color}60` }}
+            ></div>
 
-            <div className="glass-card p-8 group hover:border-customCyan/30 transition-colors">
-              <div className="flex items-center gap-3 mb-4">
-                <Calendar size={14} className="text-customTextDim" />
-                <span className="text-xs font-mono font-bold text-customTextDim uppercase tracking-widest">{edu.year}</span>
-              </div>
+            <div className="tl-card glass-card">
+              <div className="tl-year mb-1">{edu.year}</div>
+              <h3 className="tl-degree">{edu.degree}</h3>
               
-              <h3 className="text-xl font-bold text-white group-hover:text-customCyan transition-colors mb-6">{edu.degree}</h3>
-              
-              <div className="flex items-center gap-4">
-                 <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 border border-white/5 bg-white/5 p-1">
-                    <img src={edu.logo} alt={edu.inst} className="w-full h-full object-cover rounded" />
+              <div className="tl-inst-row mt-4 flex items-center gap-3">
+                 <div className="tl-logo bg-zinc-900 border border-white/5 p-1">
+                    <img 
+                      src={edu.logo} 
+                      alt={edu.inst} 
+                      className="w-full h-full object-cover filter grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all" 
+                      onError={(e) => e.currentTarget.style.display = 'none'}
+                    />
                  </div>
-                 <div className="flex flex-col gap-1">
-                    <p className="text-sm font-medium text-customTextMuted leading-tight">{edu.inst}</p>
-                    <div className="flex items-center gap-1.5 text-[10px] text-customTextDim uppercase font-bold tracking-tight">
-                       <MapPin size={10} /> Karachi, Pakistan
-                    </div>
-                 </div>
+                 <p className="tl-inst">{edu.inst}</p>
               </div>
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
     </section>
-  )
+  );
 }

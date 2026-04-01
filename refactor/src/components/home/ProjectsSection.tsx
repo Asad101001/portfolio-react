@@ -1,6 +1,4 @@
-import { motion } from 'framer-motion'
-import { ExternalLink, Github, Gavel, BarChart3, Activity, Cloud, Eye } from 'lucide-react'
-
+import { useReveal } from '../../hooks/useReveal';
 
 const projects = [
   {
@@ -11,9 +9,9 @@ const projects = [
     repo: 'https://github.com/Asad101001/LegalEaseAI',
     details: '/projects/legaleaseai.html',
     image: './images/projects/legalease.png',
-    icon: <Gavel size={20} />,
+    icon: <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m14 13-5 5 5 5"/><path d="m20 13-5 5 5 5"/><path d="m3 3 7.41 7.41"/><path d="M3 21 21 3"/></svg>,
     color: '#00ff41',
-    tags: ['FastAPI', 'LangChain', 'FAISS', 'RAG', 'Python']
+    tags: ['FastAPI', 'LangChain', 'FAISS', 'RAG']
   },
   {
     id: 'pollpulse',
@@ -22,9 +20,9 @@ const projects = [
     repo: 'https://github.com/Asad101001/pollpulse',
     details: '/projects/pollpulse.html',
     image: './images/projects/pollpulse.png',
-    icon: <BarChart3 size={20} />,
+    icon: <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>,
     color: '#a855f7',
-    tags: ['Node.js', 'Express', 'AWS', 'MySQL', 'Chart.js']
+    tags: ['Node.js', 'AWS', 'MySQL', 'Chart.js']
   },
   {
     id: 'devpulse',
@@ -34,21 +32,21 @@ const projects = [
     repo: 'https://github.com/Asad101001/devpulse',
     details: '/projects/devpulse.html',
     image: './images/projects/devpulse.png',
-    icon: <Activity size={20} />,
+    icon: <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>,
     color: '#FFD600',
-    tags: ['React', 'Express', 'Llama 3.3', 'MongoDB Atlas']
+    tags: ['React', 'Express', 'Llama 3.3', 'MongoDB']
   },
   {
     id: 'mogscope',
     title: 'Mogscope',
-    desc: 'Facial analytics platform using face-api.js for 68-point landmark detection. Combines ML insights with LLM-generated satirical analysis.',
+    desc: 'Facial analytics platform using face-api.js for landmarks. Combines ML insights with LLM-generated satirical analysis.',
     link: 'https://mogscope.vercel.app/',
     repo: 'https://github.com/Asad101001/mogscope',
     details: '/projects/mogscope.html',
     image: './images/projects/mogscope.png',
-    icon: <Eye size={20} />,
+    icon: <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>,
     color: '#818cf8',
-    tags: ['React', 'Three.js', 'TensorFlow', 'Groq AI']
+    tags: ['React', 'Three.js', 'TensorFlow', 'Groq']
   },
   {
     id: 'aws-hosting',
@@ -57,135 +55,89 @@ const projects = [
     repo: 'https://github.com/Asad101001/aws-static-website',
     details: '/projects/aws.html',
     image: './images/projects/aws.png',
-    icon: <Cloud size={20} />,
+    icon: <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.5 19c.4 0 .7-.1.9-.3.2-.2.3-.5.3-.9V7.1a1.2 1.2 0 0 0-1.2-1.2h-10A1.2 1.2 0 0 0 6.3 7v10.5c0 .4.1.7.3.9.2.2.5.3.9.3h10Z"/><path d="M11 11h2"/><path d="M11 15h2"/><path d="M6.3 10h11.4"/></svg>,
     color: '#FF9900',
-    tags: ['AWS', 'Nginx', 'Ubuntu Linux', 'Vanilla JS']
+    tags: ['AWS', 'Nginx', 'Ubuntu', 'SSH']
   }
-]
-
-function ProjectCard({ project, index }: { project: any, index: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1 }}
-      className="project-card glass-card flex flex-col group cursor-pointer overflow-hidden"
-      onClick={() => window.open(project.details, '_self')}
-    >
-      {/* Image Wrap */}
-      <div className="relative aspect-video overflow-hidden bg-zinc-900">
-        <img 
-          src={project.image} 
-          alt={project.title} 
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          onError={(e) => { e.currentTarget.style.display = 'none' }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-60" />
-      </div>
-
-      {/* Details Link Overlay */}
-      <a 
-        href={project.details} 
-        className="flex items-center gap-2 px-4 py-2 text-[10px] font-mono font-bold uppercase tracking-wider transition-colors border-b border-black/20"
-        style={{ 
-          background: `linear-gradient(90deg, ${project.color}15, transparent)`,
-          color: project.color
-        }}
-      >
-        <span className="text-base">🔍</span> View More Details
-      </a>
-
-      {/* Body */}
-      <div className="p-6 flex flex-col flex-grow">
-        <div className="flex items-start gap-4 mb-4">
-          <div 
-            className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" 
-            style={{ 
-              background: `linear-gradient(135deg, ${project.color}30, ${project.color}10)`,
-              color: project.color
-            }}
-          >
-            {project.icon}
-          </div>
-          <div>
-            <h3 className="text-lg font-bold text-white">{project.title}</h3>
-            {project.link && (
-              <a 
-                href={project.link} 
-                className="text-[10px] font-mono text-zinc-500 hover:text-customCyan transition-colors"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {project.link.replace('https://', '')} ↗
-              </a>
-            )}
-          </div>
-        </div>
-
-        <p className="text-xs text-customTextMuted leading-relaxed line-clamp-3 mb-6">
-          {project.desc}
-        </p>
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2 mb-8 mt-auto">
-          {project.tags.map((tag: string) => (
-            <span 
-              key={tag} 
-              className="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-[9px] font-mono text-customTextDim"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        {/* Links */}
-        <div className="flex items-center gap-4 pt-4 mt-auto border-t border-white/5">
-          <a 
-            href={project.repo} 
-            className="flex items-center gap-1.5 text-[10px] font-mono font-bold uppercase text-customText hover:text-customCyan transition-colors"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Github size={12} />
-            Code
-          </a>
-          {project.link && (
-            <a 
-              href={project.link} 
-              className="flex items-center gap-1.5 text-[10px] font-mono font-bold uppercase text-customText hover:text-customCyan transition-colors"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <ExternalLink size={12} />
-              Live Demo
-            </a>
-          )}
-        </div>
-      </div>
-    </motion.div>
-  )
-}
+];
 
 export default function ProjectsSection() {
+  useReveal();
+
   return (
-    <section id="projects" className="w-full py-20 relative">
+    <section id="projects" className="section-in py-20 relative">
       <div className="section-header flex items-end justify-between mb-12">
         <div>
-          <p className="text-xs font-mono uppercase tracking-[0.3em] text-customCyan mb-2">Work</p>
-          <h2 className="text-3xl md:text-4xl font-bold">Projects</h2>
+          <p className="label-xs text-xs font-mono uppercase tracking-[0.3em] text-customCyan mb-2">Work</p>
+          <h2 className="section-title text-4xl font-bold">Projects</h2>
         </div>
         <a 
           href="https://github.com/Asad101001?tab=repositories" 
           target="_blank" 
+          rel="noopener noreferrer"
           className="text-[10px] font-mono uppercase font-bold tracking-widest text-zinc-500 hover:text-customCyan transition-colors flex items-center gap-2"
         >
-          All Repositories <ExternalLink size={12} />
+          All Repositories 
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="projects-grid">
         {projects.map((project, i) => (
-          <ProjectCard key={project.id} project={project} index={i} />
+          <div 
+            key={project.id} 
+            className="project-card glass-card reveal"
+            style={{ '--delay': `${i * 100}ms` } as React.CSSProperties}
+            onClick={() => window.open(project.details, '_self')}
+          >
+            <div className="proj-img-wrap">
+              <img 
+                src={project.image} 
+                alt={project.title} 
+                className="proj-img"
+                onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement?.querySelector('.proj-img-placeholder')?.setAttribute('style', 'display:flex'); }}
+              />
+              <div className="proj-img-placeholder hidden items-center justify-center bg-zinc-900 absolute inset-0">
+                 <span className="text-zinc-700 font-mono text-[10px]">NO_SIGNAL</span>
+              </div>
+              <div className="proj-img-overlay"></div>
+              <div className="proj-badge">DEPLOYED</div>
+            </div>
+
+            <div className="proj-body">
+              <div className="proj-head">
+                 <div 
+                   className="proj-icon" 
+                   style={{ background: `rgba(${parseInt(project.color.slice(1,3),16)}, ${parseInt(project.color.slice(3,5),16)}, ${parseInt(project.color.slice(5,7),16)}, 0.1)`, color: project.color }}
+                 >
+                   {project.icon}
+                 </div>
+                 <h3 className="proj-title">{project.title}</h3>
+              </div>
+              <p className="proj-desc">{project.desc}</p>
+              
+              <div className="proj-tags">
+                {project.tags.map(tag => (
+                   <span key={tag} className="tag">{tag}</span>
+                ))}
+              </div>
+
+              <div className="proj-links">
+                <a href={project.repo} onClick={(e) => e.stopPropagation()} className="proj-link-code">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/></svg>
+                  Code
+                </a>
+                {project.link && (
+                  <a href={project.link} onClick={(e) => e.stopPropagation()} className="proj-link-demo">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    Live
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
         ))}
       </div>
     </section>
-  )
+  );
 }
