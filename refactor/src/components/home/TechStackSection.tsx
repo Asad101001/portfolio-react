@@ -110,7 +110,8 @@ export default function TechStackSection() {
     : domains.filter(d => d.cat === activeCat);
 
   return (
-    <section id="tech" className="py-24 relative overflow-hidden">
+    <section id="tech" className="section-in py-24 relative overflow-hidden">
+      <div className="ambient-glow"></div>
       <div className="section-inner max-w-7xl mx-auto px-6">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

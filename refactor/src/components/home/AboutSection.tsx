@@ -68,7 +68,8 @@ export default function AboutSection() {
   useReveal();
 
   return (
-    <section id="about">
+    <section id="about" className="section-in">
+      <div className="ambient-glow"></div>
       <div className="section-inner">
         <div className="section-header">
           <div>

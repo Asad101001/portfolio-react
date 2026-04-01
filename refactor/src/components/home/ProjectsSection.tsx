@@ -89,7 +89,8 @@ export default function ProjectsSection() {
   };
 
   return (
-    <section id="projects" className="py-24">
+    <section id="projects" className="section-in py-24">
+      <div className="ambient-glow"></div>
       <div className="section-inner max-w-7xl mx-auto px-6">
         <motion.div 
           initial={{ opacity: 0, x: -20 }}

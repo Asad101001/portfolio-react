@@ -32,7 +32,8 @@ export default function ExperienceSection() {
   };
 
   return (
-    <section id="experience">
+    <section id="experience" className="section-in">
+      <div className="ambient-glow"></div>
       <div className="section-inner">
         <div className="section-header centered">
           <p className="label-xs">Professional Path</p>

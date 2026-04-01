@@ -29,6 +29,7 @@ export default function EducationSection() {
 
   return (
     <section id="education" className="section-in py-20 relative">
+      <div className="ambient-glow"></div>
       <div className="section-header mb-12">
         <p className="label-xs text-xs font-mono uppercase tracking-[0.3em] text-customCyan mb-2">Background</p>
         <h2 className="section-title text-4xl font-bold">Education</h2>
