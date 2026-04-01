@@ -7,7 +7,7 @@ const themes: Theme[] = ['cyberpunk', 'industrial', 'sunset', 'emerald'];
 export function useTheme() {
   const [theme, setThemeState] = useState<Theme>(() => {
     const saved = localStorage.getItem('asad_portfolio_theme') as Theme;
-    return (saved && themes.includes(saved)) ? saved : 'cyberpunk';
+    return (saved && themes.includes(saved)) ? saved : 'sunset';
   });
 
   const applyTheme = useCallback((newTheme: Theme) => {

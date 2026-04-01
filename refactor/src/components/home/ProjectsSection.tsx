@@ -1,4 +1,13 @@
-import { useReveal } from '../../hooks/useReveal';
+import { motion } from 'framer-motion';
+import { 
+  ExternalLink, 
+  Github, 
+  Code2, 
+  BarChart3, 
+  Activity, 
+  Eye, 
+  Server
+} from 'lucide-react';
 
 const projects = [
   {
@@ -7,10 +16,9 @@ const projects = [
     desc: 'Upload contracts for rapid AI risk-rating. Provides plain Urdu explanations, a RAG-powered document chatbot, and downloadable PDF reports.',
     link: 'https://legal-ease-ai-iota.vercel.app/',
     repo: 'https://github.com/Asad101001/LegalEaseAI',
-    details: '/projects/legaleaseai.html',
     image: './images/projects/legalease.png',
-    icon: <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m14 13-5 5 5 5"/><path d="m20 13-5 5 5 5"/><path d="m3 3 7.41 7.41"/><path d="M3 21 21 3"/></svg>,
-    color: '#00ff41',
+    icon: Code2,
+    color: 'hsl(161, 84%, 39%)',
     tags: ['FastAPI', 'LangChain', 'FAISS', 'RAG']
   },
   {
@@ -18,10 +26,9 @@ const projects = [
     title: 'PollPulse',
     desc: 'Real-time polling platform built on AWS. Features a custom VPC with EC2 and RDS MySQL isolation. Delivers live data visualization via Chart.js.',
     repo: 'https://github.com/Asad101001/pollpulse',
-    details: '/projects/pollpulse.html',
     image: './images/projects/pollpulse.png',
-    icon: <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>,
-    color: '#a855f7',
+    icon: BarChart3,
+    color: 'hsl(271, 91%, 65%)',
     tags: ['Node.js', 'AWS', 'MySQL', 'Chart.js']
   },
   {
@@ -30,10 +37,9 @@ const projects = [
     desc: 'A developer telemetry dashboard. Analyzes commit narratives to calculate cognitive load using Llama 3.3. Built with an industrial aesthetic.',
     link: 'https://devpulse-app.onrender.com',
     repo: 'https://github.com/Asad101001/devpulse',
-    details: '/projects/devpulse.html',
     image: './images/projects/devpulse.png',
-    icon: <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>,
-    color: '#FFD600',
+    icon: Activity,
+    color: 'hsl(54, 100%, 50%)',
     tags: ['React', 'Express', 'Llama 3.3', 'MongoDB']
   },
   {
@@ -42,10 +48,9 @@ const projects = [
     desc: 'Facial analytics platform using face-api.js for landmarks. Combines ML insights with LLM-generated satirical analysis.',
     link: 'https://mogscope.vercel.app/',
     repo: 'https://github.com/Asad101001/mogscope',
-    details: '/projects/mogscope.html',
     image: './images/projects/mogscope.png',
-    icon: <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>,
-    color: '#818cf8',
+    icon: Eye,
+    color: 'hsl(231, 89%, 71%)',
     tags: ['React', 'Three.js', 'TensorFlow', 'Groq']
   },
   {
@@ -53,90 +58,147 @@ const projects = [
     title: 'AWS Static Website',
     desc: 'Cloud hosting infrastructure project. Manual provisioning of Ubuntu EC2 instances with Nginx configuration and SSH hardening.',
     repo: 'https://github.com/Asad101001/aws-static-website',
-    details: '/projects/aws.html',
     image: './images/projects/aws.png',
-    icon: <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.5 19c.4 0 .7-.1.9-.3.2-.2.3-.5.3-.9V7.1a1.2 1.2 0 0 0-1.2-1.2h-10A1.2 1.2 0 0 0 6.3 7v10.5c0 .4.1.7.3.9.2.2.5.3.9.3h10Z"/><path d="M11 11h2"/><path d="M11 15h2"/><path d="M6.3 10h11.4"/></svg>,
-    color: '#FF9900',
+    icon: Server,
+    color: 'hsl(35, 100%, 50%)',
     tags: ['AWS', 'Nginx', 'Ubuntu', 'SSH']
   }
 ];
 
 export default function ProjectsSection() {
-  useReveal();
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { y: 30, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        ease: [0.22, 1, 0.36, 1] as any
+      }
+    }
+  };
 
   return (
-    <section id="projects" className="section-in py-20 relative">
-      <div className="section-header flex items-end justify-between mb-12">
-        <div>
-          <p className="label-xs text-xs font-mono uppercase tracking-[0.3em] text-customCyan mb-2">Work</p>
-          <h2 className="section-title text-4xl font-bold">Projects</h2>
-        </div>
-        <a 
-          href="https://github.com/Asad101001?tab=repositories" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="text-[10px] font-mono uppercase font-bold tracking-widest text-zinc-500 hover:text-customCyan transition-colors flex items-center gap-2"
+    <section id="projects" className="py-24">
+      <div className="section-inner max-w-7xl mx-auto px-6">
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          className="section-header flex justify-between items-end mb-12"
         >
-          All Repositories 
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </a>
-      </div>
-
-      <div className="projects-grid">
-        {projects.map((project, i) => (
-          <div 
-            key={project.id} 
-            className="project-card glass-card reveal"
-            style={{ '--delay': `${i * 100}ms` } as React.CSSProperties}
-            onClick={() => window.open(project.details, '_self')}
-          >
-            <div className="proj-img-wrap">
-              <img 
-                src={project.image} 
-                alt={project.title} 
-                className="proj-img"
-                onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement?.querySelector('.proj-img-placeholder')?.setAttribute('style', 'display:flex'); }}
-              />
-              <div className="proj-img-placeholder hidden items-center justify-center bg-zinc-900 absolute inset-0">
-                 <span className="text-zinc-700 font-mono text-[10px]">NO_SIGNAL</span>
-              </div>
-              <div className="proj-img-overlay"></div>
-              <div className="proj-badge">DEPLOYED</div>
-            </div>
-
-            <div className="proj-body">
-              <div className="proj-head">
-                 <div 
-                   className="proj-icon" 
-                   style={{ background: `rgba(${parseInt(project.color.slice(1,3),16)}, ${parseInt(project.color.slice(3,5),16)}, ${parseInt(project.color.slice(5,7),16)}, 0.1)`, color: project.color }}
-                 >
-                   {project.icon}
-                 </div>
-                 <h3 className="proj-title">{project.title}</h3>
-              </div>
-              <p className="proj-desc">{project.desc}</p>
-              
-              <div className="proj-tags">
-                {project.tags.map(tag => (
-                   <span key={tag} className="tag">{tag}</span>
-                ))}
-              </div>
-
-              <div className="proj-links">
-                <a href={project.repo} onClick={(e) => e.stopPropagation()} className="proj-link-code">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/></svg>
-                  Code
-                </a>
-                {project.link && (
-                  <a href={project.link} onClick={(e) => e.stopPropagation()} className="proj-link-demo">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                    Live
-                  </a>
-                )}
-              </div>
-            </div>
+          <div>
+            <p className="text-customCyan font-mono text-xs uppercase tracking-widest mb-2">Selected Work</p>
+            <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">Projects</h2>
           </div>
-        ))}
+          <motion.a 
+            whileHover={{ x: 5 }}
+            href="https://github.com/Asad101001" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-customTextMuted hover:text-white transition-colors font-mono text-xs mb-2"
+          >
+            All Repositories ↗
+          </motion.a>
+        </motion.div>
+
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="projects-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"
+        >
+          {projects.map((project) => (
+            <motion.div 
+              key={project.id} 
+              variants={cardVariants}
+              whileHover={{ y: -10 }}
+              className={`project-card glass-card relative overflow-hidden group border border-white/5 bg-zinc-900/50 backdrop-blur-xl rounded-2xl transition-all duration-500`}
+            >
+              <div className="proj-img-wrap relative h-56 overflow-hidden border-b border-white/5">
+                <img 
+                  src={project.image} 
+                  alt={project.title} 
+                  className="proj-img w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-0"
+                  onLoad={(e) => e.currentTarget.classList.remove('opacity-0')}
+                  onError={(e) => { e.currentTarget.classList.add('hidden'); e.currentTarget.nextElementSibling?.classList.remove('hidden'); }}
+                />
+                <div className="proj-img-placeholder hidden h-full w-full bg-zinc-900/50 flex items-center justify-center">
+                   <span className="text-[10px] font-mono font-bold text-white/10 uppercase tracking-widest">Image Data Offline</span>
+                </div>
+                <div className="proj-img-overlay absolute inset-0 bg-gradient-to-t from-zinc-950/80 to-transparent"></div>
+                <div className="proj-badge absolute top-4 right-4 bg-customCyan/10 border border-customCyan/20 text-customCyan text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-widest">
+                  Live Active
+                </div>
+              </div>
+
+              <div className="proj-body p-8">
+                <div className="proj-head flex items-center gap-4 mb-6">
+                   <div 
+                     className="proj-icon p-3 rounded-xl" 
+                     style={{ background: `${project.color}20`, color: project.color }}
+                   >
+                     <project.icon size={24} />
+                   </div>
+                   <div className="flex flex-col">
+                     <h3 className="text-xl font-bold text-white group-hover:text-customCyan transition-colors">{project.title}</h3>
+                     <span className="text-[10px] font-mono text-customCyan/40 uppercase tracking-widest">System Integrated</span>
+                   </div>
+                </div>
+                
+                <p className="text-sm text-customTextMuted leading-relaxed mb-8 h-12 line-clamp-2">
+                  {project.desc}
+                </p>
+                
+                <div className="proj-tags flex flex-wrap gap-2 mb-8">
+                  {project.tags.map(tag => (
+                     <span key={tag} className="px-3 py-1 rounded-md bg-white/5 border border-white/5 text-[10px] font-mono text-white/50 uppercase">
+                       {tag}
+                     </span>
+                  ))}
+                </div>
+
+                <div className="proj-links flex gap-4 pt-6 border-t border-white/5 mt-auto">
+                  <motion.a 
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    href={project.repo} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex items-center gap-2 text-xs font-bold text-white/60 hover:text-white transition-colors"
+                  >
+                    <Github size={14} />
+                    Source
+                  </motion.a>
+                  {project.link && (
+                    <motion.a 
+                      whileHover={{ scale: 1.05, x: 5 }}
+                      whileTap={{ scale: 0.95 }}
+                      href={project.link} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="flex items-center gap-2 text-xs font-bold text-customCyan"
+                    >
+                      <ExternalLink size={14} />
+                      Launch Demo
+                    </motion.a>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

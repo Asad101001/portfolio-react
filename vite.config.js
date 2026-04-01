@@ -26,6 +26,9 @@ function htmlIncludePlugin() {
 
 export default {
   plugins: [htmlIncludePlugin()],
+  server: {
+    port: 5173
+  },
   build: {
     outDir: 'dist',
     rollupOptions: {

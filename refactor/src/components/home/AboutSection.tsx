@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useReveal } from '../../hooks/useReveal';
+import { LineChart, Award, Code2, Cpu } from 'lucide-react';
 
 function Counter({ target, duration = 1400 }: { target: number; duration?: number }) {
   const [count, setCount] = useState(0);
@@ -36,28 +37,28 @@ function Counter({ target, duration = 1400 }: { target: number; duration?: numbe
     return () => observer.disconnect();
   }, [target]);
 
-  return <span id={`counter-${target}`} className="stat-big font-bold text-3xl">{count}+</span>;
+  return <span id={`counter-${target}`} className="stat-big">{count}+</span>;
 }
 
 const wipActivities = [
   { 
     title: 'LLM Pipeline v2', 
-    desc: 'Improving RAG chunking strategy with hybrid retrieval', 
-    pct: '30%', 
+    desc: 'Hybrid retrieval & RAG optimization', 
+    pct: '45%', 
     icon: '🧠', 
     clr: 'var(--cyan)'
   },
   { 
-    title: 'Cloud Computing', 
-    desc: 'NED University - EC2, S3, VPC, RDS & cloud architecture deep dives', 
-    pct: '95%', 
+    title: 'Cloud Specialization', 
+    desc: 'Deep diving into AWS serverless architecture', 
+    pct: '90%', 
     icon: '☁️', 
     clr: '#FF9900'
   },
   { 
-    title: 'HEC GenAI Cohort 2', 
-    desc: 'Working through RAG systems and AI ethics modules', 
-    pct: '85%', 
+    title: 'GenAI Certifications', 
+    desc: 'Completing deeplearning.ai RAG modules', 
+    pct: '75%', 
     icon: '🤖', 
     clr: '#a855f7'
   }
@@ -67,92 +68,81 @@ export default function AboutSection() {
   useReveal();
 
   return (
-    <section id="about" className="section-in relative py-20">
-      <div className="ambient-glow absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-customCyan/5 blur-[120px] rounded-full pointer-events-none z-[-1]"></div>
-      
-      <div className="section-inner max-w-7xl mx-auto px-6">
-        <div className="section-header mb-12">
+    <section id="about">
+      <div className="section-inner">
+        <div className="section-header">
           <div>
-            <p className="label-xs text-xs font-mono uppercase tracking-[0.3em] text-customCyan mb-2">Who I Am</p>
-            <h2 className="section-title text-4xl font-bold">About Me</h2>
+            <p className="label-xs">Who I Am</p>
+            <h2 className="section-title">About Me</h2>
           </div>
         </div>
 
-        <div className="about-grid grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="about-text glass-card reveal p-8 lg:col-span-2 text-customTextMuted text-lg leading-relaxed space-y-6">
+        <div className="about-grid">
+          <div className="about-text glass-card reveal">
             <p>
               I'm a Computer Science student at UBIT, University of Karachi '28, driven to explore
-              every corner of CS before settling on a specialty. So far I've covered Cloud Computing,
-              Networking, Web Dev, Data Science, Version Control, Project Management, Prompt Engineering,
-              and AI — with lots more ahead.
+              every corner of CS before settling on a specialty. My journey has spanned Cloud Computing,
+              Networking, Web Dev, and most recently, the vast landscape of GenAI.
             </p>
-            <p>
+            <p className="mt-4">
               I learn by building. Every project is a live experiment — from AWS VPC architecture to
-              RAG-powered LLM pipelines. My philosophy: build broken things, understand why they broke,
+              RAG-powered LLM pipelines. My philosophy is simple: build broken things, understand why they broke,
               then spend ages unbreaking them.
             </p>
+            <div className="mt-8 flex gap-4">
+              {/* Optional secondary CTAs could go here */}
+            </div>
           </div>
 
-          <div className="about-stats-col flex flex-col gap-4">
+          <div className="about-stats-col">
             {[
-              { id: 'cnt-projects', target: 4, label: 'Projects', icon: <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" strokeWidth="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17" /><polyline points="16 7 22 7 22 13" /></svg> },
-              { id: 'cnt-certs', target: 6, label: 'Certifications', icon: <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" strokeWidth="2"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" /><path d="m9 12 2 2 4-4" /></svg> },
-              { id: 'cnt-tech', target: 20, label: 'Technologies', icon: <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" strokeWidth="2"><path d="m18 16 4-4-4-4" /><path d="m6 8-4 4 4 4" /><path d="m14.5 4-5 16" /></svg> }
+              { id: 'cnt-projects', target: 5, label: 'Projects', icon: <LineChart size={18} /> },
+              { id: 'cnt-certs', target: 8, label: 'Certifications', icon: <Award size={18} /> },
+              { id: 'cnt-tech', target: 25, label: 'Technologies', icon: <Cpu size={18} /> }
             ].map((stat, i) => (
               <div 
                 key={stat.id} 
-                className="about-stat-card glass-card reveal p-6 hover:-translate-x-1 transition-transform group cursor-crosshair"
+                className="about-stat-card glass-card reveal"
                 style={{ '--delay': `${i * 100}ms` } as React.CSSProperties}
               >
-                <div className="text-customCyan mb-3 group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_8px_var(--cyan)]">
+                <div className="text-customCyan mb-1">
                    {stat.icon}
                 </div>
                 <Counter target={stat.target} />
-                <p className="stat-lbl text-xs font-mono text-zinc-500 uppercase tracking-widest mt-1 group-hover:text-customCyan transition-colors">
-                   {stat.label}
-                </p>
+                <p className="stat-lbl">{stat.label}</p>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Currently Exploring */}
-        <div className="working-on-wrap glass-card reveal p-8 mt-8" style={{ '--delay': '200ms' } as React.CSSProperties}>
-          <div className="working-on-header flex items-center gap-3 mb-8">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" strokeWidth="2">
-              <polyline points="16 18 22 12 16 6" />
-              <polyline points="8 6 2 12 8 18" />
-            </svg>
-            <span className="font-mono text-sm font-semibold uppercase tracking-widest">Currently Exploring</span>
-            <span className="ml-auto flex items-center gap-2 text-[10px] uppercase font-bold text-customCyan">
-               <span className="w-1.5 h-1.5 rounded-full bg-customCyan animate-pulse"></span> active
-            </span>
+        {/* Currently Working On */}
+        <div className="working-on-wrap glass-card reveal mt-12" style={{ '--delay': '200ms' } as React.CSSProperties}>
+          <div className="working-on-header">
+            <Code2 size={14} className="text-customCyan" />
+            <span>Currently Exploring</span>
+            <div className="working-on-pulse">
+               <span></span> active
+            </div>
           </div>
 
-          <div className="working-on-grid grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="working-on-grid">
             {wipActivities.map((wip, i) => (
               <div 
                 key={i} 
-                className="wip-card group relative p-4 -m-4 rounded-2xl hover:bg-white/[0.02] transition-colors duration-500"
+                className="wip-card"
               >
-                <div className="flex items-start gap-4 mb-4">
-                  <div 
-                    className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 text-xl transition-all duration-300 group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]" 
-                    style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}
-                  >
-                     {wip.icon}
-                  </div>
-                  <div className="flex flex-col">
-                    <p className="wip-title font-bold text-sm text-customText group-hover:text-white transition-colors">{wip.title}</p>
-                    <p className="wip-desc text-xs text-customTextDim mt-1 leading-relaxed leading-snug group-hover:text-customTextMuted transition-colors">{wip.desc}</p>
-                  </div>
+                <div className="wip-icon" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                   {wip.icon}
                 </div>
-                <div className="wip-bar-wrap w-full h-1 bg-white/5 rounded-full overflow-hidden mt-2 relative z-10">
+                <div className="wip-info">
+                  <p className="wip-title">{wip.title}</p>
+                  <p className="wip-desc">{wip.desc}</p>
+                </div>
+                <div className="wip-bar-wrap">
                    <div 
-                      className="wip-bar h-full rounded-full relative transition-[width] duration-[1500ms] ease-out" 
-                      style={{ width: wip.pct, background: wip.clr }}
+                      className="wip-bar" 
+                      style={{ '--pct': wip.pct, '--clr': wip.clr } as React.CSSProperties}
                     >
-                      <div className="absolute right-0 top-0 bottom-0 w-8 bg-white/40 blur-md rounded-full"></div>
                     </div>
                 </div>
               </div>
@@ -160,22 +150,29 @@ export default function AboutSection() {
           </div>
         </div>
 
-        {/* GitHub Activity Placeholder (Phase 4 Logic) */}
-        <div className="github-widget glass-card reveal p-8 mt-8" style={{ '--delay': '300ms' } as React.CSSProperties}>
-          <div className="github-widget-header flex items-center gap-3 mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-              <path d="M9 18c-4.51 2-5-2-7-2" />
-            </svg>
-            <span className="font-mono text-sm font-semibold">GitHub Activity</span>
-            <a href="https://github.com/Asad101001" target="_blank" rel="noopener noreferrer" className="ml-auto text-xs text-customCyan hover:underline">@Asad101001 ↗</a>
+        {/* GitHub Activity Heatmap Placeholder */}
+        <div className="github-widget glass-card reveal mt-8" style={{ '--delay': '300ms' } as React.CSSProperties}>
+          <div className="flex items-center gap-3 mb-6 p-1">
+            <GithubIcon />
+            <span className="font-mono text-xs font-bold uppercase tracking-wider text-white/40">GitHub Commit History</span>
+            <a href="https://github.com/Asad101001" target="_blank" rel="noopener noreferrer" className="ml-auto text-[10px] font-mono text-customCyan hover:underline">@Asad101001 ↗</a>
           </div>
-          <div className="commit-grid-placeholder h-24 bg-white/5 border border-dashed border-white/10 rounded-lg flex items-center justify-center">
-             <span className="text-xs font-mono text-zinc-600">Commit Heatmap Rendering (Phase 4)</span>
+          {/* Heatmap implementation will be handled in Phase 4 integration */}
+          <div className="h-24 bg-white/[0.02] border border-dashed border-white/10 rounded flex items-center justify-center">
+             <span className="text-[10px] font-mono text-white/20 uppercase tracking-[0.2em]">Commit Data Feed Offline</span>
           </div>
         </div>
 
       </div>
     </section>
+  );
+}
+
+function GithubIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/40">
+      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+      <path d="M9 18c-4.51 2-5-2-7-2" />
+    </svg>
   );
 }

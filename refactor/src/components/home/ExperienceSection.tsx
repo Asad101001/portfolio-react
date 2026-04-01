@@ -3,24 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useReveal } from '../../hooks/useReveal';
 
 const skillDist = [
-  { label: 'Googling stuff', pct: '97%', color: '#f97316' },
-  { label: 'Reading docs', pct: '15%', color: '#a855f7' },
-  { label: 'Actual coding', pct: '61%', color: '#00ff41' },
-  { label: 'Debugging', pct: '40%', color: '#f87171' },
-  { label: 'It works locally', pct: '85%', color: '#22c55e' }
-];
-
-const testimonials = [
-  { 
-    text: '"He once spent 3 hours debugging a missing semicolon. Growth."', 
-    author: '— Claude, probably', 
-    stars: 4 
-  },
-  { 
-    text: '"Works perfectly. On my machine. Every time."', 
-    author: '— localhost:5000', 
-    stars: 5 
-  }
+  { label: 'Actually Coding', pct: '25%', color: 'var(--cyan)' },
+  { label: 'Googling / AI Chat', pct: '95%', color: '#a855f7' },
+  { label: 'Reading Documentation', pct: '15%', color: '#3b82f6' },
+  { label: 'Fixing Build Errors', pct: '45%', color: '#f59e0b' },
+  { label: 'Resting / Thinking', pct: '60%', color: '#10b981' }
 ];
 
 export default function ExperienceSection() {
@@ -31,7 +18,7 @@ export default function ExperienceSection() {
   useEffect(() => {
     let timer: any;
     if (showError) {
-      timer = setTimeout(() => setShowError(false), 4200);
+      timer = setTimeout(() => setShowError(false), 4000);
     }
     return () => clearTimeout(timer);
   }, [showError]);
@@ -40,22 +27,22 @@ export default function ExperienceSection() {
     const nextState = !isOpen;
     setIsOpen(nextState);
     if (nextState) {
-      setTimeout(() => setShowError(true), 200);
+      setTimeout(() => setShowError(true), 150);
     }
   };
 
   return (
-    <section id="experience" className="section-in py-20 relative">
-      <div className="section-header text-center mb-12">
-        <p className="label-xs text-xs font-mono uppercase tracking-[0.3em] text-customCyan mb-2">Background</p>
-        <h2 className="section-title text-4xl font-bold">Experience</h2>
-      </div>
+    <section id="experience">
+      <div className="section-inner">
+        <div className="section-header centered">
+          <p className="label-xs">Professional Path</p>
+          <h2 className="section-title">Experience</h2>
+          <p className="section-sub">Technical logs and contribution milestones</p>
+        </div>
 
-      <div className="experience-trigger flex justify-center mb-12">
         <div 
-          className="demo-404 reveal cursor-pointer" 
+          className="demo-404 reveal" 
           onClick={handleToggle}
-          style={{ width: '100%', maxWidth: '800px' }}
         >
           <div className="demo-404-corner tl"></div>
           <div className="demo-404-corner br"></div>
@@ -64,87 +51,85 @@ export default function ExperienceSection() {
           <p>The experience logs are restricted or haven't been decrypted yet.</p>
           <span className="demo-404-hint">{isOpen ? 'Click to terminate session' : 'Click to force decryption'}</span>
         </div>
+
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="overflow-hidden mt-8"
+            >
+              <div className="demo-grid pb-12">
+                {/* Skill Distribution Component */}
+                <div className="demo-card glass-card reveal">
+                  <span className="demo-emoji">📊</span>
+                  <h3>Actual Skill Distribution</h3>
+                  <p>Based on hours spent vs. hours productive</p>
+                  
+                  <div className="demo-progress-fake mt-6">
+                    {skillDist.map((skill, i) => (
+                      <div key={i} className="demo-progress-row">
+                        <span className="demo-progress-label">{skill.label}</span>
+                        <div className="demo-progress-bar-wrap">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: skill.pct }}
+                            transition={{ duration: 1.4, delay: 0.2 + (i * 0.1), ease: [0.34, 1.56, 0.64, 1] }}
+                            className="demo-progress-fill"
+                            style={{ '--clr': skill.color } as React.CSSProperties}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Testimonials Placeholder */}
+                <div className="demo-card glass-card reveal" style={{ '--delay': '100ms' } as React.CSSProperties}>
+                  <span className="demo-emoji">⭐</span>
+                  <h3>System Testimonials</h3>
+                  <p>Encrypted peer-review logs</p>
+                  
+                  <div className="space-y-6 mt-6">
+                    <div className="p-4 rounded bg-white/[0.02] border border-white/5 italic text-sm text-white/40">
+                      "Highly efficient at making complex problems look simple... or sometimes vice versa."
+                      <div className="flex justify-between mt-3 not-italic">
+                        <span className="text-[10px] font-mono text-customCyan">@compiler_01</span>
+                        <div className="demo-stars">★★★★★</div>
+                      </div>
+                    </div>
+                    <div className="p-4 rounded bg-white/[0.02] border border-white/5 italic text-sm text-white/40">
+                      "Always ships on time (locally)."
+                      <div className="flex justify-between mt-3 not-italic">
+                        <span className="text-[10px] font-mono text-customCyan">@production_v5</span>
+                        <div className="demo-stars">★★★★★</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden"
-          >
-            <div className="demo-grid grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
-              {/* Skill Distribution */}
-              <div className="demo-card glass-card reveal">
-                <span className="demo-emoji block text-3xl mb-4">📊</span>
-                <h3 className="text-lg font-bold mb-2">Actual Skill Distribution</h3>
-                <p className="text-sm text-customTextMuted mb-6 italic">Based on hours spent vs. hours productive</p>
-                
-                <div className="demo-progress-fake space-y-4">
-                  {skillDist.map((skill, i) => (
-                    <div key={i} className="demo-progress-row flex items-center gap-4">
-                      <span className="demo-progress-label w-32 text-right font-mono text-[10px] uppercase text-customTextDim">{skill.label}</span>
-                      <div className="demo-progress-bar-wrap flex-grow h-1 bg-white/5 rounded-full overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={{ width: skill.pct }}
-                          transition={{ duration: 1.5, delay: 0.3 + (i * 0.1), ease: "easeOut" }}
-                          className="demo-progress-fill h-full rounded-full"
-                          style={{ background: skill.color, boxShadow: `0 0 10px ${skill.color}80` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Testimonials */}
-              <div className="demo-card glass-card reveal">
-                <span className="demo-emoji block text-3xl mb-4">⭐</span>
-                <h3 className="text-lg font-bold mb-4">Testimonials</h3>
-                
-                <div className="space-y-6">
-                  {testimonials.map((t, i) => (
-                    <div key={i} className="p-4 rounded-xl bg-black/40 border border-white/5 hover:border-white/10 transition-all">
-                      <p className="text-sm text-zinc-400 italic mb-4 leading-relaxed line-clamp-3">
-                        {t.text}
-                      </p>
-                      <div className="flex items-center justify-between">
-                         <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-zinc-600">{t.author}</span>
-                         <div className="demo-stars flex gap-1 text-yellow-500 text-xs">
-                           {[...Array(5)].map((_, idx) => (
-                             <span key={idx}>{idx < t.stars ? '★' : '☆'}</span>
-                           ))}
-                         </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Error Popup Quirk */}
+      {/* Persistence Error Popup Markup */}
       <div className={`error-popup ${showError ? 'visible' : ''}`}>
         <div className="error-popup-bar">
           <div className="error-popup-trafficlight red"></div>
           <div className="error-popup-trafficlight yellow"></div>
           <div className="error-popup-trafficlight green"></div>
-          <div className="error-popup-title">KERNEL EXCEPTION: DECRYPTION_FAILURE</div>
+          <div className="error-popup-title">KERNEL EXCEPTION</div>
         </div>
         <div className="error-popup-body">
-           <div className="flex flex-col">
-             <p className="error-popup-msg">SYSTEM_THREAD_EXCEPTION_NOT_HANDLED</p>
-             <p className="error-popup-trace opacity-50">
-               At 0x0000FF01 (experience.sys)<br />
-               Internal decrypt error: access_denied<br />
-               Experience log is missing or Corrupt.
-             </p>
-           </div>
+          <div className="error-popup-msg">DECRYPTION_FAILURE: SECTOR_404</div>
+          <p className="error-popup-trace mt-1">
+            Error at 0x8004210B (experience_log.sys)<br />
+            Interrupt: IRQL_NOT_LESS_OR_EQUAL<br />
+            Status: ACCESS_VOID
+          </p>
         </div>
         <div className="error-popup-timer">
           <motion.div 

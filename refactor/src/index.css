@@ -1,8 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @import './styles/base.css';
 @import './styles/components.css';
 @import './styles/sections.css';
@@ -13,6 +9,10 @@
 @import './styles/mobile.css';
 @import './styles/desktop.css';
 @import './styles/perf.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Ensure the body starts dark to prevent white flash if theme isn't on yet */
 body {
