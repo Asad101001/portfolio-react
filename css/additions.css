@@ -262,12 +262,12 @@
    CURRENTLY INTO — rotating items
    ══════════════════════════════════════════════════════════ */
 .currently-into-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 9px 12px; border-radius: 2px;
+  display: flex !important; flex-direction: row !important; align-items: center; gap: 14px;
+  padding: 10px 14px; border-radius: 4px;
   background: rgba(16,185,129,0.03);
   border: 1px solid rgba(16,185,129,0.1);
   transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
-  min-height: 54px;
+  min-height: 72px; /* Increased height for better fit */
 }
 .currently-into-item:hover {
   border-color: rgba(16,185,129,0.3);
@@ -275,15 +275,16 @@
   box-shadow: 0 0 20px rgba(16,185,129,0.1);
 }
 .currently-into-thumb {
-  width: 36px; height: 50px; border-radius: 3px; object-fit: cover;
+  width: 44px; height: 62px; border-radius: 4px; object-fit: cover;
   flex-shrink: 0; border: 1px solid rgba(255,255,255,0.08);
   display: none; background: rgba(255,255,255,0.04);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 .currently-into-thumb-placeholder {
-  width: 36px; height: 50px; border-radius: 3px;
+  width: 44px; height: 62px; border-radius: 4px;
   background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.12);
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.1rem; flex-shrink: 0;
+  font-size: 1.3rem; flex-shrink: 0;
 }
 .currently-into-text { flex: 1; min-width: 0; }
 .currently-into-label {
@@ -292,8 +293,12 @@
   font-family: 'JetBrains Mono', monospace; margin-bottom: 2px;
 }
 .currently-into-value {
-  font-size: 0.79rem; font-weight: 500; color: var(--text-muted);
-  line-height: 1.35; display: block;
+  font-size: 0.82rem; font-weight: 500; color: var(--text-muted);
+  line-height: 1.25; display: block;
+}
+.movie-timeline-label {
+  font-size: 0.62rem; color: rgba(255,255,255,0.4);
+  font-weight: 400; padding-left: 2px;
 }
 
 /* ── Rotation animation — smooth, directional, with depth ─ */
@@ -382,8 +387,8 @@
   top: 0;
   left: 0;
   right: 0;
-  padding: 12px 14px;
-  border-radius: 2px;
+  padding: 10px 14px;
+  border-radius: 4px;
   background: rgba(16,185,129,0.04);
   border: 1px solid rgba(16,185,129,0.12);
   opacity: 0;
@@ -391,10 +396,20 @@
   transition: opacity 0.4s ease, transform 0.4s ease;
   pointer-events: none;
   min-height: 85px; 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  display: flex !important; /* Ensure flex is used */
+  flex-direction: row !important; /* Override the column layout for most widgets */
+  align-items: center;
+  justify-content: flex-start !important;
   box-sizing: border-box;
+}
+
+.rotating-item.barca-slot {
+  flex-direction: column !important; /* Football needs column for its top label */
+  align-items: stretch !important;
+}
+
+.barca-top-row {
+  margin-bottom: 2px;
 }
 
 .rotating-item.active {
@@ -498,9 +513,15 @@
 
 .barca-layout-main {
   display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.barca-content-split {
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
 
 .barca-identity {
@@ -611,6 +632,42 @@
   width: 16px;
   height: 16px;
   object-fit: contain;
+}
+
+.barca-score-col-right {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  max-width: 120px;
+}
+
+.score-row-mini {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.65rem;
+  opacity: 0.55;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 3px 6px;
+  border-radius: 4px;
+  justify-content: space-between;
+}
+
+.score-row-mini.is-host {
+  opacity: 1;
+  font-weight: 800;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.score-team-abbr {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+}
+
+.is-host .score-team-abbr {
+  color: #fff;
 }
 
 /* live badge positioning */
@@ -1648,8 +1705,8 @@ section::before {
     justify-content: center;
     gap: 12px;
     padding: 9px !important;
-    min-width: 42px !important;
-    max-width: 42px !important; /* Start as icon only */
+    min-width: 48px !important; /* Slightly wider to prevent cutoff */
+    max-width: 48px !important; /* Start as icon only */
     width: auto;
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
@@ -2349,3 +2406,45 @@ section::before {
   50% { transform: translateY(-5px) scale(0.9); opacity: 0.5; }
   100% { transform: translateY(0) scale(1); opacity: 1; }
 }
+
+/* ── Footer Enrichment ─────────────────────────────────── */
+.footer-status-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.status-pulse-small {
+  width: 6px;
+  height: 6px;
+  background: #22c55e;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #22c55e;
+  animation: pulse-dot-small 2s ease-in-out infinite;
+}
+@keyframes pulse-dot-small {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.5; }
+}
+.footer-micro-meta {
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  opacity: 0.4;
+  margin-top: 4px;
+  text-align: right;
+  font-family: 'JetBrains Mono', monospace;
+}
+@media (max-width: 768px) {
+  .footer-status-wrap { justify-content: center; }
+  .footer-micro-meta { text-align: center; }
+}
+
+.footer-stack-icons i {
+  font-size: 1.1rem;
+  transition: transform 0.3s, filter 0.3s;
+}
+.footer-stack-icons i:hover {
+  transform: translateY(-3px) scale(1.2);
+  filter: drop-shadow(0 0 8px currentColor);
+}
+

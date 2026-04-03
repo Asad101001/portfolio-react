@@ -17,9 +17,14 @@ export const CONFIG = {
       { name: 'Nuno Mendes',     fallback: '⚽' }
     ],
     watchlist: [
-      { title: 'Dune: Part Two', fallback: 'https://m.media-amazon.com/images/M/MV5BODdjMjM3NGQtZDA5OC00NGE4LWIyZDQtZjYwOGZlMTM5ZTQ1XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg' },
-      { title: 'Spider-Man: Across the Spider-Verse', fallback: 'https://m.media-amazon.com/images/M/MV5BMzI0NmVkMjEtYmY4MS00ZDMxLTlkZmRE1MDhjYWQ1NDBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_FMjpg_UX1000_.jpg' },
-      { title: 'The Odyssey', fallback: 'https://m.media-amazon.com/images/M/MV5BZWQyOWFhNGItZDk5Ni00Y2U3LWEzNDktNmJmODYxMDA3ZGQyXkEyXkFqcGdeQXVyMDI2NDg0NQ@@._V1_FMjpg_UX1000_.jpg' }
+      { title: 'Dune: Part Two' },
+      { title: 'Spider-Man: Across the Spider-Verse' },
+      { title: 'The Odyssey' }
+    ],
+    seriesWatchlist: [
+      { title: 'Severance S03' },
+      { title: 'The Boys S05' },
+      { title: 'House of the Dragon S03' }
     ]
   }
 };
@@ -56,6 +61,51 @@ function _tvmazePoster(title) {
     })
     .catch(function() { return null; });
 }
+
+/**
+ * Universal time ago helper.
+ */
+function timeAgo(dateStr) {
+  if (!dateStr) return '';
+  var date = new Date(dateStr);
+  if (isNaN(date.getTime())) return '';
+  var diff = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (diff < 60)   return diff + 's ago';
+  if (diff < 3600)  return Math.floor(diff / 60) + 'm ago';
+  if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+  return Math.floor(diff / 86400) + 'd ago';
+}
+
+
+/**
+ * FIXED: Movie poster via iTunes Search API (no key required, CORS-safe)
+ */
+function _moviePoster(title) {
+  // Clean title for better matching
+  const clean = title.replace(/[:\-]/g, ' ').replace(/\s+/g, ' ').trim();
+  const search = function(term) {
+    return fetch('https://itunes.apple.com/search?term=' + encodeURIComponent(term) + '&media=movie&limit=1')
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(d) {
+        if (d && d.results && d.results[0] && d.results[0].artworkUrl100) {
+          return d.results[0].artworkUrl100.replace('100x100bb', '600x600bb');
+        }
+        return null;
+      });
+  };
+
+  return search(clean).then(function(res) {
+    if (res) return res;
+    // Fallback 1: Just first 2 words
+    const parts = clean.split(' ');
+    if (parts.length > 2) {
+      return search(parts.slice(0, 2).join(' '));
+    }
+    // Fallback 2: Just the title as is
+    return search(title);
+  }).catch(function() { return null; });
+}
+
 
 /**
  * FIXED: Artist image via iTunes Search API.
@@ -163,13 +213,7 @@ function _starsHTML(starsStr) {
   var REPO       = 'Asad101001/portfolio-v2';
   var GITHUB_API = 'https://api.github.com/repos/' + REPO + '/commits/main';
 
-  function timeAgo(dateStr) {
-    var diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
-    if (diff < 60)   return diff + 's ago';
-    if (diff < 3600)  return Math.floor(diff / 60) + 'm ago';
-    if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
-    return Math.floor(diff / 86400) + 'd ago';
-  }
+  function fetch(url, options) { return window.fetch(url, options); }
 
   fetch(GITHUB_API, { headers: { 'Accept': 'application/vnd.github.v3+json' } })
     .then(function(r) {
@@ -268,6 +312,25 @@ function _starsHTML(starsStr) {
               }
             }
             starsEl.innerHTML = _starsHTML(parsed.starsStr);
+
+            // Add timeline (time ago) next to stars
+            const pubDate = latest.pubDate || latest.pubdate || latest.date_published || latest.published;
+            if (pubDate) {
+              let timeEl = document.getElementById('movie-logged-time');
+              if (!timeEl) {
+                timeEl = document.createElement('span');
+                timeEl.id = 'movie-logged-time';
+                timeEl.className = 'movie-timeline-label';
+                // Find a container to append to (parsed.starsStr is stars)
+                if (starsEl) {
+                  starsEl.appendChild(timeEl);
+                }
+              }
+              timeEl.textContent = ' \u2022 ' + timeAgo(pubDate);
+              // Ensure starsEl layout is flex or similar to keep them on same line
+              starsEl.style.display = 'inline-flex';
+              starsEl.style.alignItems = 'center';
+            }
           }
         })
         .catch(function() {});
@@ -460,29 +523,26 @@ function _starsHTML(starsStr) {
 
     barcaItem.innerHTML =
       '<div class="barca-scorecard-wrap">' +
-        '<div class="barca-header-title">FOOTBALL</div>' +
         '<div class="barca-layout-main">' +
-          '<div class="barca-identity">' +
-            '<img src="' + barcaLogo + '" class="barca-main-logo" alt="FCB">' +
-            '<div class="barca-text-group">' +
-              '<span class="barca-pink-name">FC Barcelona</span>' +
-              '<span class="barca-mes-que">Més que un club</span>' +
-            '</div>' +
+          '<div class="barca-top-row">' +
+             '<span class="rotating-label currently-into-label">Watching Football</span>' +
           '</div>' +
-          '<div class="barca-score-section">' +
-            '<div class="score-row ' + (barcaIsHost ? 'is-host ' + barcaOutcomeClass : '') + '">' +
-              '<img src="' + (barcaIsHost ? barcaLogo : oppLogo) + '" class="tiny-logo">' +
-              '<span class="score-team-name">' + (barcaIsHost ? 'Barça' : oppName) + '</span>' +
-              '<div class="score-col">' +
+          '<div class="barca-content-split">' +
+            '<div class="barca-identity">' +
+              '<img src="' + barcaLogo + '" class="barca-main-logo" alt="FCB">' +
+              '<div class="barca-text-group">' +
+                '<span class="barca-pink-name">FC Barcelona</span>' +
+                '<span class="barca-mes-que">Més que un club</span>' +
+              '</div>' +
+            '</div>' +
+            '<div class="barca-score-col-right">' +
+              '<div class="score-row-mini ' + (barcaIsHost ? 'is-host ' + barcaOutcomeClass : '') + '">' +
+                '<span class="score-team-abbr">' + (barcaIsHost ? 'BAR' : oppName) + '</span>' +
                 '<span class="score-num">' + (barcaIsHost ? barca.score : opp.score) + '</span>' +
                 scorerHTML(hostScorers) +
               '</div>' +
-            '</div>' +
-            '<div class="score-vs-divider">VS</div>' +
-            '<div class="score-row ' + (!barcaIsHost ? 'is-host ' + barcaOutcomeClass : '') + '">' +
-              '<img src="' + (!barcaIsHost ? barcaLogo : oppLogo) + '" class="tiny-logo">' +
-              '<span class="score-team-name">' + (!barcaIsHost ? 'Barça' : oppName) + '</span>' +
-              '<div class="score-col">' +
+              '<div class="score-row-mini ' + (!barcaIsHost ? 'is-host ' + barcaOutcomeClass : '') + '">' +
+                '<span class="score-team-abbr">' + (!barcaIsHost ? 'BAR' : oppName) + '</span>' +
                 '<span class="score-num">' + (!barcaIsHost ? barca.score : opp.score) + '</span>' +
                 scorerHTML(awayScorers) +
               '</div>' +
@@ -1157,31 +1217,37 @@ function _starsHTML(starsStr) {
         }
 
         /* ── Series ── */
-        if (seriesEl) {
-          var names = data.shows && data.shows.length
-            ? data.shows.map(function(s) { return s.title; }).join(', ')
-            : '';
-          seriesEl.textContent = names;
+        /* ── Series (HARDCODED + API) ── */
+        if (seriesEl && CONFIG.big3.seriesWatchlist) {
+          // CLONE to avoid permanent pollution of CONFIG if desired, but here we merge.
+          var hardcodedSeries = [].concat(CONFIG.big3.seriesWatchlist);
+          var seriesTitles = hardcodedSeries.map(function(s) { return s.title; });
+          
+          if (data && data.shows && data.shows.length) {
+            data.shows.forEach(function(s) {
+              // Only add if not already present or if it's a different season variant
+              if (seriesTitles.indexOf(s.title) === -1) {
+                hardcodedSeries.push(s);
+              }
+            });
+          }
+          
+          seriesEl.textContent = hardcodedSeries.map(function(s) { return s.title; }).join(', ');
 
           var seriesThumbsEl = document.getElementById('big3-series-thumbs');
-          if (seriesThumbsEl && data.shows) {
+          if (seriesThumbsEl) {
             seriesThumbsEl.innerHTML = '';
-            data.shows.forEach(function(s) {
+            hardcodedSeries.forEach(function(s) {
               var wrap = document.createElement('div');
               wrap.className = 'media-thumb-card';
               wrap.title     = s.title;
 
-              if (s.poster) {
-                wrap.innerHTML = '<img class="media-thumb-img" src="' + s.poster + '" alt="' + s.title + '" loading="lazy" />';
-              } else {
-                wrap.innerHTML = '<div class="media-thumb-emoji">📺</div>';
-                // FIXED: multi-source TVmaze + iTunes fallback
-                _tvmazePoster(s.title).then(function(url) {
-                  if (url && wrap.parentNode) {
-                    wrap.innerHTML = '<img class="media-thumb-img" src="' + url + '" alt="' + s.title + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;" />';
-                  }
-                });
-              }
+              wrap.innerHTML = '<div class="media-thumb-emoji">📺</div>';
+              _tvmazePoster(s.title).then(function(url) {
+                if (url && wrap.parentNode) {
+                  wrap.innerHTML = '<img class="media-thumb-img" src="' + url + '" alt="' + s.title + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;" />';
+                }
+              });
 
               seriesThumbsEl.appendChild(wrap);
             });
@@ -1201,11 +1267,13 @@ function _starsHTML(starsStr) {
               wrap.className = 'media-thumb-card';
               wrap.title     = m.title;
               
-              if (m.fallback) {
-                wrap.innerHTML = '<img class="media-thumb-img" src="' + m.fallback + '" alt="' + m.title + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;" />';
-              } else {
-                wrap.innerHTML = '<div class="media-thumb-emoji">🎬</div>';
-              }
+              wrap.innerHTML = '<div class="media-thumb-emoji">🎬</div>';
+              _moviePoster(m.title).then(function(url) {
+                if (url && wrap.parentNode) {
+                  wrap.innerHTML = '<img class="media-thumb-img" src="' + url + '" alt="' + m.title + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;" />';
+                }
+              });
+
               movieThumbsEl.appendChild(wrap);
             });
           }
