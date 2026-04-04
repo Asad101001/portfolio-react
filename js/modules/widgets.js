@@ -22,9 +22,9 @@ export const CONFIG = {
       { title: 'The Odyssey' }
     ],
     seriesWatchlist: [
-      { title: 'Severance S03' },
-      { title: 'The Boys S05' },
-      { title: 'House of the Dragon S03' }
+      { title: 'Severance s3' },
+      { title: 'The Boys s5' },
+      { title: 'House of the Dragon s3' }
     ]
   }
 };
@@ -38,7 +38,10 @@ export const CONFIG = {
  * Falls back to iTunes TV show search for better coverage.
  */
 function _tvmazePoster(title) {
-  return fetch('https://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(title))
+  // Clean title: remove season info like 'S03', 's3' etc.
+  var clean = title.replace(/\s[sS]\d+/g, '').replace(/[:\-]/g, ' ').replace(/\s+/g, ' ').trim();
+
+  return fetch('https://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(clean))
     .then(function(r) { return r.ok ? r.json() : null; })
     .then(function(d) {
       return d && d.image ? (d.image.medium || d.image.original || null) : null;
@@ -47,7 +50,7 @@ function _tvmazePoster(title) {
       if (url) return url;
       // iTunes TV fallback — free, CORS-safe, no key
       return fetch(
-        'https://itunes.apple.com/search?term=' + encodeURIComponent(title) +
+        'https://itunes.apple.com/search?term=' + encodeURIComponent(clean) +
         '&media=tvShow&entity=tvSeason&limit=1'
       )
         .then(function(r) { return r.ok ? r.json() : null; })
@@ -91,6 +94,18 @@ function _moviePoster(title) {
           return d.results[0].artworkUrl100.replace('100x100bb', '600x600bb');
         }
         return null;
+      })
+      .then(function(res) {
+        if (res) return res;
+        // Fallback: TMDB-like search via iTunes if movie search fails (sometimes entity is musicVideo for trailers)
+        return fetch('https://itunes.apple.com/search?term=' + encodeURIComponent(term) + '&limit=1')
+          .then(function(r) { return r.ok ? r.json() : null; })
+          .then(function(d) {
+            if (d && d.results && d.results[0] && d.results[0].artworkUrl100) {
+              return d.results[0].artworkUrl100.replace('100x100bb', '600x600bb');
+            }
+            return null;
+          });
       });
   };
 
@@ -228,7 +243,7 @@ function _starsHTML(starsStr) {
       commitLine.style.opacity = '1';
     })
     .catch(function() {
-      commitLine.textContent = 'a1b2c3d feat: portfolio — latest build';
+      commitLine.textContent = 'a1b2c3d feat: portfolio - latest build';
       commitLine.style.opacity = '0.55';
     });
 })();
@@ -257,7 +272,7 @@ function _starsHTML(starsStr) {
                 if (readingPlaceholder) readingPlaceholder.style.display = 'none';
               }
               if (readingTitle) {
-                readingTitle.textContent = doc.title + (doc.author_name ? ' — ' + doc.author_name[0] : '');
+                readingTitle.textContent = doc.title + (doc.author_name ? ' - ' + doc.author_name[0] : '');
               }
             }
           } else if (query !== CONFIG.currently.reading.split(' ')[0]) {
@@ -458,23 +473,30 @@ function _starsHTML(starsStr) {
       .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
       .then(function(data){
         var scorerMap = {};
+        var redCardMap = {};
         var plays = data.scoringPlays || data.keyEvents || [];
         plays.forEach(function(play){
           var typeText = (play.type && play.type.text || play.type && play.type.name || '').toLowerCase();
-          if (typeText.indexOf('goal') === -1) return;
           var teamId = play.team && String(play.team.id || '');
           if (!teamId) return;
-          var athlete = play.participants && play.participants[0] && play.participants[0].athlete;
-          var name = athlete && (athlete.shortName || athlete.displayName);
-          if (!name) return;
-          var clock = play.clock && play.clock.displayValue || play.period && play.period.displayValue || '';
-          var entry = name + (clock ? ' ' + clock + "'" : '');
-          if (!scorerMap[teamId]) scorerMap[teamId] = [];
-          if (scorerMap[teamId].indexOf(entry) === -1) scorerMap[teamId].push(entry);
+
+          if (typeText.indexOf('goal') !== -1) {
+            var athlete = play.participants && play.participants[0] && play.participants[0].athlete;
+            var name = athlete && (athlete.shortName || athlete.displayName);
+            if (!name) return;
+            var clock = play.clock && play.clock.displayValue || play.period && play.period.displayValue || '';
+            var entry = name + (clock ? ' ' + clock + "'" : '');
+            if (!scorerMap[teamId]) scorerMap[teamId] = [];
+            if (scorerMap[teamId].indexOf(entry) === -1) scorerMap[teamId].push(entry);
+          }
+          
+          if (typeText.indexOf('red card') !== -1) {
+            redCardMap[teamId] = true;
+          }
         });
-        return scorerMap;
+        return { scorers: scorerMap, redCards: redCardMap };
       })
-      .catch(function(){ return {}; });
+      .catch(function(){ return { scorers: {}, redCards: {} }; });
   }
 
   function leagueSlugFromEvent(ev) {
@@ -493,23 +515,46 @@ function _starsHTML(starsStr) {
     return name;
   }
 
+  function getMatchTimeframe(matchDate, state) {
+    if (!matchDate) return '';
+    const d = new Date(matchDate);
+    const now = new Date();
+    
+    // Reset hours to compare dates only
+    const dStart = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    const nStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const diffDays = Math.round((nStart - dStart) / (1000 * 60 * 60 * 24));
+    
+    if (state === 'in') return 'Live Now';
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays === -1) return 'Tomorrow';
+    if (diffDays > 1 && diffDays < 7) return diffDays + ' days ago';
+    if (diffDays >= 7) return Math.floor(diffDays/7) + 'w ago';
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+  }
+
   function setBarcaDisplay(data) {
     var barca        = data.barca;
     var opp          = data.opp;
     var isLive       = data.isLive;
     var state        = data.state;
+    var matchDate    = data.date;
     var barcaIsHost  = data.barcaIsHost;
     var barcaScorers = data.barcaScorers || [];
     var oppScorers   = data.oppScorers   || [];
+    var barcaRed     = data.barcaRed;
+    var oppRed       = data.oppRed;
 
     var barcaScore = parseInt(barca.score) || 0;
     var oppScore   = parseInt(opp.score)   || 0;
     var emotion = '⚽';
-    var barcaOutcomeClass = '';
+    var barcaRowClass = '';
+    
     if (state === 'post') {
       emotion = barcaScore > oppScore ? '🎉' : barcaScore < oppScore ? '😢' : '😕';
-      if (barcaScore > oppScore) barcaOutcomeClass = 'barca-win-tint';
-      else if (barcaScore < oppScore) barcaOutcomeClass = 'barca-loss-tint';
+      if (barcaScore > oppScore) barcaRowClass = 'barca-win-tint-row';
+      else if (barcaScore < oppScore) barcaRowClass = 'barca-loss-tint-row';
     } else if (state === 'in') {
       emotion = '🔥';
     }
@@ -519,6 +564,10 @@ function _starsHTML(starsStr) {
 
     var hostScorers = barcaIsHost ? barcaScorers : oppScorers;
     var awayScorers = barcaIsHost ? oppScorers   : barcaScorers;
+    var hostRed     = barcaIsHost ? barcaRed     : oppRed;
+    var awayRed     = barcaIsHost ? oppRed       : barcaRed;
+    var hostLogo    = barcaIsHost ? barcaLogo    : oppLogo;
+    var awayLogo    = !barcaIsHost ? barcaLogo    : oppLogo;
     
     var barcaName   = 'FC Barcelona';
     var oppNameFull = (opp.team && formatTeam(opp.team)) || '---';
@@ -526,23 +575,30 @@ function _starsHTML(starsStr) {
     var hostName = barcaIsHost ? barcaName : oppNameFull;
     var awayName = !barcaIsHost ? barcaName : oppNameFull;
 
-    function scorerHTML(list) {
-      if (!list || !list.length) return '';
-      var shown = list.slice(0, 1); // Only 1 (as requested)
-      return '<div class="barca-scorers">' + shown[0] + '</div>';
+    var timeframe = getMatchTimeframe(matchDate, state);
+    var headerLabel = (state === 'pre') ? 'Matchday' : 'Watching Football';
+
+    function scorerAndRedHTML(list, hasRed) {
+      var scorers = '';
+      if (list && list.length) {
+        scorers = '<span class="barca-scorers">' + list.slice(0, 1)[0] + '</span>';
+      }
+      var red = hasRed ? '<span class="red-card-rect" title="Red Card"></span>' : '';
+      return '<div class="score-meta-left">' + scorers + red + '</div>';
     }
 
     barcaItem.innerHTML =
-      '<div class="barca-scorecard-wrap ' + barcaOutcomeClass + '">' +
+      '<div class="barca-scorecard-wrap">' +
         '<div class="barca-layout-main">' +
           '<div class="barca-top-row">' +
-             '<span class="rotating-label currently-into-label">Watching Football</span>' +
+             '<span class="rotating-label currently-into-label">' + headerLabel + '</span>' +
+             (timeframe ? '<span class="match-timeframe">' + timeframe + '</span>' : '') +
           '</div>' +
           '<div class="barca-content-split">' +
             '<div class="barca-identity">' +
               '<div class="barca-logo-wrap">' +
                 '<img src="' + barcaLogo + '" class="barca-main-logo" alt="FCB">' +
-                '<span class="barca-mini-tag">Barça</span>' +
+                '<span class="barca-mini-tag">Supporting</span>' +
               '</div>' +
               '<div class="barca-text-group">' +
                 '<span class="barca-pink-name">FC Barcelona</span>' +
@@ -552,21 +608,21 @@ function _starsHTML(starsStr) {
               '</div>' +
             '</div>' +
             '<div class="barca-score-col-right">' +
-              '<div class="score-row-mini ' + (barcaIsHost ? 'is-host' : '') + '">' +
+              '<div class="score-row-mini ' + (barcaIsHost ? 'is-host ' + barcaRowClass : '') + '">' +
                 '<div class="score-team-info">' +
-                  (barcaIsHost ? '<span class="home-icon">🏠</span>' : '') +
+                  '<img src="' + hostLogo + '" class="tiny-logo" alt="">' +
                   '<span class="score-team-abbr">' + hostName + '</span>' +
                 '</div>' +
+                scorerAndRedHTML(hostScorers, hostRed) +
                 '<span class="score-num">' + (barcaIsHost ? barca.score : opp.score) + '</span>' +
-                scorerHTML(hostScorers) +
               '</div>' +
-              '<div class="score-row-mini ' + (!barcaIsHost ? 'is-host' : '') + '">' +
+              '<div class="score-row-mini ' + (!barcaIsHost ? 'is-host ' + barcaRowClass : '') + '">' +
                 '<div class="score-team-info">' +
-                  (!barcaIsHost ? '<span class="home-icon">🏠</span>' : '') +
+                  '<img src="' + awayLogo + '" class="tiny-logo" alt="">' +
                   '<span class="score-team-abbr">' + awayName + '</span>' +
                 '</div>' +
+                scorerAndRedHTML(awayScorers, awayRed) +
                 '<span class="score-num">' + (!barcaIsHost ? barca.score : opp.score) + '</span>' +
-                scorerHTML(awayScorers) +
               '</div>' +
             '</div>' +
           '</div>' +
@@ -581,8 +637,8 @@ function _starsHTML(starsStr) {
       var badge = document.createElement('span');
       badge.className = 'barca-live-badge';
       badge.textContent = 'LIVE';
-      var headerTitle = barcaItem.querySelector('.barca-header-title');
-      if (headerTitle) headerTitle.after(badge);
+      var headerTarget = barcaItem.querySelector('.currently-into-label');
+      if (headerTarget) headerTarget.after(badge);
     } else {
       barcaItem.classList.remove('barca-live');
     }
@@ -625,17 +681,20 @@ function _starsHTML(starsStr) {
 
       var scorerPromise = (state === 'post' || state === 'in')
         ? fetchScorers(ev.id, slug)
-        : Promise.resolve({});
+        : Promise.resolve({ scorers: {}, redCards: {} });
 
-      scorerPromise.then(function(scorerMap){
+      scorerPromise.then(function(res){
         setBarcaDisplay({
           barca:        barca,
           opp:          opp,
           isLive:       state === 'in',
           state:        state,
+          date:         ev.date,
           barcaIsHost:  barca.homeAway === 'home',
-          barcaScorers: scorerMap[BARCA_ID] || [],
-          oppScorers:   opp ? (scorerMap[String(opp.team.id)] || []) : []
+          barcaScorers: (res.scorers && res.scorers[BARCA_ID]) || [],
+          oppScorers:   opp ? ((res.scorers && res.scorers[String(opp.team.id)]) || []) : [],
+          barcaRed:     (res.redCards && res.redCards[BARCA_ID]) || false,
+          oppRed:       opp ? ((res.redCards && res.redCards[String(opp.team.id)]) || false) : false
         });
       });
     }).catch(function(e){ console.warn('[Barca] fetch error:', e); });
