@@ -502,7 +502,8 @@ function _starsHTML(starsStr) {
             var name = athlete && (athlete.shortName || athlete.displayName);
             if (!name) return;
             var clock = play.clock && play.clock.displayValue || play.period && play.period.displayValue || '';
-            var entry = name + (clock ? ' ' + clock + "'" : '');
+            var cleanClock = clock.replace(/'/g, '');
+            var entry = name + (cleanClock ? ' ' + cleanClock + "'" : '');
             if (!scorerMap[teamId]) scorerMap[teamId] = [];
             if (scorerMap[teamId].indexOf(entry) === -1) scorerMap[teamId].push(entry);
           }
@@ -589,59 +590,68 @@ function _starsHTML(starsStr) {
     var barcaName   = 'FC Barcelona';
     var oppNameFull = (opp.team && formatTeam(opp.team)) || '---';
     
-    var hostName = barcaIsHost ? barcaName : oppNameFull;
-    var awayName = !barcaIsHost ? barcaName : oppNameFull;
-
-    var timeframe = getMatchTimeframe(matchDate, state);
+    // Corrected Home/Away Labeling
+    // Row 1 (Top) is always the "Home" team in standard layout, or matches original host/guest slots
+    // Row 1: Home Team, Row 2: Away Team
+    var team1 = barcaIsHost ? barcaName : oppNameFull;
+    var team2 = !barcaIsHost ? barcaName : oppNameFull;
+    var logo1 = barcaIsHost ? barcaLogo : oppLogo;
+    var logo2 = !barcaIsHost ? barcaLogo : oppLogo;
+    var score1 = barcaIsHost ? barca.score : opp.score;
+    var score2 = !barcaIsHost ? barca.score : opp.score;
     
-    // Header logic: Only say Matchday if it's TODAY
+    // Scorer details (Standardized format: Name Minute')
+    var s1 = (barcaIsHost ? barcaScorers : oppScorers).slice(-1)[0] || '';
+    var s2 = (!barcaIsHost ? barcaScorers : oppScorers).slice(-1)[0] || '';
+    
+    var timeframe = getMatchTimeframe(matchDate, state);
+    if (state === 'in') timeframe = '';
+
     const dObj = new Date(matchDate);
     const nObj = new Date();
     const dS   = new Date(dObj.getFullYear(), dObj.getMonth(), dObj.getDate());
     const nS   = new Date(nObj.getFullYear(), nObj.getMonth(), nObj.getDate());
     const diff = Math.round((nS - dS) / (1000 * 60 * 60 * 24));
     var headerLabel = (diff === 0) ? 'Matchday' : 'Watching Football';
-
-    function scorerAndRedHTML(list, hasRed) {
-      var scorers = '';
-      if (list && list.length) {
-        scorers = '<span class="barca-scorers">' + list.slice(0, 1)[0] + '</span>';
-      }
-      var red = hasRed ? '<span class="red-card-rect" title="Red Card"></span>' : '';
-      return '<div class="score-meta-left">' + scorers + red + '</div>';
-    }
-
-    // Pre-match digits as dashes
-    var hostScoreDisplay = (state === 'pre') ? '-' : (barcaIsHost ? barca.score : opp.score);
-    var awayScoreDisplay = (state === 'pre') ? '-' : (!barcaIsHost ? barca.score : opp.score);
-
+    
+    // Identity-based layout (Corrected Home/Away logic)
     barcaItem.innerHTML =
-      '<div class="barca-scorecard-wrap">' +
-        '<div class="barca-layout-main">' +
-          '<div class="barca-top-row">' +
-             '<span class="rotating-label currently-into-label">' + headerLabel + '</span>' +
-             (timeframe ? '<span class="match-timeframe">' + timeframe + '</span>' : '') +
-          '</div>' +
-          '<div class="barca-score-col-right centered-scorecard">' +
-            '<div class="score-row-mini ' + (barcaIsHost ? 'is-host ' + barcaRowClass : '') + '">' +
-              '<div class="score-team-info">' +
-                '<img src="' + hostLogo + '" class="tiny-logo" alt="">' +
-                '<span class="score-team-abbr">' + hostName + ' <small class="host-tag">' + (barcaIsHost ? 'Supporting' : '(H)') + '</small></span>' +
-              '</div>' +
-              scorerAndRedHTML(hostScorers, hostRed) +
-              '<span class="score-num">' + hostScoreDisplay + '</span>' +
+      '<div class="barca-scorecard-wrap ' + barcaRowClass + '">' +
+        '<div class="barca-top-row">' +
+          '<span class="rotating-label currently-into-label">' + headerLabel + '</span>' +
+          (state !== 'in' && timeframe ? '<span class="match-timeframe">' + timeframe + '</span>' : '') +
+        '</div>' +
+        '<div class="barca-content-layout-hybrid">' +
+          '<div class="barca-identity-side">' +
+            '<div class="barca-logo-wrap">' +
+              '<img src="' + barcaLogo + '" class="barca-main-logo" alt="">' +
+              '<span class="barca-mini-tag">SUPPORTING</span>' +
             '</div>' +
-            '<div class="score-row-mini ' + (!barcaIsHost ? 'is-host ' + barcaRowClass : '') + '">' +
+            '<div class="barca-name-stack">' +
+               '<span class="barca-name-pink">' + barcaName + '</span>' +
+               '<span class="barca-slogan-cyan">MÉS QUE UN CLUB</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="barca-score-rows-side">' +
+            '<div class="score-row-mini is-home-row">' +
               '<div class="score-team-info">' +
-                '<img src="' + awayLogo + '" class="tiny-logo" alt="">' +
-                '<span class="score-team-abbr">' + awayName + ' <small class="host-tag">' + (!barcaIsHost ? 'Supporting' : '') + '</small></span>' +
+                '<img src="' + logo1 + '" class="tiny-logo" alt="">' +
+                '<span class="score-team-abbr">' + team1 + ' <small class="host-tag">(H)</small></span>' +
               '</div>' +
-              scorerAndRedHTML(awayScorers, awayRed) +
-              '<span class="score-num">' + awayScoreDisplay + '</span>' +
+              (s1 ? '<span class="score-row-scorer">' + s1 + '</span>' : '') +
+              '<span class="score-num">' + (state === 'pre' ? '-' : score1) + '</span>' +
+            '</div>' +
+            '<div class="score-row-mini">' +
+              '<div class="score-team-info">' +
+                '<img src="' + logo2 + '" class="tiny-logo" alt="">' +
+                '<span class="score-team-abbr">' + team2 + '</span>' +
+              '</div>' +
+              (s2 ? '<span class="score-row-scorer">' + s2 + '</span>' : '') +
+              '<span class="score-num">' + (state === 'pre' ? '-' : score2) + '</span>' +
             '</div>' +
           '</div>' +
         '</div>' +
-        '<div class="barca-emotion-badge">' + emotion + '</div>' +
+        (state !== 'in' ? '<div class="barca-emotion-badge">' + emotion + '</div>' : '') +
       '</div>';
 
     var oldBadge = barcaItem.querySelector('.barca-live-badge');
