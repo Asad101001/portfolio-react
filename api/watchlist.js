@@ -9,6 +9,11 @@ export default async function handler(req, res) {
   const SIMKL_USER_ID = process.env.SIMKL_USER_ID;
   const sourceQuery = String(req.query?.source || '').toLowerCase();
 
+  function toHttpsUrl(url) {
+    if (!url || typeof url !== 'string') return null;
+    return url.replace(/^http:\/\//i, 'https://');
+  }
+
   async function getTMDBPoster(id, type) {
     if (!TMDB_API_KEY || !id) return null;
     try {
@@ -16,7 +21,7 @@ export default async function handler(req, res) {
       const tmdbRes = await fetch(url);
       if (!tmdbRes.ok) return null;
       const data = await tmdbRes.json();
-      return data.poster_path ? `https://image.tmdb.org/t/p/w200${data.poster_path}` : null;
+      return data.poster_path ? toHttpsUrl(`https://image.tmdb.org/t/p/w200${data.poster_path}`) : null;
     } catch (_) {
       return null;
     }
@@ -35,7 +40,7 @@ export default async function handler(req, res) {
       const r = await fetch(`https://api.tvmaze.com/singlesearch/shows?q=${encodeURIComponent(clean)}`);
       if (!r.ok) return null;
       const d = await r.json();
-      return d?.image?.medium || d?.image?.original || null;
+      return toHttpsUrl(d?.image?.medium || d?.image?.original || null);
     } catch (_) {
       return null;
     }

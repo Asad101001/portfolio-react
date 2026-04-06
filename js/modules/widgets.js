@@ -17,14 +17,14 @@ export const CONFIG = {
       { name: 'Nuno Mendes',     fallback: '⚽' }
     ],
     watchlist: [
-      { title: 'Dune: Part Three', poster: 'https://image.tmdb.org/t/p/original/8OAbx7S7uCqC35O5B6i4yZ6u6U.jpg' },
-      { title: 'The Odyssey', poster: 'https://image.tmdb.org/t/p/original/3S2WfX6W8AtRpxvDTcuBR_5.jpg' },
-      { title: 'Spider-Man: Brand New Day', poster: 'https://image.tmdb.org/t/p/original/spidey_concept.jpg' }
+      { title: 'Dune: Part Three' },
+      { title: 'The Odyssey' },
+      { title: 'Beyond the Spider-Verse' }
     ],
     seriesWatchlist: [
-      { title: 'Severance s3', poster: 'https://image.tmdb.org/t/p/original/qA97S9Y5IF79m9ojN9v7u96S9Py.jpg' },
-      { title: 'The Boys s5', poster: 'https://image.tmdb.org/t/p/original/7WsyChp6Y_yW_8AtRpxvDTcuBR_1.jpg' },
-      { title: 'House of the Dragon s3', poster: 'https://image.tmdb.org/t/p/original/z2Yp7oYp7Yp7Yp7Yp7Yp7Yp7Yp7Y.jpg' }
+      { title: 'Severance' },
+      { title: 'The Boys' },
+      { title: 'House of the Dragon' }
     ]
   }
 };
