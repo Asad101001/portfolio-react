@@ -54,7 +54,7 @@
   }
 
   // Dismiss after page is ready (steady loading duration)
-  var minDuration = 500;
+  var minDuration = 300;
   var startTime   = Date.now();
 
   function tryDismiss() {
@@ -73,7 +73,7 @@
     window.addEventListener('load', tryDismiss);
   }
 
-  // Hard cap: 1.5s max
-  setTimeout(dismiss, 1500);
+  // Hard cap: 0.8s max
+  setTimeout(dismiss, 800);
 
 })();
