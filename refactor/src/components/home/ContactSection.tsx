@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { useReveal } from '../../hooks/useReveal';
 import { 
   Github, 
@@ -24,7 +23,8 @@ export default function ContactSection() {
   useReveal();
 
   return (
-    <section id="contact">
+    <section id="contact" className="section-in">
+      <div className="ambient-glow"></div>
       <div className="section-inner">
         <div className="section-header centered">
           <p className="label-xs">Connect</p>
