@@ -54,6 +54,11 @@ function App() {
     return () => document.body.classList.remove('is-ready');
   }, []);
 
+  useEffect(() => {
+    document.body.classList.add('is-ready');
+    return () => document.body.classList.remove('is-ready');
+  }, []);
+
   return (
     <Router>
       <div className="min-h-screen flex flex-col relative w-full overflow-hidden bg-black selection:bg-customCyan/30 selection:text-white">
