@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { useTheme } from './hooks/useTheme';
+import { useSmoothScroll } from './hooks/useSmoothScroll';
 import { motion, AnimatePresence } from 'framer-motion';
 import Background from './components/layout/Background';
 import Overlays from './components/layout/Overlays';
@@ -8,8 +9,7 @@ import CertsDrawer from './components/layout/CertsDrawer';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import HomePage from './pages/HomePage';
-import ProjectAwsPage from './pages/ProjectAwsPage';
-import ProjectPrsPage from './pages/ProjectPrsPage';
+import ProjectDetailPage from './pages/ProjectDetailPage';
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -18,8 +18,7 @@ function AnimatedRoutes() {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/projects/aws" element={<ProjectAwsPage />} />
-        <Route path="/projects/prs" element={<ProjectPrsPage />} />
+        <Route path="/projects/:slug" element={<ProjectDetailPage />} />
         {/* Catch-all 404 */}
         <Route path="*" element={
           <motion.div 
@@ -48,6 +47,12 @@ function AnimatedRoutes() {
 
 function App() {
   const { theme, setTheme, rotateTheme } = useTheme();
+  useSmoothScroll();
+
+  useEffect(() => {
+    document.body.classList.add('is-ready');
+    return () => document.body.classList.remove('is-ready');
+  }, []);
 
   useEffect(() => {
     document.body.classList.add('is-ready');

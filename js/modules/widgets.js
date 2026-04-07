@@ -17,9 +17,14 @@ export const CONFIG = {
       { name: 'Nuno Mendes',     fallback: '⚽' }
     ],
     watchlist: [
-      { title: 'Dune: Part Two', fallback: 'https://m.media-amazon.com/images/M/MV5BODdjMjM3NGQtZDA5OC00NGE4LWIyZDQtZjYwOGZlMTM5ZTQ1XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg' },
-      { title: 'Spider-Man: Across the Spider-Verse', fallback: 'https://m.media-amazon.com/images/M/MV5BMzI0NmVkMjEtYmY4MS00ZDMxLTlkZmRE1MDhjYWQ1NDBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_FMjpg_UX1000_.jpg' },
-      { title: 'The Odyssey', fallback: 'https://m.media-amazon.com/images/M/MV5BZWQyOWFhNGItZDk5Ni00Y2U3LWEzNDktNmJmODYxMDA3ZGQyXkEyXkFqcGdeQXVyMDI2NDg0NQ@@._V1_FMjpg_UX1000_.jpg' }
+      { title: 'Dune: Part Three' },
+      { title: 'The Odyssey' },
+      { title: 'Beyond the Spider-Verse' }
+    ],
+    seriesWatchlist: [
+      { title: 'Severance' },
+      { title: 'The Boys' },
+      { title: 'House of the Dragon' }
     ]
   }
 };
@@ -28,34 +33,111 @@ export const CONFIG = {
    IMAGE / DATA UTILITY HELPERS — FIXED VERSION
    ══════════════════════════════════════════════════════════ */
 
+function _toHttpsUrl(url) {
+  if (!url || typeof url !== 'string') return null;
+  return url.replace(/^http:\/\//i, 'https://');
+}
+
 /**
  * TVmaze — free, no key, CORS-safe.
  * Falls back to iTunes TV show search for better coverage.
  */
 function _tvmazePoster(title) {
-  return fetch('https://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(title))
+  // 1. Clean title: remove EVERYTHING after ' s\d+' or ' Season \d+'
+  // We use split and then take the first part to be extra safe
+  var clean = title.replace(/\s[sS]\d+.*/g, '')
+                   .replace(/\sSeason\s\d+.*/gi, '')
+                   .replace(/[:\-]/g, ' ')
+                   .replace(/\s+/g, ' ')
+                   .trim();
+
+  var search = function(term) {
+    return fetch('https://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(term))
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(d) {
+        return d && d.image ? _toHttpsUrl(d.image.medium || d.image.original || null) : null;
+      })
+      .then(function(url) {
+        if (url) return url;
+        // iTunes TV fallback — free, CORS-safe, no key
+        return fetch(
+          'https://itunes.apple.com/search?term=' + encodeURIComponent(term) +
+          '&media=tvShow&entity=tvSeason&limit=1'
+        )
+          .then(function(r) { return r.ok ? r.json() : null; })
+          .then(function(d) {
+            if (d && d.results && d.results[0] && d.results[0].artworkUrl100) {
+              return _toHttpsUrl(d.results[0].artworkUrl100.replace('100x100bb', '600x600bb'));
+            }
+            return null;
+          })
+          .catch(function() { return null; });
+      })
+      .catch(function() { return null; });
+  };
+
+  return search(clean).then(function(res) {
+    if (res) return res;
+    // Fallback: If 3+ words, try first 2
+    var parts = clean.split(' ');
+    if (parts.length > 2) {
+      return search(parts.slice(0, 2).join(' '));
+    }
+    return null;
+  });
+}
+
+/**
+ * Universal time ago helper.
+ */
+function timeAgo(dateStr) {
+  if (!dateStr) return '';
+  var date = new Date(dateStr);
+  if (isNaN(date.getTime())) return '';
+  var diff = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (diff < 60)   return diff + 's ago';
+  if (diff < 3600)  return Math.floor(diff / 60) + 'm ago';
+  if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+  return Math.floor(diff / 86400) + 'd ago';
+}
+
+
+/**
+ * FIXED: Movie poster via Wikipedia Rest API (primary) + iTunes fallback.
+ * Wikipedia is excellent for finding high-quality "main" images for films.
+ */
+function _moviePoster(title) {
+  var clean = title.replace(/[:\-]/g, ' ').replace(/\s+/g, ' ').trim();
+  var wikiSlug = clean.replace(/ /g, '_');
+
+  var wikiFetch = fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(wikiSlug))
     .then(function(r) { return r.ok ? r.json() : null; })
     .then(function(d) {
-      return d && d.image ? (d.image.medium || d.image.original || null) : null;
-    })
-    .then(function(url) {
-      if (url) return url;
-      // iTunes TV fallback — free, CORS-safe, no key
-      return fetch(
-        'https://itunes.apple.com/search?term=' + encodeURIComponent(title) +
-        '&media=tvShow&entity=tvSeason&limit=1'
-      )
-        .then(function(r) { return r.ok ? r.json() : null; })
-        .then(function(d) {
-          if (d && d.results && d.results[0] && d.results[0].artworkUrl100) {
-            return d.results[0].artworkUrl100.replace('100x100bb', '600x600bb');
-          }
-          return null;
-        })
-        .catch(function() { return null; });
-    })
-    .catch(function() { return null; });
+      return (d && d.thumbnail && d.thumbnail.source) ? _toHttpsUrl(d.thumbnail.source) : null;
+    });
+
+  var itunesFetch = function(term) {
+    return fetch('https://itunes.apple.com/search?term=' + encodeURIComponent(term) + '&media=movie&limit=1')
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(d) {
+        if (d && d.results && d.results[0] && d.results[0].artworkUrl100) {
+          return _toHttpsUrl(d.results[0].artworkUrl100.replace('100x100bb', '600x600bb'));
+        }
+        return null;
+      });
+  };
+
+  return wikiFetch.then(function(res) {
+    if (res) return res;
+    return itunesFetch(clean).then(function(res2) {
+      if (res2) return res2;
+      var parts = clean.split(' ');
+      if (parts.length > 2) return itunesFetch(parts.slice(0, 2).join(' '));
+      return null;
+    });
+  }).catch(function() { return null; });
 }
+
 
 /**
  * FIXED: Artist image via iTunes Search API.
@@ -63,34 +145,36 @@ function _tvmazePoster(title) {
  * iTunes is fully CORS-safe, no API key, returns high-quality artwork.
  */
 function _artistImage(name) {
-  // Try Wikipedia Rest Summary First (Often has better portrait shots for modern artists like Playboi Carti)
-  return fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(name))
+  var FALLBACK_SVG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%23333"><rect width="100%" height="100%"/><text x="50" y="55" font-family="sans-serif" font-size="40" text-anchor="middle" fill="%23666">🎵</text></svg>';
+
+  // 1. Try TheAudioDB first (dedicated artist portraits)
+  return fetch('https://www.theaudiodb.com/api/v1/json/2/search.php?s=' + encodeURIComponent(name))
     .then(function(r) { return r.ok ? r.json() : null; })
     .then(function(d) {
-      if (d && d.thumbnail && d.thumbnail.source) return d.thumbnail.source;
+      if (d && d.artists && d.artists[0] && d.artists[0].strArtistThumb) {
+        return d.artists[0].strArtistThumb;
+      }
       
-      // Fallback: iTunes musicArtist Entity
+      // 2. iTunes musicArtist search (fast, no key, good modern artist coverage)
       return fetch('https://itunes.apple.com/search?term=' + encodeURIComponent(name) + '&entity=musicArtist&limit=1')
         .then(function(r) { return r.ok ? r.json() : null; })
         .then(function(d2) {
           if (d2 && d2.results && d2.results[0] && d2.results[0].artworkUrl100) {
-            return d2.results[0].artworkUrl100.replace('100x100bb', '400x400bb');
+            return d2.results[0].artworkUrl100.replace('100x100bb', '600x600bb');
           }
-          // Generic audioDB/iTunes song fallback if portrait still misses
-          return fetch('https://itunes.apple.com/search?term=' + encodeURIComponent(name) + '&entity=song&limit=1')
+
+          // 3. Wikipedia Rest Summary fallback
+          return fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(name))
             .then(function(r) { return r.ok ? r.json() : null; })
             .then(function(d3) {
-              if (d3 && d3.results && d3.results[0] && d3.results[0].artworkUrl100) {
-                return d3.results[0].artworkUrl100.replace('100x100bb', '400x400bb');
-              }
-              // Absolute final fallback so it doesn't break UI layout (placeholder grey image)
-              return 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%23333"><rect width="100%" height="100%"/><text x="50" y="55" font-family="sans-serif" font-size="40" text-anchor="middle" fill="%23666">🎵</text></svg>';
-            });
-        });
+              if (d3 && d3.thumbnail && d3.thumbnail.source) return _toHttpsUrl(d3.thumbnail.source);
+              return FALLBACK_SVG;
+            })
+            .catch(function() { return FALLBACK_SVG; });
+        })
+        .catch(function() { return FALLBACK_SVG; });
     })
-    .catch(function() { 
-      return 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%23333"><rect width="100%" height="100%"/><text x="50" y="55" font-family="sans-serif" font-size="40" text-anchor="middle" fill="%23666">🎵</text></svg>';
-    });
+    .catch(function() { return FALLBACK_SVG; });
 }
 
 /**
@@ -113,7 +197,7 @@ function _sportsdbPlayer(pObj) {
       return fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(wikiQ))
         .then(function(r) { return r.ok ? r.json() : null; })
         .then(function(d2) {
-          return (d2 && d2.thumbnail && d2.thumbnail.source) ? d2.thumbnail.source : null;
+          return (d2 && d2.thumbnail && d2.thumbnail.source) ? _toHttpsUrl(d2.thumbnail.source) : null;
         });
     })
     .catch(function() { return null; });
@@ -163,13 +247,7 @@ function _starsHTML(starsStr) {
   var REPO       = 'Asad101001/portfolio-v2';
   var GITHUB_API = 'https://api.github.com/repos/' + REPO + '/commits/main';
 
-  function timeAgo(dateStr) {
-    var diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
-    if (diff < 60)   return diff + 's ago';
-    if (diff < 3600)  return Math.floor(diff / 60) + 'm ago';
-    if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
-    return Math.floor(diff / 86400) + 'd ago';
-  }
+  function fetch(url, options) { return window.fetch(url, options); }
 
   fetch(GITHUB_API, { headers: { 'Accept': 'application/vnd.github.v3+json' } })
     .then(function(r) {
@@ -184,7 +262,7 @@ function _starsHTML(starsStr) {
       commitLine.style.opacity = '1';
     })
     .catch(function() {
-      commitLine.textContent = 'a1b2c3d feat: portfolio — latest build';
+      commitLine.textContent = 'a1b2c3d feat: portfolio - latest build';
       commitLine.style.opacity = '0.55';
     });
 })();
@@ -213,7 +291,7 @@ function _starsHTML(starsStr) {
                 if (readingPlaceholder) readingPlaceholder.style.display = 'none';
               }
               if (readingTitle) {
-                readingTitle.textContent = doc.title + (doc.author_name ? ' — ' + doc.author_name[0] : '');
+                readingTitle.textContent = doc.title + (doc.author_name ? ' - ' + doc.author_name[0] : '');
               }
             }
           } else if (query !== CONFIG.currently.reading.split(' ')[0]) {
@@ -268,6 +346,25 @@ function _starsHTML(starsStr) {
               }
             }
             starsEl.innerHTML = _starsHTML(parsed.starsStr);
+
+            // Add timeline (time ago) next to stars
+            const pubDate = latest.pubDate || latest.pubdate || latest.date_published || latest.published;
+            if (pubDate) {
+              let timeEl = document.getElementById('movie-logged-time');
+              if (!timeEl) {
+                timeEl = document.createElement('span');
+                timeEl.id = 'movie-logged-time';
+                timeEl.className = 'movie-timeline-label';
+                // Find a container to append to (parsed.starsStr is stars)
+                if (starsEl) {
+                  starsEl.appendChild(timeEl);
+                }
+              }
+              timeEl.textContent = ' \u2022 ' + timeAgo(pubDate);
+              // Ensure starsEl layout is flex or similar to keep them on same line
+              starsEl.style.display = 'inline-flex';
+              starsEl.style.alignItems = 'center';
+            }
           }
         })
         .catch(function() {});
@@ -315,8 +412,13 @@ function _starsHTML(starsStr) {
           var progressWrap = document.getElementById('tv-progress-wrap');
           var progressFill = document.getElementById('tv-progress-fill');
           if (progressWrap && progressFill) {
-            progressWrap.style.display = 'block';
-            progressFill.style.width   = data.watching ? '45%' : '100%';
+            if (data.progress != null) {
+              progressWrap.style.display = 'block';
+              progressFill.style.width   = data.progress + '%';
+            } else {
+              progressFill.style.width   = data.watching ? '45%' : '100%';
+              progressWrap.style.display = data.watching ? 'block' : 'none';
+            }
           }
 
           if (data.poster && tvPoster) {
@@ -389,29 +491,51 @@ function _starsHTML(starsStr) {
     return out;
   }
 
+  function _shortName(fullName) {
+    if (!fullName) return '';
+    // For names like "R. Lewandowski" keep as-is, otherwise take last word
+    var parts = fullName.split(' ');
+    if (parts.length === 1) return fullName;
+    // If first part is initial (single char or with dot), return as-is shortened
+    if (parts[0].length <= 2) return parts[parts.length - 1];
+    // Otherwise return just the last name
+    return parts[parts.length - 1];
+  }
+
   function fetchScorers(eventId, leagueSlug) {
     var url = 'https://site.api.espn.com/apis/site/v2/sports/soccer/' + leagueSlug + '/summary?event=' + eventId;
     return fetch(url)
       .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
       .then(function(data){
         var scorerMap = {};
+        var redCardMap = {};
         var plays = data.scoringPlays || data.keyEvents || [];
+
         plays.forEach(function(play){
           var typeText = (play.type && play.type.text || play.type && play.type.name || '').toLowerCase();
-          if (typeText.indexOf('goal') === -1) return;
           var teamId = play.team && String(play.team.id || '');
           if (!teamId) return;
-          var athlete = play.participants && play.participants[0] && play.participants[0].athlete;
-          var name = athlete && (athlete.shortName || athlete.displayName);
-          if (!name) return;
-          var clock = play.clock && play.clock.displayValue || play.period && play.period.displayValue || '';
-          var entry = name + (clock ? ' ' + clock + "'" : '');
-          if (!scorerMap[teamId]) scorerMap[teamId] = [];
-          if (scorerMap[teamId].indexOf(entry) === -1) scorerMap[teamId].push(entry);
+
+          if (typeText.indexOf('goal') !== -1) {
+            var athlete = play.participants && play.participants[0] && play.participants[0].athlete;
+            var rawName = athlete && (athlete.shortName || athlete.displayName);
+            if (!rawName) return;
+            var name = _shortName(rawName);
+            var clock = play.clock && play.clock.displayValue || play.period && play.period.displayValue || '';
+            var cleanClock = clock.replace(/'/g, '');
+            var entry = name + (cleanClock ? ' ' + cleanClock + "'" : '');
+            if (!scorerMap[teamId]) scorerMap[teamId] = [];
+            if (scorerMap[teamId].indexOf(entry) === -1) scorerMap[teamId].push(entry);
+          }
+
+          if (typeText.indexOf('red') !== -1) {
+            redCardMap[teamId] = (redCardMap[teamId] || 0) + 1;
+          }
         });
-        return scorerMap;
+
+        return { scorers: scorerMap, redCards: redCardMap };
       })
-      .catch(function(){ return {}; });
+      .catch(function(){ return { scorers: {}, redCards: {} }; });
   }
 
   function leagueSlugFromEvent(ev) {
@@ -423,23 +547,58 @@ function _starsHTML(starsStr) {
     return 'esp.1';
   }
 
+  function formatTeam(team) {
+    if (!team) return '???';
+    var name = team.shortDisplayName || team.displayName || team.name || '';
+    if (name.length > 11) return team.abbreviation || name.slice(0, 3).toUpperCase();
+    return name;
+  }
+
+  function getMatchTimeframe(matchDate, state) {
+    if (!matchDate) return '';
+    const d = new Date(matchDate);
+    const now = new Date();
+    
+    // Reset hours to compare dates only
+    const dStart = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    const nStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const diffDays = Math.round((nStart - dStart) / (1000 * 60 * 60 * 24));
+    
+    if (state === 'in') return 'Live Now';
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays === -1) return 'Tomorrow';
+    if (diffDays > 1 && diffDays < 7) return diffDays + ' days ago';
+    if (diffDays >= 7) return Math.floor(diffDays/7) + 'w ago';
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+  }
+
+  function compactEventList(entries, limit) {
+    var list = Array.isArray(entries) ? entries.filter(Boolean) : [];
+    if (!list.length) return '';
+    if (list.length <= limit) return list.join(', ');
+    var overflow = list.length - limit;
+    return list.slice(0, limit).join(', ') + ' +' + overflow;
+  }
+
   function setBarcaDisplay(data) {
     var barca        = data.barca;
     var opp          = data.opp;
     var isLive       = data.isLive;
     var state        = data.state;
+    var matchDate    = data.date;
     var barcaIsHost  = data.barcaIsHost;
     var barcaScorers = data.barcaScorers || [];
     var oppScorers   = data.oppScorers   || [];
+    var barcaRedCards = data.barcaRedCards || 0;
+    var oppRedCards   = data.oppRedCards   || 0;
 
     var barcaScore = parseInt(barca.score) || 0;
     var oppScore   = parseInt(opp.score)   || 0;
     var emotion = '⚽';
-    var barcaOutcomeClass = '';
+    
     if (state === 'post') {
       emotion = barcaScore > oppScore ? '🎉' : barcaScore < oppScore ? '😢' : '😕';
-      if (barcaScore > oppScore) barcaOutcomeClass = 'barca-win-tint';
-      else if (barcaScore < oppScore) barcaOutcomeClass = 'barca-loss-tint';
     } else if (state === 'in') {
       emotion = '🔥';
     }
@@ -447,49 +606,72 @@ function _starsHTML(starsStr) {
     var barcaLogo = 'https://a.espncdn.com/i/teamlogos/soccer/500/83.png';
     var oppLogo   = (opp.team && opp.team.logo) || 'https://a.espncdn.com/i/teamlogos/soccer/500/default.png';
 
-    function scorerHTML(list) {
-      if (!list || !list.length) return '';
-      var shown = list.slice(0, 3);
-      var extra = list.length > 3 ? ' +' + (list.length - 3) : '';
-      return '<div class="barca-scorers">' + shown.join(' · ') + extra + '</div>';
-    }
+    var barcaName   = 'FC Barcelona';
+    var oppNameFull = (opp.team && formatTeam(opp.team)) || '---';
+    
+    // Row 1: Home Team, Row 2: Away Team
+    var team1 = barcaIsHost ? barcaName : oppNameFull;
+    var team2 = !barcaIsHost ? barcaName : oppNameFull;
+    var logo1 = barcaIsHost ? barcaLogo : oppLogo;
+    var logo2 = !barcaIsHost ? barcaLogo : oppLogo;
+    var score1 = barcaIsHost ? barca.score : opp.score;
+    var score2 = !barcaIsHost ? barca.score : opp.score;
+    
+    var s1 = compactEventList(barcaIsHost ? barcaScorers : oppScorers, 2);
+    var s2 = compactEventList(!barcaIsHost ? barcaScorers : oppScorers, 2);
+    var red1 = barcaIsHost ? barcaRedCards : oppRedCards;
+    var red2 = !barcaIsHost ? barcaRedCards : oppRedCards;
+    
+    var timeframe = getMatchTimeframe(matchDate, state);
+    if (state === 'in') timeframe = '';
 
-    var hostScorers = barcaIsHost ? barcaScorers : oppScorers;
-    var awayScorers = barcaIsHost ? oppScorers   : barcaScorers;
-    var oppName     = (opp.team && (opp.team.abbreviation || opp.team.shortDisplayName)) || '---';
-
+    const dObj = new Date(matchDate);
+    const nObj = new Date();
+    const dS   = new Date(dObj.getFullYear(), dObj.getMonth(), dObj.getDate());
+    const nS   = new Date(nObj.getFullYear(), nObj.getMonth(), nObj.getDate());
+    const diff = Math.round((nS - dS) / (1000 * 60 * 60 * 24));
+    var headerLabel = (diff === 0) ? 'Matchday' : 'Watching Football';
+    
+    // Identity column layout: logo on top, name+slogan below
     barcaItem.innerHTML =
       '<div class="barca-scorecard-wrap">' +
-        '<div class="barca-header-title">FOOTBALL</div>' +
-        '<div class="barca-layout-main">' +
-          '<div class="barca-identity">' +
-            '<img src="' + barcaLogo + '" class="barca-main-logo" alt="FCB">' +
-            '<div class="barca-text-group">' +
-              '<span class="barca-pink-name">FC Barcelona</span>' +
-              '<span class="barca-mes-que">Més que un club</span>' +
+        '<div class="barca-top-row">' +
+          '<span class="rotating-label currently-into-label">' + headerLabel + '</span>' +
+          (state !== 'in' && timeframe ? '<span class="match-timeframe">' + timeframe + '</span>' : '') +
+        '</div>' +
+        '<div class="barca-content-layout-hybrid">' +
+          '<div class="barca-identity-side">' +
+            '<div class="barca-logo-wrap">' +
+              '<img src="' + barcaLogo + '" class="barca-main-logo" alt="">' +
+              '<span class="barca-mini-tag">SUPPORTING</span>' +
+            '</div>' +
+            '<div class="barca-name-stack">' +
+               '<span class="barca-name-pink">FC Barcelona</span>' +
+               '<span class="barca-slogan-cyan">MÉS QUE UN CLUB</span>' +
             '</div>' +
           '</div>' +
-          '<div class="barca-score-section">' +
-            '<div class="score-row ' + (barcaIsHost ? 'is-host ' + barcaOutcomeClass : '') + '">' +
-              '<img src="' + (barcaIsHost ? barcaLogo : oppLogo) + '" class="tiny-logo">' +
-              '<span class="score-team-name">' + (barcaIsHost ? 'Barça' : oppName) + '</span>' +
-              '<div class="score-col">' +
-                '<span class="score-num">' + (barcaIsHost ? barca.score : opp.score) + '</span>' +
-                scorerHTML(hostScorers) +
+          '<div class="barca-score-rows-side">' +
+            '<div class="score-row-mini is-home-row">' +
+              '<div class="score-team-info">' +
+                '<img src="' + logo1 + '" class="tiny-logo" alt="">' +
+                '<span class="score-team-abbr">' + team1 + ' <small class="host-tag">(H)</small></span>' +
               '</div>' +
+              (s1 ? '<span class="score-row-scorer">' + s1 + '</span>' : '') +
+              (red1 ? '<span class="score-row-card" title="Red cards">🟥' + (red1 > 1 ? ' x' + red1 : '') + '</span>' : '') +
+              '<span class="score-num">' + (state === 'pre' ? '-' : score1) + '</span>' +
             '</div>' +
-            '<div class="score-vs-divider">VS</div>' +
-            '<div class="score-row ' + (!barcaIsHost ? 'is-host ' + barcaOutcomeClass : '') + '">' +
-              '<img src="' + (!barcaIsHost ? barcaLogo : oppLogo) + '" class="tiny-logo">' +
-              '<span class="score-team-name">' + (!barcaIsHost ? 'Barça' : oppName) + '</span>' +
-              '<div class="score-col">' +
-                '<span class="score-num">' + (!barcaIsHost ? barca.score : opp.score) + '</span>' +
-                scorerHTML(awayScorers) +
+            '<div class="score-row-mini">' +
+              '<div class="score-team-info">' +
+                '<img src="' + logo2 + '" class="tiny-logo" alt="">' +
+                '<span class="score-team-abbr">' + team2 + '</span>' +
               '</div>' +
+              (s2 ? '<span class="score-row-scorer">' + s2 + '</span>' : '') +
+              (red2 ? '<span class="score-row-card" title="Red cards">🟥' + (red2 > 1 ? ' x' + red2 : '') + '</span>' : '') +
+              '<span class="score-num">' + (state === 'pre' ? '-' : score2) + '</span>' +
             '</div>' +
           '</div>' +
         '</div>' +
-        '<div class="barca-emotion-badge">' + emotion + '</div>' +
+        (state !== 'in' ? '<div class="barca-emotion-badge">' + emotion + '</div>' : '') +
       '</div>';
 
     var oldBadge = barcaItem.querySelector('.barca-live-badge');
@@ -499,8 +681,8 @@ function _starsHTML(starsStr) {
       var badge = document.createElement('span');
       badge.className = 'barca-live-badge';
       badge.textContent = 'LIVE';
-      var headerTitle = barcaItem.querySelector('.barca-header-title');
-      if (headerTitle) headerTitle.after(badge);
+      var headerTarget = barcaItem.querySelector('.currently-into-label');
+      if (headerTarget) headerTarget.after(badge);
     } else {
       barcaItem.classList.remove('barca-live');
     }
@@ -543,17 +725,20 @@ function _starsHTML(starsStr) {
 
       var scorerPromise = (state === 'post' || state === 'in')
         ? fetchScorers(ev.id, slug)
-        : Promise.resolve({});
+        : Promise.resolve({ scorers: {}, redCards: {} });
 
-      scorerPromise.then(function(scorerMap){
+      scorerPromise.then(function(res){
         setBarcaDisplay({
           barca:        barca,
           opp:          opp,
           isLive:       state === 'in',
           state:        state,
+          date:         ev.date,
           barcaIsHost:  barca.homeAway === 'home',
-          barcaScorers: scorerMap[BARCA_ID] || [],
-          oppScorers:   opp ? (scorerMap[String(opp.team.id)] || []) : []
+          barcaScorers: (res.scorers && res.scorers[BARCA_ID]) || [],
+          oppScorers:   opp ? ((res.scorers && res.scorers[String(opp.team.id)]) || []) : [],
+          barcaRedCards: (res.redCards && res.redCards[BARCA_ID]) || 0,
+          oppRedCards: opp ? ((res.redCards && res.redCards[String(opp.team.id)]) || 0) : 0
         });
       });
     }).catch(function(e){ console.warn('[Barca] fetch error:', e); });
@@ -1144,7 +1329,97 @@ function _starsHTML(starsStr) {
   }
   fetchArtists();
 
-  /* ── WATCHLIST (Trakt API) — TVmaze + iTunes fallback for series posters ── */
+  /* ── WATCHLIST (Dynamic provider API + local fallback) ── */
+  function mergeWatchlistItems(dynamicItems, fallbackItems) {
+    var out = [];
+    var seen = {};
+
+    (dynamicItems || []).forEach(function(item) {
+      var key = (item && item.title ? item.title : '').toLowerCase();
+      if (!key || seen[key]) return;
+      seen[key] = true;
+      out.push(item);
+    });
+
+    (fallbackItems || []).forEach(function(item) {
+      var normalized = typeof item === 'string' ? { title: item } : item;
+      var key = (normalized && normalized.title ? normalized.title : '').toLowerCase();
+      if (!key || seen[key]) return;
+      seen[key] = true;
+      out.push(normalized);
+    });
+
+    return out;
+  }
+
+  function compactTitles(items, maxVisible) {
+    var titles = (items || []).map(function(i) { return i && i.title; }).filter(Boolean);
+    if (!titles.length) return 'No items synced';
+    if (titles.length <= maxVisible) return titles.join(', ');
+    return titles.slice(0, maxVisible).join(', ') + ' +' + (titles.length - maxVisible);
+  }
+
+  function renderSeries(seriesItems) {
+    if (!seriesEl) return;
+
+    seriesEl.textContent = compactTitles(seriesItems, 4);
+
+    var seriesThumbsEl = document.getElementById('big3-series-thumbs');
+    if (!seriesThumbsEl) return;
+
+    seriesThumbsEl.innerHTML = '';
+    seriesItems.slice(0, 3).forEach(function(s) {
+      var wrap = document.createElement('div');
+      wrap.className = 'media-thumb-card';
+      wrap.title = s.title;
+      wrap.innerHTML = '<div class="media-thumb-emoji">📺</div>';
+
+      var directPoster = s.poster || null;
+      var posterPromise = directPoster ? Promise.resolve(directPoster) : _tvmazePoster(s.title);
+      posterPromise.then(function(url) {
+        if (url && wrap.parentNode) {
+          wrap.innerHTML = '<img class="media-thumb-img" src="' + url + '" alt="' + s.title + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;" />';
+        }
+      }).catch(function() {});
+
+      if (s.progress != null) {
+        var barCont = document.createElement('div');
+        barCont.className = 'media-thumb-progress-cont';
+        barCont.innerHTML = '<div class="media-thumb-progress-fill" style="width:' + s.progress + '%"></div>';
+        wrap.appendChild(barCont);
+      }
+
+      seriesThumbsEl.appendChild(wrap);
+    });
+  }
+
+  function renderMovies(movieItems) {
+    if (!watchlistEl) return;
+
+    watchlistEl.textContent = compactTitles(movieItems, 4);
+
+    var movieThumbsEl = document.getElementById('big3-movie-thumbs');
+    if (!movieThumbsEl) return;
+
+    movieThumbsEl.innerHTML = '';
+    movieItems.slice(0, 3).forEach(function(m) {
+      var wrap = document.createElement('div');
+      wrap.className = 'media-thumb-card';
+      wrap.title = m.title;
+      wrap.innerHTML = '<div class="media-thumb-emoji">🎬</div>';
+
+      var directPoster = m.poster || m.fallback || null;
+      var posterPromise = directPoster ? Promise.resolve(directPoster) : _moviePoster(m.title);
+      posterPromise.then(function(url) {
+        if (url && wrap.parentNode) {
+          wrap.innerHTML = '<img class="media-thumb-img" src="' + url + '" alt="' + m.title + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;" />';
+        }
+      }).catch(function() {});
+
+      movieThumbsEl.appendChild(wrap);
+    });
+  }
+
   function fetchWatchlist() {
     fetch('/api/watchlist')
       .then(function(r) {
@@ -1152,117 +1427,17 @@ function _starsHTML(starsStr) {
         return r.json();
       })
       .then(function(data) {
-        if (!data || !data.shows || data.shows.length === 0) {
-          throw new Error('No series data from API');
-        }
+        if (!data) throw new Error('Empty payload');
 
-        /* ── Series ── */
-        if (seriesEl) {
-          var names = data.shows && data.shows.length
-            ? data.shows.map(function(s) { return s.title; }).join(', ')
-            : '';
-          seriesEl.textContent = names;
+        var mergedSeries = mergeWatchlistItems(data.shows, CONFIG.big3.seriesWatchlist || []);
+        var mergedMovies = mergeWatchlistItems(data.movies, CONFIG.big3.watchlist || []);
 
-          var seriesThumbsEl = document.getElementById('big3-series-thumbs');
-          if (seriesThumbsEl && data.shows) {
-            seriesThumbsEl.innerHTML = '';
-            data.shows.forEach(function(s) {
-              var wrap = document.createElement('div');
-              wrap.className = 'media-thumb-card';
-              wrap.title     = s.title;
-
-              if (s.poster) {
-                wrap.innerHTML = '<img class="media-thumb-img" src="' + s.poster + '" alt="' + s.title + '" loading="lazy" />';
-              } else {
-                wrap.innerHTML = '<div class="media-thumb-emoji">📺</div>';
-                // FIXED: multi-source TVmaze + iTunes fallback
-                _tvmazePoster(s.title).then(function(url) {
-                  if (url && wrap.parentNode) {
-                    wrap.innerHTML = '<img class="media-thumb-img" src="' + url + '" alt="' + s.title + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;" />';
-                  }
-                });
-              }
-
-              seriesThumbsEl.appendChild(wrap);
-            });
-          }
-        }
-
-        /* ── Movies (HARDCODED as requested) ── */
-        if (watchlistEl && CONFIG.big3.watchlist) {
-          var hardcodedMovies = CONFIG.big3.watchlist;
-          watchlistEl.textContent = hardcodedMovies.map(function(m) { return m.title; }).join(', ');
-
-          var movieThumbsEl = document.getElementById('big3-movie-thumbs');
-          if (movieThumbsEl) {
-            movieThumbsEl.innerHTML = '';
-            hardcodedMovies.forEach(function(m) {
-              var wrap = document.createElement('div');
-              wrap.className = 'media-thumb-card';
-              wrap.title     = m.title;
-              
-              if (m.fallback) {
-                wrap.innerHTML = '<img class="media-thumb-img" src="' + m.fallback + '" alt="' + m.title + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;" />';
-              } else {
-                wrap.innerHTML = '<div class="media-thumb-emoji">🎬</div>';
-              }
-              movieThumbsEl.appendChild(wrap);
-            });
-          }
-        }
+        renderSeries(mergedSeries);
+        renderMovies(mergedMovies);
       })
       .catch(function() {
-
-        /* ── Series fallback — TVmaze + iTunes ── */
-        if (seriesEl) {
-          var fallbackSeries = CONFIG.currently.series.slice(0, 3);
-          seriesEl.textContent = fallbackSeries.join(', ');
-
-          var seriesThumbsElFb = document.getElementById('big3-series-thumbs');
-          if (seriesThumbsElFb) {
-            seriesThumbsElFb.innerHTML = '';
-            fallbackSeries.forEach(function(title) {
-              var wrap = document.createElement('div');
-              wrap.className = 'media-thumb-card';
-              wrap.title     = title;
-              wrap.innerHTML = '<div class="media-thumb-emoji">📺</div>';
-
-              // FIXED: multi-source fallback
-              _tvmazePoster(title).then(function(posterUrl) {
-                if (posterUrl && wrap.parentNode) {
-                  wrap.innerHTML = '<img class="media-thumb-img" src="' + posterUrl + '" alt="' + title + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;" />';
-                }
-              }).catch(function() {});
-
-              seriesThumbsElFb.appendChild(wrap);
-            });
-          }
-        }
-
-        /* ── Movies fallback ── */
-        if (watchlistEl && CONFIG.big3.watchlist) {
-          var fallbackMovies = CONFIG.big3.watchlist;
-          watchlistEl.textContent = fallbackMovies.map(function(m) { return m.title || m; }).join(', ');
-
-          var movieThumbsElFb = document.getElementById('big3-movie-thumbs');
-          if (movieThumbsElFb) {
-            movieThumbsElFb.innerHTML = '';
-            fallbackMovies.forEach(function(m) {
-              var mObj = typeof m === 'string' ? { title: m } : m;
-              var wrap = document.createElement('div');
-              wrap.className = 'media-thumb-card';
-              wrap.title     = mObj.title;
-
-              if (mObj.fallback) {
-                wrap.innerHTML = '<img class="media-thumb-img" src="' + mObj.fallback + '" alt="' + mObj.title + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;" />';
-              } else {
-                wrap.innerHTML = '<div class="media-thumb-emoji">🎬</div>';
-              }
-              
-              movieThumbsElFb.appendChild(wrap);
-            });
-          }
-        }
+        renderSeries(CONFIG.big3.seriesWatchlist || []);
+        renderMovies(CONFIG.big3.watchlist || []);
       });
   }
   fetchWatchlist();
