@@ -14,29 +14,29 @@ interface StatCardProps {
   onClick?: () => void;
 }
 
-function StatCard({ stat, index, onClick }: StatCardProps) {
-  const tiltRef = useTilt<HTMLDivElement>();
-  
-  return (
-    <motion.div 
-      ref={tiltRef}
-      initial={{ opacity: 0, x: 20 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1 }}
-      className={`glass-card p-6 flex items-center justify-between group cursor-pointer ${onClick ? 'hover:border-customCyan/50' : ''}`}
-      onClick={onClick}
-    >
-      <div className="flex flex-col">
-        <span className="text-3xl font-black text-white group-hover:text-customCyan transition-colors">{stat.value}</span>
-        <span className="text-xs font-mono uppercase tracking-widest text-white/40 mt-1">{stat.label}</span>
-      </div>
-      <div className="p-3 bg-white/5 rounded-xl text-customCyan group-hover:bg-customCyan/10 transition-colors">
-        {stat.icon}
-      </div>
-    </motion.div>
-  );
-}
+const wipActivities = [
+  { 
+    title: 'LLM Pipeline v2', 
+    desc: 'Improving RAG chunking strategy with hybrid retrieval', 
+    pct: '30%', 
+    icon: '🧠', 
+    clr: 'var(--cyan)'
+  },
+  { 
+    title: 'Cloud Computing', 
+    desc: 'NED University - EC2, S3, VPC, RDS & cloud architecture deep dives', 
+    pct: '95%', 
+    icon: '☁️', 
+    clr: '#FF9900'
+  },
+  { 
+    title: 'HEC GenAI Cohort 2', 
+    desc: 'Working through RAG systems and AI ethics modules', 
+    pct: '85%', 
+    icon: '🤖', 
+    clr: '#a855f7'
+  }
+];
 
 export default function AboutSection() {
   const stats = [
@@ -70,48 +70,51 @@ export default function AboutSection() {
   ];
 
   return (
-    <section id="about" className="py-24 px-6 relative">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col mb-12">
-          <p className="font-mono text-xs text-customCyan uppercase tracking-[0.3em] font-bold mb-2">Who I Am</p>
-          <ScrambleHeader text="About Me" className="text-4xl md:text-5xl font-black tracking-tighter text-white" />
+    <section id="about" className="section-in">
+      <div className="ambient-glow"></div>
+      <div className="section-inner">
+        <div className="section-header">
+          <div>
+            <p className="label-xs">Who I Am</p>
+            <h2 className="section-title">About Me</h2>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Main Bio Text */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="lg:col-span-8 glass-card p-8 md:p-10"
-          >
-            <div className="space-y-6 text-customTextMuted leading-relaxed text-lg">
-              <p>
-                I'm a Computer Science student at <span className="text-white font-semibold">UBIT, University of Karachi '28</span>, driven to explore
-                every corner of CS before settling on a specialty. So far I've covered Cloud Computing,
-                Networking, Web Dev, Data Science, Version Control, Project Management, Prompt Engineering,
-                and AI — with lots more ahead.
-              </p>
-              <p>
-                I learn by building. Every project is a live experiment — from AWS VPC architecture to
-                RAG-powered LLM pipelines. My philosophy: <span className="text-customCyan font-medium italic">build broken things, understand why they broke,
-                then spend ages unbreaking them.</span>
-              </p>
+        <div className="about-grid">
+          <div className="about-text glass-card reveal">
+            <p>
+              I'm a Computer Science student at UBIT, University of Karachi '28, driven to explore
+              every corner of CS before settling on a specialty. So far I've covered Cloud Computing,
+              Networking, Web Dev, Data Science, Version Control, Project Management, Prompt Engineering,
+              and AI — with lots more ahead.
+            </p>
+            <p className="mt-4">
+              I learn by building. Every project is a live experiment — from AWS VPC architecture to
+              RAG-powered LLM pipelines. My philosophy: build broken things, understand why they broke,
+              then spend ages unbreaking them.
+            </p>
+            <div className="mt-8 flex gap-4">
+              {/* Optional secondary CTAs could go here */}
             </div>
-          </motion.div>
+          </div>
 
-          {/* Stats Column */}
-          <div className="lg:col-span-4 flex flex-col gap-4">
-            {stats.map((stat, i) => (
-              <StatCard 
-                key={stat.label} 
-                stat={stat} 
-                index={i} 
-                onClick={stat.label === 'Certifications' ? () => {
-                  const event = new CustomEvent('open-certs-drawer');
-                  window.dispatchEvent(event);
-                } : undefined}
-              />
+          <div className="about-stats-col">
+            {[
+              { id: 'cnt-projects', target: 4, label: 'Projects', icon: <LineChart size={18} /> },
+              { id: 'cnt-certs', target: 6, label: 'Certifications', icon: <Award size={18} /> },
+              { id: 'cnt-tech', target: 20, label: 'Technologies', icon: <Cpu size={18} /> }
+            ].map((stat, i) => (
+              <div 
+                key={stat.id} 
+                className="about-stat-card glass-card reveal"
+                style={{ '--delay': `${i * 100}ms` } as React.CSSProperties}
+              >
+                <div className="text-customCyan mb-1">
+                   {stat.icon}
+                </div>
+                <Counter target={stat.target} />
+                <p className="stat-lbl">{stat.label}</p>
+              </div>
             ))}
           </div>
         </div>

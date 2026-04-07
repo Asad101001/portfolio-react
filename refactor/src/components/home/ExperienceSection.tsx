@@ -74,12 +74,13 @@ export default function ExperienceSection() {
   };
 
   return (
-    <section id="experience" className="py-24 px-6 relative overflow-hidden">
-      <div className="section-inner max-w-7xl mx-auto">
-        <div className="section-header text-center mb-16">
-          <p className="font-mono text-xs text-customCyan uppercase tracking-[0.3em] font-bold mb-2">Background</p>
-          <ScrambleHeader text="Experience" className="text-4xl md:text-5xl font-black tracking-tighter text-white" />
-          <p className="text-customTextMuted mt-4 max-w-lg mx-auto italic">Where I've spent my time, energy, and sanity.</p>
+    <section id="experience" className="section-in">
+      <div className="ambient-glow"></div>
+      <div className="section-inner">
+        <div className="section-header centered">
+          <p className="label-xs">Professional Path</p>
+          <h2 className="section-title">Experience</h2>
+          <p className="section-sub">Technical logs and contribution milestones</p>
         </div>
 
         {/* The 404 Quirk Block */}

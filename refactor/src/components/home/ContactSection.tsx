@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useReveal } from '../../hooks/useReveal';
 import { 
   Github, 
   Linkedin, 
@@ -88,12 +87,13 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="py-24 px-6 relative">
-      <div className="max-w-7xl mx-auto">
-        <div className="section-header text-center mb-16">
-          <p className="font-mono text-xs text-customCyan uppercase tracking-[0.3em] font-bold mb-2">Connect</p>
-          <ScrambleHeader text="Internet Friends" className="text-4xl md:text-5xl font-black tracking-tighter text-white" />
-          <p className="text-customTextMuted mt-4 max-w-lg mx-auto italic">Catch me building stuff, posting takes, or listening to music.</p>
+    <section id="contact" className="section-in">
+      <div className="ambient-glow"></div>
+      <div className="section-inner">
+        <div className="section-header centered">
+          <p className="label-xs">Connect</p>
+          <h2 className="section-title">Let's Be Internet Friends</h2>
+          <p className="section-sub">Catch me building stuff, posting takes, or listening to music. Slide in anywhere 👋</p>
         </div>
 
         {/* Social Chips */}

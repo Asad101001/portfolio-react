@@ -1,173 +1,118 @@
-import { Github, ExternalLink, Gavel, BarChart3, Activity, Eye, Cloud, Search } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { ExternalLink, Github } from 'lucide-react';
 import { useReveal } from '../../hooks/useReveal';
-import { useTilt } from '../../hooks/useTilt';
-import ScrambleHeader from './ScrambleHeader';
-
-function ProjectCard({ project, index }: { project: any, index: number }) {
-  const tiltRef = useTilt<HTMLDivElement>();
-  
-  return (
-    <motion.div
-      ref={tiltRef}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1 }}
-      className={`glass-card group reveal overflow-hidden flex flex-col ${index === 4 ? 'lg:col-span-2 lg:mx-auto lg:max-w-2xl w-full' : ''}`}
-    >
-      {/* Project Image */}
-      <div className="relative h-48 bg-white/5 overflow-hidden">
-        <img 
-          src={project.img} 
-          alt={project.title} 
-          className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-70 group-hover:scale-110 transition-all duration-700" 
-          onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-            (e.target as HTMLImageElement).style.display = 'none';
-          }}
-        />
-        <div className="absolute inset-0 flex items-center justify-center opacity-20 group-hover:opacity-40 group-hover:scale-110 transition-all duration-700 pointer-events-none">
-          <div style={{ color: project.color }}>
-            {project.icon}
-          </div>
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0D] to-transparent"></div>
-        
-        <div className="absolute top-4 left-4 p-2 rounded-lg bg-black/40 backdrop-blur-md border border-white/10" style={{ color: project.color }}>
-          {project.icon}
-        </div>
-      </div>
-
-      {/* View More Details Bar */}
-      <Link 
-        to={`/projects/${project.title.toLowerCase().replace(/\s+/g, '')}`}
-        className="bg-white/5 py-4 px-6 border-b border-white/5 text-[10px] font-mono font-bold uppercase tracking-widest transition-all flex items-center justify-between group/bar"
-        style={{ color: project.color }}
-      >
-        <div className="flex items-center gap-2">
-          <Search size={12} className="group-hover/bar:scale-125 transition-transform" /> 
-          <span>Reveal Project Details</span>
-        </div>
-        <span className="opacity-0 group-hover/bar:opacity-100 transition-opacity">→</span>
-      </Link>
-
-      <div className="p-6 flex flex-grow flex-col">
-        <h3 className="text-xl font-bold mb-2 group-hover:text-customCyan transition-colors">{project.title}</h3>
-        <p className="text-customTextMuted text-sm leading-relaxed mb-6 flex-grow">{project.desc}</p>
-        
-        {/* Tech Tags */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          {project.tech.map((t: string) => (
-            <span 
-              key={t}
-              className="tag px-3 py-1 bg-white/5 border border-white/10 rounded font-mono text-[10px] text-white/40 group-hover:border-customCyan/30 group-hover:text-customCyan/80 transition-all cursor-default"
-            >
-              {t}
-            </span>
-          ))}
-        </div>
-
-        <div className="flex items-center gap-4 mt-auto">
-          <a 
-            href={project.github} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors"
-          >
-            <Github size={14} /> Code
-          </a>
-          {project.demo && (
-            <a 
-              href={project.demo} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-customCyan hover:text-white transition-colors"
-            >
-              <ExternalLink size={14} /> Live Demo
-            </a>
-          )}
-        </div>
-      </div>
-    </motion.div>
-  );
-}
 
 const projects = [
   {
-    title: "LegalEaseAI",
-    desc: "Upload contracts for rapid AI risk-rating. Provides plain Urdu explanations and a RAG-powered document chatbot.",
-    tech: ["Python", "LangChain", "FAISS", "FastAPI", "React"],
-    github: "https://github.com/Asad101001/LegalEaseAI",
-    demo: "https://legal-ease-ai-iota.vercel.app/",
-    icon: <Gavel size={20} />,
-    color: "#00ff41",
-    img: "/images/projects/legalease.png"
+    id: 'legaleaseai',
+    title: 'LegalEaseAI',
+    desc: 'Upload contracts for rapid AI risk-rating. Plain Urdu explanations, RAG chatbot, and downloadable PDF reports.',
+    link: 'https://legal-ease-ai-iota.vercel.app/',
+    repo: 'https://github.com/Asad101001/LegalEaseAI',
+    image: '/images/projects/legalease.png',
+    color: 'var(--cyan)',
+    tags: ['Vanilla JS', 'LangChain', 'FAISS', 'RAG', 'FastAPI'],
   },
   {
-    title: "PollPulse",
-    desc: "Real-time polling platform built on AWS. Features a custom VPC with EC2 and RDS MySQL isolation.",
-    tech: ["Node.js", "Express", "AWS", "MySQL", "Chart.js"],
-    github: "https://github.com/Asad101001/pollpulse",
-    icon: <BarChart3 size={20} />,
-    color: "#a855f7",
-    img: "/images/projects/pollpulse.png"
+    id: 'pollpulse',
+    title: 'PollPulse',
+    desc: 'Real-time polling platform on AWS with custom VPC, EC2 + RDS isolation, and chart-based analytics.',
+    repo: 'https://github.com/Asad101001/pollpulse',
+    image: '/images/projects/pollpulse.png',
+    color: '#a855f7',
+    tags: ['Node.js', 'Express', 'AWS', 'MySQL', 'Chart.js'],
   },
   {
-    title: "DevPulse",
-    desc: "Developer telemetry dashboard analyzing commit narratives with Llama 3.3 to calculate cognitive load.",
-    tech: ["React", "Express", "MongoDB", "Groq AI", "Framer"],
-    github: "https://github.com/Asad101001/devpulse",
-    demo: "https://devpulse-app.onrender.com",
-    icon: <Activity size={20} />,
-    color: "#FFD600",
-    img: "/images/projects/devpulse.png"
+    id: 'devpulse',
+    title: 'DevPulse',
+    desc: 'Developer telemetry dashboard using Llama 3.3 with a sharp industrial UI.',
+    link: 'https://devpulse-app.onrender.com',
+    repo: 'https://github.com/Asad101001/devpulse',
+    image: '/images/projects/devpulse.png',
+    color: '#FFD600',
+    tags: ['React', 'Express', 'Llama 3.3', 'MongoDB'],
   },
   {
-    title: "Mogscope",
-    desc: "Facial analytics platform using face-api.js for 68-point landmark detection and AI-satirical analysis.",
-    tech: ["React", "Threejs", "Tailwind", "TensorFlow", "Groq"],
-    github: "https://github.com/Asad101001/mogscope",
-    demo: "https://mogscope.vercel.app/",
-    icon: <Eye size={20} />,
-    color: "#6366f1",
-    img: "/images/projects/mogscope.png"
+    id: 'mogscope',
+    title: 'Mogscope',
+    desc: 'Facial analytics + satirical LLM analysis with face-api.js and modern frontend tooling.',
+    link: 'https://mogscope.vercel.app/',
+    repo: 'https://github.com/Asad101001/mogscope',
+    image: '/images/projects/mogscope.png',
+    color: '#818cf8',
+    tags: ['React', 'Tailwind', 'Three.js', 'Groq'],
   },
-  {
-    title: "AWS Infrastructure",
-    desc: "Manual provisioning of Ubuntu EC2 instances with Nginx configuration and SSH hardening.",
-    tech: ["AWS", "Ubuntu", "Nginx", "Vanilla JS"],
-    github: "https://github.com/Asad101001/aws-static-website",
-    icon: <Cloud size={20} />,
-    color: "#FF9900",
-    img: "/images/projects/aws.png"
-  }
 ];
 
 export default function ProjectsSection() {
   useReveal();
 
   return (
-    <section id="projects" className="py-24 px-6 relative">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-end justify-between mb-12">
-          <div className="flex flex-col">
-            <p className="font-mono text-xs text-customCyan uppercase tracking-[0.3em] font-bold mb-2">Work</p>
-            <ScrambleHeader text="Projects" className="text-4xl md:text-5xl font-black tracking-tighter text-white" />
+    <section id="projects" className="section-in py-24">
+      <div className="ambient-glow"></div>
+      <div className="section-inner">
+        <div className="section-header">
+          <div>
+            <p className="label-xs">Work</p>
+            <h2 className="section-title">Projects</h2>
           </div>
-          <a 
-            href="https://github.com/Asad101001?tab=repositories" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="hidden md:flex items-center gap-2 text-xs font-mono text-customCyan hover:text-white transition-colors uppercase tracking-widest font-bold pb-2"
-          >
-            All Repositories <Github size={14} />
+          <a href="https://github.com/Asad101001?tab=repositories" target="_blank" rel="noopener noreferrer" className="view-all-link">
+            All Repositories <ExternalLink size={14} />
           </a>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project, i) => (
-            <ProjectCard key={project.title} project={project} index={i} />
+        <div className="projects-grid stagger">
+          {projects.map((project) => (
+            <article key={project.id} className="project-card glass-card reveal">
+              <div className="proj-img-wrap" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.06), #18181b)' }}>
+                <img
+                  src={project.image}
+                  alt={`${project.title} screenshot`}
+                  className="proj-img"
+                  onError={(e: any) => {
+                    e.currentTarget.style.display = 'none';
+                    const placeholder = e.currentTarget.parentNode?.querySelector('.proj-img-placeholder');
+                    if (placeholder) placeholder.style.display = 'flex';
+                  }}
+                />
+                <div className="proj-img-placeholder" style={{ display: 'none' }}>
+                  <span className="text-xs font-mono opacity-50">image unavailable</span>
+                </div>
+                <div className="proj-img-overlay"></div>
+              </div>
+
+              <div className="proj-body">
+                <div className="proj-head">
+                  <div className="proj-icon" style={{ background: `${project.color}25`, color: project.color }}>■</div>
+                  <div>
+                    <h3 className="proj-title">{project.title}</h3>
+                    {project.link ? (
+                      <p className="proj-live"><a href={project.link} target="_blank" rel="noopener noreferrer">Live Demo ↗</a></p>
+                    ) : (
+                      <p className="proj-live" style={{ color: 'var(--text-muted)' }}>Cloud-Deployed Capstone</p>
+                    )}
+                  </div>
+                </div>
+
+                <p className="proj-desc">{project.desc}</p>
+
+                <div className="proj-tags">
+                  {project.tags.map((tag) => (
+                    <span className="tag" key={tag}><span className="tag-label">{tag}</span></span>
+                  ))}
+                </div>
+
+                <div className="proj-links">
+                  <a href={project.repo} target="_blank" rel="noopener noreferrer" className="proj-link-code">
+                    <Github size={14} /> Code
+                  </a>
+                  {project.link && (
+                    <a href={project.link} target="_blank" rel="noopener noreferrer" className="proj-link-demo">
+                      <ExternalLink size={14} /> Live Demo
+                    </a>
+                  )}
+                </div>
+              </div>
+            </article>
           ))}
         </div>
       </div>
