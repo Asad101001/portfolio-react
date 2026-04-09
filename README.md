@@ -66,11 +66,11 @@ portfolio-v2/
 │   ├── mobile.css                  ← Touch-optimized overrides (max-width: 768px)
 │   ├── desktop.css                 ← Desktop enhancements (min-width: 769px)
 │   ├── project-page.css            ← Individual case study page styles
-│   └── themes/
-│       ├── cyberpunk.css           ← Electric cyan #00fff9 + neon purple #bc13fe
-│       ├── sunset.css              ← Hot pink #ff0055 + gold #ffd700 (default)
-│       ├── industrial.css          ← Safety orange #f97316 + raw black
-│       └── emerald.css             ← Deep green #10B981 + lime #ADFF2F
+│    └── themes/
+        ├── cyberpunk.css           ← Electric cyan #00fff9 + neon purple #bc13fe
+        ├── sunset.css              ← Hot pink #ff0055 + gold #ffd700 (default)
+        ├── industrial.css          ← Raw Neo-Brutalist: safety orange #f97316 + white/black grid
+        └── emerald.css             ← Deep green #10B981 + lime #ADFF2F
 │
 ├── ⚙️  js/
 │   ├── app.js                      ← Global state · passive scroll · master rAF loop
@@ -165,6 +165,8 @@ HTML partials use a custom Vite plugin (`html-include`):
 | Star canvas capped at 30fps | `FRAME_INTERVAL = 1000/30` timestamp gate in `canvas.js` |
 | `body.is-scrolling` class | Disables pointer-events + blur during scroll (100ms debounce) |
 | `contain: layout style paint` on cards | Applied globally via `perf.css` |
+| **Universal Image Fallbacks** | `window.__handleImgError` in `widgets.js` injects NB placeholders |
+| **Neo-Brutalist Boundaries** | `.nb-boundary` + `.nb-widget-label` system for industrial feel |
 
 ---
 
@@ -308,7 +310,7 @@ cyberpunk → industrial → sunset → emerald → (repeat)
 | Theme | `--cyan` | `--lime` | Scanlines | Body class |
 |-------|----------|----------|-----------|------------|
 | **Cyberpunk** | `#00fff9` | `#39ff14` | 15% | `theme-cyberpunk` |
-| **Industrial** | `#f97316` | `#ffffff` | 25% | `theme-industrial` |
+| **Industrial** | `#f97316` | `#ffffff` | 0% | `theme-professional` |
 | **Sunset** | `#ff0055` | `#ffd700` | 8% | `theme-sunset` |
 | **Emerald** | `#10B981` | `#ADFF2F` | 0% | `theme-emerald` |
 
@@ -374,12 +376,13 @@ Case study pages at `/projects/{slug}.html` — each self-contained with Mermaid
   Acceptable in terminal context; use ⚽ or neutral emoji in UI elements.
 
 ! Twitter/X widget reliability
-  Nitter instances fail frequently. Widget degrades through: multi-instance
-  fallback → localStorage cache → direct profile link. This is expected.
+  Nitter instances fail frequently. Widget implements a "Pinned Fallback"
+  mechanism + `x-rt-sub-label` layout for official look even in downtime.
 
-! Watchlist movie posters
-  Hardcoded image URLs in CONFIG.big3.watchlist for unreleased films.
-  TMDB/TVmaze have no poster for them yet. Update as they release.
+! High-Fidelity Image Fallbacks
+  External APIs (Spotify, Last.fm, sports) are prone to broken assets.
+  The global `__handleImgError` utility dynamically injects Neo-Brutalist
+  placeholders with specific icons (music, film, player) to maintain UI.
 ```
 
 ---
