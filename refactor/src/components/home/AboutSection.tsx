@@ -1,49 +1,32 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Target, Award, Code2, Cpu, Cloud, Brain, TrendingUp } from 'lucide-react';
+import { Target, Award, Cpu, Cloud, Brain, LineChart } from 'lucide-react';
 import GitHubHeatmap from './GitHubHeatmap';
-import ScrambleHeader from './ScrambleHeader';
-import { useTilt } from '../../hooks/useTilt';
 
-interface StatCardProps {
-  stat: {
-    label: string;
-    value: string;
-    icon: React.ReactNode;
-  };
-  index: number;
-  onClick?: () => void;
+function Counter({ target }: { target: number }) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let start = 0;
+    const end = target;
+    if (start === end) return;
+
+    let totalDuration = 2000;
+    let incrementTime = (totalDuration / end);
+
+    let timer = setInterval(() => {
+      start += 1;
+      setCount(start);
+      if (start === end) clearInterval(timer);
+    }, incrementTime);
+
+    return () => clearInterval(timer);
+  }, [target]);
+
+  return <span className="text-2xl font-black text-white">{count}+</span>;
 }
 
-const wipActivities = [
-  { 
-    title: 'LLM Pipeline v2', 
-    desc: 'Improving RAG chunking strategy with hybrid retrieval', 
-    pct: '30%', 
-    icon: '🧠', 
-    clr: 'var(--cyan)'
-  },
-  { 
-    title: 'Cloud Computing', 
-    desc: 'NED University - EC2, S3, VPC, RDS & cloud architecture deep dives', 
-    pct: '95%', 
-    icon: '☁️', 
-    clr: '#FF9900'
-  },
-  { 
-    title: 'HEC GenAI Cohort 2', 
-    desc: 'Working through RAG systems and AI ethics modules', 
-    pct: '85%', 
-    icon: '🤖', 
-    clr: '#a855f7'
-  }
-];
-
 export default function AboutSection() {
-  const stats = [
-    { label: 'Projects', value: '4+', icon: <TrendingUp size={18} /> },
-    { label: 'Certifications', value: '6+', icon: <Award size={18} /> },
-    { label: 'Technologies', value: '20+', icon: <Code2 size={18} /> }
-  ];
 
   const exploring = [
     {

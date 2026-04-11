@@ -26,7 +26,7 @@ export default function HeroSection() {
       setActiveSlot((prev) => (prev + 1) % activityItems.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [activities.length]);
+  }, [activityItems.length]);
 
   return (
     <section id="hero">

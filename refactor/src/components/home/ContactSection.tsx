@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { useReveal } from '../../hooks/useReveal';
 import { 
   Github, 
@@ -5,14 +7,11 @@ import {
   Twitter, 
   Instagram,
   Music,
-  ExternalLink,
   Send,
   Star
 } from 'lucide-react';
-import { useReveal } from '../../hooks/useReveal';
 import { useSocialData } from '../../hooks/useSocialData';
 import { useVisitorXP } from '../../hooks/useVisitorXP';
-import ScrambleHeader from './ScrambleHeader';
 
 const socialChips = [
   { label: 'GitHub', handle: '@Asad101001', href: 'https://github.com/Asad101001', icon: Github, color: '#fff' },
@@ -30,7 +29,7 @@ export default function ContactSection() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setBig3Index(prev => (prev + 1) % 4);
+      setBig3Index((prev: number) => (prev + 1) % 4);
     }, 8000);
     return () => clearInterval(timer);
   }, []);

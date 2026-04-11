@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useReveal } from '../../hooks/useReveal';
-import { LineChart, Briefcase, Terminal as TerminalIcon, Star } from 'lucide-react';
-import ScrambleHeader from './ScrambleHeader';
+import { LineChart, Briefcase, Star } from 'lucide-react';
 
 const skillDist = [
   { label: 'Googling stuff', pct: '97%', color: '#f97316' },

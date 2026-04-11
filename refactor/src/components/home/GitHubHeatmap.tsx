@@ -1,12 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
 import { Github } from 'lucide-react';
-import { motion } from 'framer-motion';
-
-interface ContributionDay {
-  date: string;
-  count: number;
-  level: number;
-}
 
 export default function GitHubHeatmap() {
   const [contributions, setContributions] = useState<number[]>([]);
