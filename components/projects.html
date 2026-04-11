@@ -272,57 +272,7 @@
                     </div>
                 </div>
 
-                <!-- AWS Static Website -->
-                <div class="project-card glass-card reveal proj-center" onclick="if(!event.target.closest('a') && !event.target.closest('button') && !event.target.closest('.proj-links')) window.location.href='/projects/aws.html'" style="cursor: pointer;">
-                    <div class="proj-img-wrap" style="background:linear-gradient(135deg,#FF990018,#18181b)">
-                        <img src="./images/projects/aws.png" alt="AWS Static Website screenshot" class="proj-img"
-                            onerror="this.style.display='none';var p=this.parentNode.querySelector('.proj-img-placeholder');if(p)p.style.display='flex'" />
-                        <div class="proj-img-placeholder" style="display:none">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
-                                fill="none" stroke="#FF9900" stroke-width="1.2" opacity="0.45">
-                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                                <polyline points="9 22 9 12 15 12 15 22" />
-                            </svg>
-                        </div>
-                        <div class="proj-img-overlay"></div>
-                    </div>
-                    <a href="/projects/aws.html" target="_blank" style="background: linear-gradient(90deg, rgba(255,153,0,0.15), transparent); padding: 8px 16px; border-bottom: 1px solid rgba(255,153,0,0.1); border-top: 1px solid rgba(255,153,0,0.05); color: #FF9900; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; display: flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none; transition: background 0.3s;" onmouseover="this.style.background='linear-gradient(90deg, rgba(255,153,0,0.25), transparent)'" onmouseout="this.style.background='linear-gradient(90deg, rgba(255,153,0,0.15), transparent)'">
-                        <span style="font-size: 1rem;">🔍</span> View More Details
-                    </a>
-                    <div class="proj-body">
-                        <div class="proj-head">
-                            <div class="proj-icon"
-                                style="background:linear-gradient(135deg,#FF990030,#FF990010);color:#FF9900">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="draw-path" pathLength="1" d="M17.5 19c2.5 0 4.5-2 4.5-4.501C22 12.015 20.015 10 17.5 10c-.394 0-.773.056-1.135.158C15.421 7.234 12.441 5 9 5c-3.866 0-7 3.134-7 7 0 .133.003.266.01.398C.813 13.167 0 14.244 0 15.5 0 17.433 1.567 19 3.5 19h14z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="proj-title">AWS Static Website</h3>
-                                <p class="proj-live" style="color:#71717a">Cloud Hosting Project</p>
-                            </div>
-                        </div>
-                        <p class="proj-desc">
-                            Cloud hosting infrastructure project. Manual provisioning of Ubuntu EC2 instances with Nginx configuration, security groups, and SSH hardening — a deep dive into root-level deployment.
-                        </p>
-                        <div class="proj-tags">
-                            <span class="tag" data-tech="AWS"><svg viewBox="0 0 24 24" fill="#FF9900"><path d="M6.763 10.036c0 .296.032.535.088.71.064.176.144.368.256.576.04.063.056.127.056.183 0 .08-.048.16-.152.24l-.503.335a.383.383 0 0 1-.208.072c-.08 0-.16-.04-.239-.112a2.47 2.47 0 0 1-.287-.375 6.18 6.18 0 0 1-.248-.471c-.622.734-1.405 1.101-2.347 1.101-.67 0-1.205-.191-1.596-.574-.391-.384-.59-.894-.59-1.533 0-.678.239-1.23.726-1.644.487-.415 1.133-.623 1.955-.623.272 0 .551.024.846.064.296.04.6.104.918.176v-.583c0-.607-.127-1.03-.375-1.277-.255-.248-.686-.367-1.3-.367-.28 0-.568.031-.863.103-.295.072-.583.16-.862.272a2.287 2.287 0 0 1-.28.104.488.488 0 0 1-.127.023c-.112 0-.168-.08-.168-.247v-.391c0-.128.016-.224.056-.28a.597.597 0 0 1 .224-.167c.279-.144.614-.264 1.005-.36a4.84 4.84 0 0 1 1.246-.151c.95 0 1.644.216 2.091.647.439.43.662 1.085.662 1.963v2.586zm-3.24 1.214c.263 0 .534-.048.822-.144.287-.096.543-.271.758-.51.128-.152.224-.32.272-.512.047-.191.08-.423.08-.694v-.335a6.66 6.66 0 0 0-.735-.136 6.02 6.02 0 0 0-.75-.048c-.535 0-.926.104-1.19.32-.263.215-.39.518-.39.917 0 .375.095.655.295.846.191.2.47.296.839.296zm6.41.862c-.144 0-.24-.024-.304-.08-.063-.048-.12-.16-.168-.311L7.586 5.55a1.398 1.398 0 0 1-.072-.32c0-.128.064-.2.191-.2h.783c.151 0 .255.025.31.08.065.048.113.16.16.312l1.342 5.284 1.245-5.284c.04-.16.088-.264.151-.312a.549.549 0 0 1 .32-.08h.638c.152 0 .256.025.32.08.063.048.12.16.151.312l1.261 5.348 1.381-5.348c.048-.16.104-.264.16-.312a.52.52 0 0 1 .311-.08h.743c.127 0 .2.065.2.2 0 .04-.009.08-.017.128a1.137 1.137 0 0 1-.056.2l-1.923 6.17c-.048.16-.104.263-.168.311a.51.51 0 0 1-.303.08h-.687c-.151 0-.255-.024-.32-.08-.063-.056-.119-.16-.15-.32l-1.238-5.148-1.23 5.14c-.04.16-.087.264-.15.32-.065.056-.177.08-.32.08zm10.256.215c-.415 0-.83-.048-1.229-.143-.399-.096-.71-.2-.918-.32-.128-.071-.215-.151-.247-.223a.563.563 0 0 1-.048-.224v-.407c0-.167.064-.247.183-.247.048 0 .096.008.144.024.048.016.12.048.2.08.271.12.566.215.878.279.319.064.63.096.95.096.502 0 .894-.088 1.165-.264a.86.86 0 0 0 .415-.758.777.777 0 0 0-.215-.559c-.144-.151-.415-.287-.807-.415l-1.157-.36c-.583-.183-1.014-.454-1.277-.813a1.902 1.902 0 0 1-.4-1.158c0-.335.073-.63.216-.886.144-.255.335-.479.575-.654.24-.184.51-.32.83-.415.32-.096.655-.136 1.006-.136.175 0 .359.008.535.032.183.024.35.056.518.088.16.04.312.08.455.127.144.048.256.096.336.144a.69.69 0 0 1 .24.2.43.43 0 0 1 .071.263v.375c0 .168-.064.256-.184.256a.83.83 0 0 1-.303-.096 3.652 3.652 0 0 0-1.532-.311c-.455 0-.815.071-1.062.223-.248.152-.375.383-.375.71 0 .224.08.416.24.567.159.152.454.304.877.44l1.133.358c.574.184.99.44 1.237.767.247.327.367.702.367 1.117 0 .343-.072.655-.207.926-.144.272-.336.511-.583.703-.248.2-.543.343-.886.447-.36.111-.743.167-1.155.167z" /></svg><span class="tag-label">AWS</span></span>
-                            <span class="tag" data-tech="Nginx"><svg viewBox="0 0 24 24" fill="#009639"><path d="M12 0L1.605 6v12L12 24l10.395-6V6L12 0zm6 16.59c0 .705-.646 1.29-1.529 1.29-.631 0-1.351-.255-1.801-.781l-5.375-6.402V17.1c0 .677-.522 1.29-1.37 1.29H7.77c-.747 0-1.37-.613-1.37-1.29V7.41c0-.705.57-1.29 1.46-1.29.556 0 1.351.255 1.801.781l5.302 6.305V6.9c0-.677.57-1.29 1.421-1.29h.166C17.297 5.61 18 6.223 18 6.9v9.69z" /></svg><span class="tag-label">Nginx</span></span>
-                            <span class="tag" data-tech="Ubuntu"><svg viewBox="0 0 24 24" fill="#E95420"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 18c-3.314 0-6-2.686-6-6s2.686-6 6-6 6 2.686 6 6-2.686 6-6 6zm0-10c-2.209 0-4 1.791-4 4s1.791 4 4 4 4-1.791 4-4-1.791-4-4-4z" /></svg><span class="tag-label">Ubuntu Linux</span></span>
-                            <span class="tag" data-tech="Vanilla JS"><svg viewBox="0 0 24 24" fill="#F7DF1E"><path d="M0 0h24v24H0V0zm22.034 18.276c-.175-1.095-.888-2.015-3.003-2.873-.736-.345-1.554-.585-1.797-1.14-.091-.33-.105-.51-.046-.705.15-.646.915-.84 1.515-.66.39.12.75.42.976.9 1.034-.676 1.034-.676 1.755-1.125-.27-.42-.404-.601-.586-.78-.63-.705-1.469-1.065-2.834-1.034l-.705.089c-.676.165-1.32.525-1.71 1.005-1.14 1.291-.811 3.541.569 4.471 1.365 1.02 3.361 1.244 3.616 2.205.24 1.17-.87 1.545-1.966 1.41-.811-.18-1.26-.586-1.755-1.336l-1.83 1.051c.21.48.45.689.81 1.109 1.74 1.756 6.09 1.666 6.871-1.004.029-.09.24-.705.074-1.65l.046.067zm-8.983-7.245h-2.248c0 1.938-.009 3.864-.009 5.805 0 1.232.063 2.363-.138 2.711-.33.689-1.18.601-1.566.48-.396-.196-.597-.466-.83-.855-.063-.105-.11-.196-.127-.196l-1.825 1.125c.305.63.75 1.172 1.324 1.517.855.51 2.004.675 3.207.405.783-.226 1.458-.691 1.811-1.411.51-.93.402-2.07.397-3.346.012-2.054 0-4.109 0-6.179l.004-.056z" /></svg><span class="tag-label">HTML/CSS/JS</span></span>
-                        </div>
-                        <div class="proj-links">
-                            <a href="https://github.com/Asad101001/aws-static-website" target="_blank" rel="noopener"
-                                class="proj-link-code">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2">
-                                    <path
-                                        d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-                                    <path d="M9 18c-4.51 2-5-2-7-2" />
-                                </svg>
-                                Code
-                            </a>
-                        </div>
-                    </div>
-                </div>
+
 
 
 

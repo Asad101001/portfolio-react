@@ -561,9 +561,9 @@ function _starsHTML(starsStr) {
     
     if (state === 'in') return 'Live Now';
     if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return 'Yesterday';
+    if (diffDays === 1) return '1d ago';
     if (diffDays === -1) return 'Tomorrow';
-    if (diffDays > 1 && diffDays < 7) return diffDays + ' days ago';
+    if (diffDays > 1 && diffDays < 7) return diffDays + 'd ago';
     if (diffDays >= 7) return Math.floor(diffDays/7) + 'w ago';
     return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
   }
@@ -618,14 +618,16 @@ function _starsHTML(starsStr) {
     var red2 = !barcaIsHost ? barcaRedCards : oppRedCards;
     
     var timeframe = getMatchTimeframe(matchDate, state);
-    if (state === 'in') timeframe = '';
-
+    
     const dObj = new Date(matchDate);
     const nObj = new Date();
     const dS   = new Date(dObj.getFullYear(), dObj.getMonth(), dObj.getDate());
     const nS   = new Date(nObj.getFullYear(), nObj.getMonth(), nObj.getDate());
     const diff = Math.round((nS - dS) / (1000 * 60 * 60 * 24));
     var headerLabel = (diff === 0) ? 'Matchday' : 'Watching Football';
+
+    // Suppress "Today" if header is "Matchday", or if it is "Live Now"
+    if (state === 'in' || timeframe === 'Today') timeframe = '';
     
     // Identity column layout: logo on top, name+slogan below
     barcaItem.innerHTML =

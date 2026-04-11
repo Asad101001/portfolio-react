@@ -242,7 +242,7 @@ body.theme-professional strong {
 body.theme-professional p,
 body.theme-professional li,
 body.theme-professional label,
-body.theme-professional span:not(.accent-text) {
+body.theme-professional span:not(.accent-text):not(.status-pill):not(.tag-label):not(.barca-name-pink):not(.barca-slogan-cyan) {
     color: var(--text-muted) !important;
 }
 
@@ -275,9 +275,19 @@ body.theme-professional .footer-stack-icons i {
     color: var(--text) !important;
 }
 
-/* Explicit class for vibrant icons */
+/* Explicit class for vibrant icons & Skill Icons Background */
 body.theme-professional .accent-icon {
     color: var(--purple) !important;
+}
+
+body.theme-professional .proj-icon,
+body.theme-professional .wip-icon,
+body.theme-professional .skill-icon,
+body.theme-professional .tag,
+body.theme-professional .cert-thumb,
+body.theme-professional .lastfm-track-art {
+    background: #ffffff !important;
+    border: 2px solid #000000 !important;
 }
 
 /* Decorative Footer Blocks */
@@ -311,7 +321,16 @@ body.theme-professional .t-prompt {
 }
 
 body.theme-professional .t-cmd { color: var(--text) !important; }
-body.theme-professional .t-out { color: var(--text-muted) !important; }
+body.theme-professional .t-out { 
+    color: var(--text-muted) !important; 
+    word-break: break-word !important;
+    white-space: pre-wrap !important;
+    overflow-wrap: anywhere !important;
+}
+
+body.theme-professional .terminal-body {
+    overflow-x: hidden !important;
+}
 
 body.theme-professional .t-cursor {
     background: var(--text) !important;
@@ -337,14 +356,16 @@ body.theme-professional .lastfm-track-name {
 }
 
 body.theme-professional .spotify-artist,
-body.theme-professional .lastfm-track-artist {
-    color: var(--text-muted) !important;
+body.theme-professional .lastfm-track-artist,
+body.theme-professional .match-timeframe {
+    color: var(--text-dim) !important;
+    font-weight: 600 !important;
 }
 
 body.theme-professional .xp-label { color: var(--text) !important; font-weight: 800 !important; }
 body.theme-professional .xp-level { background: #000 !important; color: #fff !important; }
-body.theme-professional .xp-bar-wrap { border: 2px solid #000 !important; background: #fff !important; height: 10px !important; }
-body.theme-professional .xp-bar-fill { background: var(--lime) !important; box-shadow: none !important; }
+body.theme-professional .xp-bar-wrap { border: 3px solid #000 !important; background: #fff !important; height: 12px !important; }
+body.theme-professional .xp-bar-fill { background: var(--lime) !important; box-shadow: none !important; border-right: 2px solid #000 !important; }
 
 /* Global Section Hierarchy */
 body.theme-professional section:nth-of-type(even) {
@@ -357,13 +378,31 @@ body.theme-professional .hero-backdrop-overlay {
 }
 
 body.theme-professional .wip-bar-wrap {
-    border: 2px solid #000000 !important;
+    border: 3px solid #000000 !important;
     background: #ffffff !important;
+    height: 12px !important;
 }
 
 body.theme-professional .wip-bar {
     background: var(--cyan) !important;
     box-shadow: none !important;
+    border-right: 2px solid #000 !important;
+}
+
+/* GitHub Activity Heatmap visibility overrides */
+body.theme-professional .commit-day {
+    border: 1px solid rgba(0,0,0,0.15) !important;
+}
+body.theme-professional .commit-day[data-count="0"] {
+    background: #f1f5f9 !important; /* Soft slate 100 */
+}
+body.theme-professional .commit-day[data-count="1"] { background: #dcfce7 !important; border-color: #86efac !important; }
+body.theme-professional .commit-day[data-count="2"] { background: #86efac !important; border-color: #4ade80 !important; }
+body.theme-professional .commit-day[data-count="3"] { background: #22c55e !important; border-color: #16a34a !important; }
+body.theme-professional .commit-day[data-count="4"] { background: #15803d !important; border-color: #14532d !important; }
+
+body.theme-professional .commit-legend-sq {
+    border: 1px solid rgba(0,0,0,0.2) !important;
 }
 
 /* Hide CRT / Scanlines globally for Professional theme */
