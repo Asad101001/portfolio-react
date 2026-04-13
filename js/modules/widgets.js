@@ -22,9 +22,9 @@ export const CONFIG = {
       { title: 'Spiderman:Brand New Day' }
     ],
     seriesWatchlist: [
-      { title: 'Severance' },
-      { title: 'The Boys' },
-      { title: 'House of the Dragon' }
+      { title: 'The Wire' },
+      { title: 'The Sopranos' },
+      { title: 'Lost' }
     ]
   }
 };
